@@ -1,0 +1,334 @@
+/* 卡片容器 */
+.services-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    padding: 0;
+    margin: 0 auto;
+    max-width: 1200px; /* 設置最大寬度 */
+}
+
+/* 卡片樣式 */
+.service-card {
+    max-width: 100%;
+    background: #fff;
+    border-radius: 12px; /* 增加圓角 */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* 增加陰影 */
+    overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    margin: 16px; /* 增加卡片之間的間距 */
+}
+.btn-primary {
+    text-decoration: none !important; /* 取消底線 */
+}
+
+/*  確保滑鼠懸停時也不會出現底線 */
+.btn-primary:hover,
+.btn-primary:focus {
+    text-decoration: none !important;
+}
+
+    .service-card:hover {
+        transform: translateY(-8px); /* 增加懸浮效果 */
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+    }
+
+.cardM {
+    margin-left: 16px !important;
+}
+
+.service-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* 圖片容器 */
+.card-image {
+    width: 100%;
+    height: 150px; /* 調整圖片高度 */
+    overflow: hidden;
+    flex-shrink: 0;
+    border-bottom: 1px solid #eee; /* 增加分隔線 */
+}
+
+    .card-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.3s ease; /* 增加圖片縮放效果 */
+    }
+
+    .card-image:hover img {
+        transform: scale(1.05); /* 當懸浮時放大圖片 */
+    }
+
+.image-slider {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.slider-container {
+    display: flex;
+    transition: transform 0.3s ease;
+    height: 100%;
+}
+
+    .slider-container img {
+        flex-shrink: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+/* 輪播按鈕 */
+.slider-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.8);
+    border: none;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 2;
+}
+
+.prev {
+    left: 8px;
+}
+
+.next {
+    right: 8px;
+}
+
+.image-slider:hover .slider-btn {
+    opacity: 1;
+}
+
+/* 輪播*/
+.slider-dots {
+    position: absolute;
+    bottom: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 6px;
+    z-index: 2;
+}
+
+.dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+    .dot.active {
+        background: white;
+    }
+
+/* 卡片內容區域 */
+.card-content {
+    padding: 16px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.content-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 40px;
+    width: 100%;
+    gap: 16px;
+}
+
+/* 卡片底部 */
+.card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 16px;
+    border-top: 1px solid #eee;
+    height: 50px;
+    flex-shrink: 0;
+}
+
+.provider {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 140px;
+    flex-shrink: 0;
+}
+
+.avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+}
+
+.provider-name {
+    font-size: 0.9rem;
+    color: #666;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.service-title {
+    margin: 0;
+    font-size: 1.1rem;
+    line-height: 1.2;
+    flex-grow: 1;
+    text-align: right;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 60%;
+}
+
+.card-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+/* 愛心按鈕 */
+.heart-btn {
+    border: none;
+    background: none;
+    padding: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+    z-index: 3;
+}
+
+    .heart-btn i {
+        font-size: 1.2rem;
+        color: #666;
+        transition: all 0.2s ease;
+    }
+
+    .heart-btn.active i {
+        color: #ff4444;
+    }
+
+.service-card:hover .service-title {
+    color: #007bff;
+}
+
+.page-container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+}
+
+.content-wrap {
+    /*flex: 1 0 auto;*/
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* 讓內部內容水平置中 */
+}
+
+.pagination-container {
+    position: fixed; /* 固定在底部 */
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: white;
+    padding: 15px 0;
+    z-index: 1000;
+}
+
+.pagination {
+    display: flex; /* 水平排列 */
+    justify-content: center;
+    align-items: center;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    gap: 8px;
+}
+
+
+/* 區域標題樣式 */
+.section-header {
+    display: flex;
+    justify-content: space-between; /* 讓內容兩端對齊 */
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.section-title {
+    font-size: 1.5rem;
+    margin: 0;
+    font-weight: 500;
+}
+
+/* 排序區域樣式 */
+.sort-wrapper select {
+    width: auto;
+    min-width: 150px;
+}
+
+.view-toggle .btn {
+    padding: 6px 12px;
+    margin-left: 8px;
+}
+
+    .view-toggle .btn.active {
+        background-color: #6c757d;
+        color: white;
+    }
+
+
+@media (max-width: 1200px) {
+    .services-container {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 32px;
+        max-width: 960px;
+    }
+}
+
+@media (max-width: 992px) {
+    .services-container {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 24px;
+        max-width: 720px;
+    }
+}
+
+@media (max-width: 576px) {
+    .services-container {
+        grid-template-columns: 1fr;
+        padding: 12px;
+        gap: 18px;
+        max-width: 540px;
+    }
+
+    .sort-wrapper {
+        display: flex;
+        align-items: center;
+    }
+}
+
+.heart-btn:focus {
+    pointer-events: auto;
+}

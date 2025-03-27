@@ -1,0 +1,443 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>建立帳戶</title>
+    <!-- CSS -->
+    <link href="~/frontuse/css/register.css" rel="stylesheet" />
+    <!-- 載入 Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Press+Start+2P&display=swap"
+          rel="stylesheet" />
+    <!-- 載入 Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" />
+</head>
+
+<body>
+    <div class="register-container" id="app">
+        <div class="register-box enter">
+            <!-- Step 1: 輸入姓名 -->
+            <div class="register-content step" v-show="currentStep === 1">
+                <div class="logo">
+                    <div class="logo-text">
+                        <span class="match">Match</span><span class="pro">Pro</span>
+                    </div>
+                </div>
+
+                <h1 class="title">建立帳戶</h1>
+                <p class="subtitle">請輸入您的真實姓名</p>
+
+                <form id="form-step1" class="register-form" v-on:submit.prevent>
+                    <div class="input-group">
+                        <input type="text"
+                               v-model.trim="form.FfullName"
+                               id="FfullName"
+                               autocomplete="off"
+                               required />
+                        <label for="FfullName">姓名</label>
+                    </div>
+
+                    <div class="input-group">
+                        <input type="text"
+                               v-model.trim="form.FidNumber"
+                               id="FidNumber"
+                               pattern="[A-Z][12]\d{8}"
+                               autocomplete="off"
+                               title="請輸入正確的身分證字號格式"
+                               required />
+                        <label for="FidNumber">身分證字號</label>
+                    </div>
+
+                    <div v-if="idNumberError" class="error-message">
+                        請輸入正確的身分證字號格式
+                    </div>
+
+                    <div v-if="!isStep1Valid && showStep1Error" class="error-message">
+                        請填寫所有必填欄位
+                    </div>
+
+                    <div class="form-nav">
+                        <button type="button" class="btn-next" v-on:click="nextStep(1)">下一步</button>
+                    </div>
+
+                    <div class="login-link">
+                        已經有帳號了？ <a href="@Url.Action("Login", "Account")">登入</a>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Step 2: 輸入基本資訊 -->
+            <div class="register-content step" v-show="currentStep === 2">
+                <div class="logo">
+                    <div class="logo-text">
+                        <span class="match">Match</span><span class="pro">Pro</span>
+                    </div>
+                </div>
+
+                <h1 class="title">基本資訊</h1>
+                <p class="subtitle">輸入您的聯絡電話和Email及地址</p>
+
+                <form id="form-step2" class="register-form" v-on:submit.prevent>
+                    <div class="input-group">
+                        <input type="tel"
+                               v-model.trim="form.FphoneNumber"
+                               id="FphoneNumber"
+                               autocomplete="off"
+                               title="請輸入正確的手機號碼格式"
+                               required />
+                        <label for="FphoneNumber">聯絡電話</label>
+                    </div>
+                    <div v-if="phoneError" class="error-message">
+                        請輸入正確的手機號碼格式
+                    </div>
+
+                    <div class="input-group">
+                        <input type="email"
+                               v-model.trim="form.Femail"
+                               id="Femail"
+                               autocomplete="off"
+                               title="請輸入有效的 Email，如 example@mail.com"
+                               required />
+                        <label for="Femail">Email</label>
+                    </div>
+                    <div v-if="emailError" class="error-message">
+                        請輸入正確的 Email 格式
+                    </div>
+
+                    <div class="input-group">
+                        <div class="address-group">
+                            <div class="address-flex-container">
+                                <div class="input-group">
+                                    <select class="input-field city-select"
+                                            id="city"
+                                            v-model="selectedCity"
+                                            required>
+                                        <option value="" disabled selected></option>
+                                        <option value="台北市">台北市</option>
+                                        <option value="新北市">新北市</option>
+                                        <option value="桃園市">桃園市</option>
+                                        <option value="台中市">台中市</option>
+                                        <option value="台南市">台南市</option>
+                                        <option value="高雄市">高雄市</option>
+                                        <option value="基隆市">基隆市</option>
+                                        <option value="新竹市">新竹市</option>
+                                        <option value="嘉義市">嘉義市</option>
+                                        <option value="新竹縣">新竹縣</option>
+                                        <option value="苗栗縣">苗栗縣</option>
+                                        <option value="彰化縣">彰化縣</option>
+                                        <option value="南投縣">南投縣</option>
+                                        <option value="雲林縣">雲林縣</option>
+                                        <option value="嘉義縣">嘉義縣</option>
+                                        <option value="屏東縣">屏東縣</option>
+                                        <option value="宜蘭縣">宜蘭縣</option>
+                                        <option value="花蓮縣">花蓮縣</option>
+                                        <option value="台東縣">台東縣</option>
+                                        <option value="澎湖縣">澎湖縣</option>
+                                        <option value="金門縣">金門縣</option>
+                                        <option value="連江縣">連江縣</option>
+                                    </select>
+                                    <label for="city">選擇縣市</label>
+                                </div>
+
+                                <div class="input-group">
+                                    <input type="text"
+                                           class="input-field address-input"
+                                           id="address"
+                                           v-model.trim="form.Faddress"
+                                           autocomplete="off"
+                                           required />
+                                    <label for="address">詳細地址</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div v-if="!isStep2Valid && showStep2Error" class="error-message">
+                        請填寫所有必填欄位
+                    </div>
+
+                    <div class="form-nav">
+                        <button type="button" class="btn-back" v-on:click="prevStep">返回</button>
+                        <button type="button" class="btn-next" v-on:click="nextStep(2)">下一步</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Step 3: 設定密碼 -->
+            <div class="register-content step" v-show="currentStep === 3">
+                <div class="logo">
+                    <div class="logo-text">
+                        <span class="match">Match</span><span class="pro">Pro</span>
+                    </div>
+                </div>
+
+                <h1 class="title">創建帳號</h1>
+                <p class="subtitle">設定您的帳號資訊</p>
+
+                <form id="form-step3" class="register-form" v-on:submit.prevent="submitForm">
+                    @Html.AntiForgeryToken()
+                    <div class="input-group position-relative">
+                        <input v-bind:type="showPassword ? 'text' : 'password'"
+                               v-model.trim="form.FpasswordHash"
+                               id="password"
+                               autocomplete="new-password"
+                               pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{6,}"
+                               title="密碼必須包含大小寫字母和數字，最少6個字元"
+                               required />
+                        <label for="password">密碼</label>
+                        <i class="bi"
+                           style="position: absolute; right: 15px; top: 15px; cursor: pointer;"
+                           v-bind:class="{'bi-eye': !showPassword, 'bi-eye-slash': showPassword}"
+                           v-on:click="showPassword = !showPassword"></i>
+                    </div>
+                    <div v-if="passwordError" class="error-message">
+                        密碼必須包含大小寫字母和數字，最少6個字元
+                    </div>
+
+                    <div class="input-group position-relative">
+                        <input v-bind:type="showConfirmPassword ? 'text' : 'password'"
+                               v-model.trim="form.confirmPassword"
+                               id="confirmPassword"
+                               autocomplete="new-password"
+                               pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{6,}"
+                               title="密碼必須包含大小寫字母和數字，最少6個字元"
+                               required />
+                        <label for="confirmPassword">確認密碼</label>
+                        <i class="bi"
+                           style="position: absolute; right: 15px; top: 15px; cursor: pointer;"
+                           v-bind:class="{'bi-eye': !showConfirmPassword, 'bi-eye-slash': showConfirmPassword}"
+                           v-on:click="showConfirmPassword = !showConfirmPassword"></i>
+                    </div>
+                    <div v-if="!passwordsMatch && showPasswordMatchError" class="error-message">
+                        密碼與確認密碼不符
+                    </div>
+
+                    <div v-if="errorMessage" class="error-message">
+                        {{ errorMessage }}
+                    </div>
+
+                    <div class="form-nav">
+                        <button type="button" class="btn-back" v-on:click="prevStep">返回</button>
+                        <button type="submit" class="btn-next" v-bind:disabled="!isFormValid">完成註冊</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
+    <script>
+    new Vue({
+        el: '#app',
+        data: {
+            form: {
+                FfullName: '',
+                FidNumber: '',
+                Femail: '',
+                FpasswordHash: '',
+                confirmPassword: '',
+                FphoneNumber: '',
+                Faddress: ''
+            },
+            selectedCity: '',
+            showPassword: false,
+            showConfirmPassword: false,
+            errorMessage: '',
+            currentStep: 1,
+            showStep1Error: false,
+            showStep2Error: false,
+            idNumberError: false,
+            emailError: false,
+            phoneError: false,
+            passwordError: false,
+            confirmPasswordError: false,
+            showPasswordMatchError: false
+        },
+        computed: {
+            passwordsMatch() {
+                return this.form.FpasswordHash === this.form.confirmPassword;
+            },
+            isStep1Valid() {
+                return this.form.FfullName && this.form.FidNumber;
+            },
+            isStep2Valid() {
+                    return this.form.FphoneNumber && 
+                    this.form.Femail &&
+                    this.selectedCity &&
+                    this.form.Faddress;
+            },
+            isFormValid() {
+                return this.form.FfullName &&
+                    this.form.FidNumber &&
+                    this.form.Femail &&
+                    this.form.FpasswordHash &&
+                    this.form.confirmPassword &&
+                    this.passwordsMatch &&
+                    this.form.FphoneNumber &&
+                    this.selectedCity &&
+                    this.form.Faddress &&
+                    !this.passwordError &&
+                    !this.confirmPasswordError;
+            }
+        },
+        methods: {
+            validateIdNumber(idNumber) {
+                const idNumberPattern = /^[A-Z][12]\d{8}$/;
+                return idNumberPattern.test(idNumber);
+            },
+            validateEmail(email) {
+                const emailPattern = /^[a-zA-Z0-9._+-]+@@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+                return emailPattern.test(email);
+            },
+            validatePhone(phone) {
+                const phonePattern = /^09\d{8}$/;
+                return phonePattern.test(phone);
+            },
+            validatePassword(password) {
+                const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{6,}$/;
+                return passwordPattern.test(password);
+            },
+            checkPasswords() {
+                // 檢查密碼格式
+                if (!this.validatePassword(this.form.FpasswordHash)) {
+                    this.passwordError = true;
+                    return false;
+                }
+                this.passwordError = false;
+
+                // 檢查確認密碼格式
+                if (!this.validatePassword(this.form.confirmPassword)) {
+                    this.confirmPasswordError = true;
+                    return false;
+                }
+                this.confirmPasswordError = false;
+
+                // 檢查兩個密碼是否相符
+                if (!this.passwordsMatch) {
+                    this.showPasswordMatchError = true;
+                    return false;
+                }
+                this.showPasswordMatchError = false;
+                return true;
+            },
+            nextStep(step) {
+                if (step === 1) {
+                    if (!this.isStep1Valid) {
+                        this.showStep1Error = true;
+                        return;
+                    }
+                    if (!this.validateIdNumber(this.form.FidNumber)) {
+                        this.idNumberError = true;
+                        return;
+                    }
+                    this.idNumberError = false;
+                    this.currentStep = 2;
+                    this.showStep1Error = false;
+                } else if (step === 2) {
+                    if (!this.isStep2Valid) {
+                        this.showStep2Error = true;
+                        return;
+                    }
+                    if (!this.validatePhone(this.form.FphoneNumber)) {
+                        this.phoneError = true;
+                        return;
+                    }
+                    if (!this.validateEmail(this.form.Femail)) {
+                        this.emailError = true;
+                        return;
+                    }
+                    this.phoneError = false;
+                    this.emailError = false;
+                    this.currentStep = 3;
+                    this.showStep2Error = false;
+                }
+            },
+            prevStep() {
+                if (this.currentStep > 1) {
+                    this.currentStep--;
+                }
+            },
+            async submitForm(event) {
+                event.preventDefault();
+
+                if (!this.checkPasswords()) {
+                    return;
+                }
+
+                try {
+                    const formData = {
+                        FfullName: this.form.FfullName,
+                        FidNumber: this.form.FidNumber,
+                        Femail: this.form.Femail,
+                        FpasswordHash: this.form.FpasswordHash,
+                        ConfirmPassword: this.form.confirmPassword,
+                        FphoneNumber: this.form.FphoneNumber,
+                        Faddress: this.selectedCity + this.form.Faddress,
+                        FloginType: 'Local',
+                        Fstatus: 0,
+                        FisEmailVerified: false
+                    };
+
+                    const token = document.querySelector('input[name="__RequestVerificationToken"]').value;
+
+                    const response = await fetch('/Account/DoRegister', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'RequestVerificationToken': token
+                        },
+                        body: JSON.stringify(formData)
+                    });
+
+                    const result = await response.json();
+
+                    if (result.ErrMsg) {
+                        this.errorMessage = '註冊失敗，該資料已經註冊';
+                        return;
+                    }
+                        // 顯示註冊成功訊息
+                        alert('註冊成功！請查收驗證信件');
+                    window.location.href = '/Account/Login';
+
+                } catch (error) {
+                    console.error('Error:', error);
+                    this.errorMessage = '註冊失敗，請稍後再試';
+                }
+            }
+        },
+        watch: {
+            'form.FpasswordHash'() {
+                if (this.form.FpasswordHash) {
+                    this.passwordError = !this.validatePassword(this.form.FpasswordHash);
+                }
+                if (this.form.confirmPassword) {
+                    this.showPasswordMatchError = !this.passwordsMatch;
+                }
+            },
+            'form.confirmPassword'() {
+                if (this.form.confirmPassword) {
+                    this.confirmPasswordError = !this.validatePassword(this.form.confirmPassword);
+                    this.showPasswordMatchError = !this.passwordsMatch;
+                }
+            }
+        },
+        mounted() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const googleEmail = urlParams.get('email');
+            const googleName = urlParams.get('name');
+            if (googleEmail) {
+                this.form.Femail = googleEmail;
+            }
+            if (googleName) {
+                this.form.FfullName = googleName;
+            }
+        }
+    });
+</script>
+</body>
+</html>

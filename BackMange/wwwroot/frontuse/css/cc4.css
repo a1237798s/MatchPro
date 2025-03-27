@@ -1,0 +1,176 @@
+ /* 酒館風格的樣式 */
+/* 頁尾樣式 */
+/* header 整體高度控制 */
+.navbar {
+  height: 50px;  /* 設定固定高度 */
+  padding: 0;    /* 移除預設內邊距 */
+}
+.job header {
+  max-width: calc(var(--pixel-size) * 100px);  /* 設置最大寬度 */
+  margin: 0 auto;
+  padding-bottom: 2rem;
+  
+}
+header{background-color:#212529;}
+
+/* 導航連結樣式 */
+.navbar-nav .nav-link {
+  padding: 0.25rem 1rem;  /* 減少上下內邊距 */
+  font-size: 0.9rem;      /* 設定字體大小 */
+  line-height: 1;      /* 控制行高 */
+  color:white!important;   
+}
+.btt1{margin-left: 5px;}
+
+/* 滑鼠懸停時的顏色 */
+.navbar-nav .nav-link:hover {
+    color:#FF8000	  !important; 
+}
+/* 登入按鈕樣式 */
+.navbar .btn {
+  padding: 0.25rem 1rem;  /* 按鈕內邊距 */
+  font-size: 0.9rem;      /* 按鈕字體大小 */
+  height: 32px;           /* 控制按鈕高度 */
+  line-height: 1.2;       /* 按鈕文字行高 */
+  color:white;
+}
+
+/* 導航列表樣式 */
+.navbar-nav {
+  height: 100%;          /* 確保導航列表填滿navbar高度 */
+  align-items: center;   /* 垂直居中 */
+}
+
+.body1 {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-image: url('./img/天空2.jpg');
+    background-size: cover;  /* 圖片覆蓋整個區域 */
+    background-position: center;  /* 圖片置中 */
+    background-repeat: no-repeat;  /* 圖片不重複 */
+    background-attachment: fixed;  /* 固定背景，滾動時不動 */
+}
+footer {
+    flex-shrink: 0;  /* 防止頁尾被壓縮 */
+    background-color: #212529;
+    color: #fff;
+    width: 100%;
+}
+  a {
+     text-decoration: none !important;
+        
+    }
+footer a {
+    color: #ff6b6b;
+    transition: color 0.3s ease;
+}
+
+footer a:hover {
+    color: #ff8787;
+}
+main{padding-top: 100px;}
+
+.filter-container {
+  padding: 20px;
+  border-radius: 10px;
+  margin: 20px auto; /* 使用 auto 來讓容器居中 */
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+  justify-content: center;
+  max-width: 1000px; /* 限制最大寬度 */
+  
+  
+  background-color: rgba(50, 30, 15, 0.9);  /* 深棕色半透明背景 */
+  border: 2px solid #d4a373;                /* 金色邊框 */
+  border-radius: 20px;                      /* 圓角效果 */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.7); 
+}
+select,
+input,
+button {
+  padding: 8px; /* 減少內邊距 */
+  font-size: 0.9rem; /* 調整字型大小 */
+  border: 2px solid #d4a017;
+  border-radius: 5px;
+  background-color: #5d4037;
+  color: #f5deb3;
+  width: 180px; /* 設定元素的寬度 */
+  background-color: rgba(50, 30, 15, 0.9);  /* 深棕色半透明背景 */
+  border: 2px solid #d4a373;                /* 金色邊框 */
+  border-radius: 20px;                      /* 圓角效果 */
+}
+button {
+  cursor: pointer;
+  font-weight: bold;
+  background-color: rgba(50, 30, 15, 0.9);  /* 深棕色半透明背景 */
+  border: 2px solid #d4a373;                /* 金色邊框 */
+  border-radius: 20px;                      /* 圓角效果 */
+}
+button:hover {
+  background-color: #795548;
+}
+.task-list {
+  padding: 20px;
+  margin: 20px auto; /* 使用 auto 讓容器居中 */
+  border: 2px solid #d4a017;
+  border-radius: 10px;
+  background-color: #3e2723;
+  max-width: 900px; /* 限制最大寬度 */
+}
+.task {
+  background-color: #5d4037;
+  padding: 15px;
+  margin-bottom: 10px;
+  border: 1px solid #d4a017;
+  border-radius: 5px;
+  max-width: 100%; /* 讓任務項目不超過容器的寬度 */
+  box-sizing: border-box; /* 包含padding在內的寬度計算 */
+}
+.task h3 {
+  color: #ffcc80;
+}
+.task button {
+  padding: 10px 15px;
+  font-size: 1rem;
+  color: #2b2b2b;
+  background-color: #d4a017;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.task button:hover {
+  background-color: #fbc02d;
+}
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.page-button {
+  padding: 8 10px;
+  font-size: 1rem;
+  margin: 0 5px;
+  background-color: #5d4037;
+  color: #f5deb3;
+  cursor: pointer;
+ /* 深棕色半透明背景 */
+  border: 2px solid #d4a373;                /* 金色邊框 */
+  border-radius: 15px;                      /* 圓角效果 */
+}
+
+.page-button:hover {
+  background-color: #795548;
+}
+
+.page-button:focus {
+  outline: none;
+}
+.page-button.active {
+  background-color: #007bff; /* 藍色背景 */
+  color: #fff; /* 白色文字 */
+  font-weight: bold;
+  border: 1px solid #007bff;
+}

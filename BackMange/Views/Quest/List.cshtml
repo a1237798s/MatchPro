@@ -1,0 +1,138 @@
+﻿@model IEnumerable<BackMange.DTO.TTaskDTO>
+
+@{
+    ViewData["Title"] = "任務列表";
+}
+
+@* breadcrumb *@
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">主頁</a></li>
+        <li class="breadcrumb-item active" aria-current="page">任務列表</li>
+    </ol>
+</nav>
+
+<h1>任務清單</h1>
+<!-- 搜尋表單 -->
+<form method="get" asp-action="List" class="mb-3">
+    <div class="input-group">
+        <input type="text" name="searchQuery" class="form-control" placeholder="搜尋標題或內容"
+               value="@ViewBag.SearchQuery" />
+        <button type="submit" class="btn btn-primary">搜尋</button>
+    </div>
+</form>
+
+<div class="d-flex justify-content-end">
+    <a class="btn btn-success" asp-action="Create">創建任務</a>
+</div>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Ftitle)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FposterId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Fdescription)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Fbudget)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Fstatus)
+            </th>
+            <td>
+                @Html.DisplayNameFor(model => model.Fdeadline)
+            </td>
+            <th>
+                @Html.DisplayNameFor(model => model.FcreatedAt)
+            </th>
+          
+             <th>
+                @Html.DisplayNameFor(model => model.FupdatedAt)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Ftitle)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FposterId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Fdescription)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Fbudget)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Fstatus)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Fdeadline)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.FcreatedAt)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FupdatedAt)
+                </td>
+                <td>
+                    <a asp-action="Review" asp-route-id="@item.FtaskId" class="btn btn-success">審核</a>
+                    <a asp-action="Edit" asp-route-id="@item.FtaskId" class="btn btn-warning">修改</a>
+                    <a asp-controller="Quest" asp-action="Detail" asp-route-id="@item.FtaskId" class="btn btn-info">詳情</a>
+                    <a asp-action="Delete" asp-route-id="@item.FtaskId" class="btn btn-danger">刪除</a>
+                </td>
+            </tr>
+        }
+        
+    </tbody>
+   
+</table>
+<div class="d-flex justify-content-center mt-4">
+    <ul class="pagination">
+        <!-- 上一頁 -->
+        <li class="page-item @(ViewBag.PageNumber == 1 ? "disabled" : "")">
+            <a class="page-link"
+               asp-action="List"
+               asp-route-pageNumber="@(ViewBag.PageNumber - 1)"
+               asp-route-searchQuery="@ViewBag.SearchQuery">
+                上一頁
+            </a>
+        </li>
+
+        <!-- 頁數顯示 -->
+        @for (var i = 1; i <= ViewBag.TotalPages; i++)
+        {
+            <li class="page-item @(ViewBag.PageNumber == i ? "active" : "")">
+                <a class="page-link"
+                   asp-action="List"
+                   asp-route-pageNumber="@i"
+                   asp-route-searchQuery="@ViewBag.SearchQuery">
+                    @i
+                </a>
+            </li>
+        }
+
+        <!-- 下一頁 -->
+        <li class="page-item @(ViewBag.PageNumber == ViewBag.TotalPages ? "disabled" : "")">
+            <a class="page-link"
+               asp-action="List"
+               asp-route-pageNumber="@(ViewBag.PageNumber + 1)"
+               asp-route-searchQuery="@ViewBag.SearchQuery">
+                下一頁
+            </a>
+        </li>
+    </ul>
+</div>
+

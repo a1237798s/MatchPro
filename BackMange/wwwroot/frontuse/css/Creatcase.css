@@ -1,0 +1,183 @@
+/* 全局背景設置 */
+body {
+  background-image: url("./img/1.png ");
+  background-size: cover;          /* 確保背景圖片完整覆蓋 */
+  background-attachment: fixed;    /* 背景固定，不隨滾動移動 */
+  font-family: "Georgia", serif;
+     /* 使用襯線字體增加古典感 */
+}
+
+/* 頁首樣式 */
+
+.navbar-expand-md {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+a {
+  color: #f8f3e4 !important;          /* 鏈接文字淺色 */
+}
+
+/* 主容器樣式 */
+.container1 {
+  background-color: rgba(50, 30, 15, 0.9);  /* 深棕色半透明背景 */
+  border: 2px solid #d4a373;                /* 金色邊框 */
+  border-radius: 15px;                      /* 圓角效果 */
+  padding: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.7); /* 陰影效果增加層次感 */
+}
+
+/* 工作資訊頭部樣式 */
+.job-header {
+  text-align: center;
+  padding: 15px;
+  margin-bottom: 20px;
+  background-color: rgba(70, 40, 20, 0.9);  /* 稍深的背景色 */
+  border-radius: 10px;
+  border: 1px solid #d4a373;
+}
+
+/* 工作標題樣式 */
+.job-title {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #ffcc00;  /* 金色標題 */
+}
+
+/* 工作詳細資訊樣式 */
+.job-details {
+  font-size: 1.1rem;
+  margin-top: 10px;
+}
+
+/* 標籤樣式 */
+.tag {
+  display: inline-block;
+  background-color: rgba(80, 50, 30, 0.8);  /* 半透明深色背景 */
+  color: #ffcc00;                           /* 金色文字 */
+  border-radius: 10px;
+  padding: 5px 15px;
+  font-size: 1rem;
+  margin-right: 10px;
+  border: 1px solid #ffcc00;                /* 金色邊框 */
+}
+
+/* 區段標題樣式 */
+.section-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 15px;
+  color: #ffcc00;
+  position: relative;
+}
+
+.section-title::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -5px;
+  width: 50px;
+  height: 3px;
+  background-color: #d4a373;  /* 金色裝飾線 */
+}
+
+/* 照片區域樣式 */
+.photos {
+  display: flex;
+  gap: 15px;
+  margin-top: 15px;
+}
+
+.photo {
+  flex: 1;
+  height: 150px;
+  background-color: #d4a373;
+  border-radius: 5px;
+  border: 1px solid #ffcc00;
+  background-size: cover;
+  background-position: center;
+}
+
+/* 側邊欄樣式 */
+/* .sidebar {
+  position: fixed;
+  top: 0;
+  left: -250px;                    預設隱藏在左側 
+  width: 250px;
+  height: 100%;
+  background-color: #343a40;
+  color: white;
+  transition: left 0.3s ease;       滑動動畫效果 
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  padding: 20px;
+} */
+
+.sidebar-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;              /* 圓形頭像 */
+  margin-bottom: 10px;
+}
+
+.username {
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
+.sidebar-content button {
+  color: white;
+  border-color: white;
+}
+
+.sidebar-content button:hover {
+  background-color: #495057;
+}
+
+.placeholder-light::placeholder {
+  color: #b3b3b3;
+  font-style: italic;
+}
+
+/* 自定義主題色 */
+.bg-primary {
+  background-color: #8a5a44 !important;  /* 深棕色背景 */
+  margin-bottom: 10px;
+}
+
+.text-brown {
+  color: #cf8b48;                        /* 暖棕色 */
+}
+
+.text-darkgreen {
+  color: darkgreen;
+}
+
+.rounded {
+  border-radius: 40px !important;
+}
+
+/* 按鈕樣式 */
+.btn-primary {
+  background-color: #d4a373 !important;  /* 金屬感按鈕顏色 */
+}
+
+.btn-outline-secondary {
+  padding: 6px 20px;         /* 增加左右內邊距 */
+  min-width: 120px;          /* 設定最小寬度 */
+  white-space: nowrap;       /* 防止文字換行 */
+  font-size: 14px;           /* 調整文字大小 */
+  line-height: 1.5;          /* 調整行高 */
+  border-radius: 4px;        /* 圓角 */
+}
+
+.login-btn-container {
+  margin-right: 10px;  /* 右側間距 */
+  padding: 8px;        /* 內部間距 */
+}

@@ -1,0 +1,638 @@
+/* 主要變數 */
+:root {
+    --primary: #60A5FA;
+    --primary-light: #93C5FD;
+    --primary-dark: #3B82F6;
+    --success: #34D399;
+    --error: #F87171;
+    --bg: #FAFAFA;
+    --surface: #FFFFFF;
+    --bg-hover: #F8FAFC;
+    --text: #334155;
+    --text-light: #64748B;
+    --text-muted: #94A3B8;
+    --border: #E2E8F0;
+    --border-focus: #BAE6FD;
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.03);
+    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+    --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* 重置和基礎樣式 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Noto Sans TC', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    color: var(--text);
+    line-height: 1.6;
+    background: var(--bg);
+}
+
+/* 主要內容區域 */
+.content-wrap {
+    background: var(--bg);
+    min-height: 100vh;
+    padding: 120px 0 80px;
+    position: relative;
+    isolation: isolate;
+}
+
+    .content-wrap::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient( 135deg, rgba(96, 165, 250, 0.03) 0%, rgba(147, 197, 253, 0.02) 100% );
+        z-index: -1;
+    }
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 24px;
+    position: relative;
+    z-index: 1;
+}
+
+/* 主要內容卡片 */
+.main-content {
+    max-width: 800px;
+    margin: 0 auto;
+    background: var(--surface);
+    border-radius: 24px;
+    box-shadow: var(--shadow-lg);
+    padding: 48px;
+    position: relative;
+}
+
+/* 標題樣式 */
+.section-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--text);
+    text-align: center;
+    margin-bottom: 3rem;
+    letter-spacing: -0.025em;
+    line-height: 1.2;
+}
+
+/* 進度指示器 */
+.form-progress {
+    display: flex;
+    justify-content: space-between;
+    margin: 0 auto 4rem;
+    max-width: 600px;
+    position: relative;
+}
+
+.progress-line {
+    position: absolute;
+    top: 24px;
+    left: 60px;
+    right: 60px;
+    height: 3px;
+    background: var(--border);
+    border-radius: 1.5px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary-light) 0%, var(--primary) 100% );
+    transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.progress-step {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+}
+
+.step-number {
+    width: 48px;
+    height: 48px;
+    margin: 0 auto 12px;
+    border-radius: 50%;
+    background: var(--surface);
+    border: 2px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    color: var(--text-light);
+    transition: var(--transition);
+    position: relative;
+}
+
+    .step-number::after {
+        content: '';
+        position: absolute;
+        inset: 2px;
+        border-radius: 50%;
+        background: var(--bg);
+        z-index: -1;
+        transition: var(--transition);
+        transform: scale(0.9);
+    }
+
+.progress-step.active .step-number {
+    border-color: var(--primary);
+    color: var(--primary);
+}
+
+    .progress-step.active .step-number::after {
+        background: rgba(96, 165, 250, 0.08);
+        transform: scale(1);
+    }
+
+.step-label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text-light);
+    transition: var(--transition);
+}
+
+.progress-step.active .step-label {
+    color: var(--primary);
+}
+
+/* 表單區塊 */
+.form-section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 32px;
+    margin-bottom: 24px;
+    transition: var(--transition);
+}
+
+    .form-section:hover {
+        border-color: var(--primary-light);
+        box-shadow: 0 4px 12px rgba(96, 165, 250, 0.05);
+    }
+
+    .form-section h3 {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: var(--text);
+        margin-bottom: 24px;
+        padding-bottom: 16px;
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+        .form-section h3::before {
+            content: '';
+            width: 24px;
+            height: 24px;
+            background: var(--primary);
+            mask-size: contain;
+            mask-repeat: no-repeat;
+            opacity: 0.9;
+        }
+
+/* 表單元素 */
+.form-group {
+    margin-bottom: 24px;
+}
+
+    .form-group label {
+        display: block;
+        font-weight: 500;
+        color: var(--text);
+        margin-bottom: 8px;
+        font-size: 0.9375rem;
+    }
+
+.required {
+    color: #e53e3e;
+    margin-left: 4px;
+}
+
+/* 輸入框樣式 */
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    font-size: 0.9375rem;
+    color: var(--text);
+    background: var(--surface);
+    transition: var(--transition);
+}
+
+    .form-group input:hover,
+    .form-group select:hover,
+    .form-group textarea:hover {
+        border-color: var(--border-focus);
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+        outline: none;
+        border-color: var(--primary-light);
+        box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.1);
+    }
+
+/* 技能標籤 */
+.skills-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 12px;
+    min-height: 56px;
+    border: 1.5px dashed var(--border);
+    border-radius: 12px;
+    background: var(--bg);
+    transition: var(--transition);
+}
+
+    .skills-tags:hover {
+        border-color: var(--border-focus);
+    }
+
+.skill-tag {
+    background: var(--bg-hover);
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.875rem;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition);
+    border: 1px solid var(--border);
+}
+
+    .skill-tag:hover {
+        border-color: var(--primary-light);
+        background: var(--surface);
+    }
+
+    .skill-tag button {
+        border: none;
+        background: none;
+        padding: 0;
+        color: var(--text-light);
+        cursor: pointer;
+        opacity: 0.6;
+        transition: opacity 0.2s ease;
+    }
+
+        .skill-tag button:hover {
+            opacity: 1;
+        }
+
+/* 檔案上傳 */
+.file-upload {
+    border: 2px dashed var(--border);
+    border-radius: var(--radius);
+    padding: 30px;
+    text-align: center;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+    .file-upload:hover,
+    .file-upload.dragover {
+        border-color: var(--primary-light);
+        background: rgba(96, 165, 250, 0.02);
+    }
+
+.upload-icon {
+    font-size: 2.5rem;
+    color: var(--primary-light);
+    margin-bottom: 15px;
+}
+
+.image-preview {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.preview-item {
+    position: relative;
+    aspect-ratio: 1;
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+}
+
+    .preview-item img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+.remove-image {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.9);
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--error);
+    transition: all 0.2s ease;
+}
+
+    .remove-image:hover {
+        background: white;
+        transform: scale(1.1);
+    }
+
+/* 成功訊息 */
+.success-message {
+    background: var(--success);
+    color: white;
+    padding: 16px;
+    border-radius: var(--radius);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 錯誤提示 */
+.error-message {
+    color: var(--error);
+    font-size: 0.85rem;
+    margin-top: 5px;
+}
+
+.form-group.error input,
+.form-group.error select,
+.form-group.error textarea {
+    border-color: var(--error);
+}
+
+/* 按鈕樣式 */
+.button-group {
+    display: flex;
+    gap: 16px;
+    justify-content: flex-end;
+    margin-top: 48px;
+}
+
+.submit-btn,
+.cancel-btn {
+    padding: 12px 32px;
+    font-size: 1rem;
+    font-weight: 500;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 160px;
+    justify-content: center;
+}
+
+.submit-btn {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100% );
+    color: white;
+    border: none;
+}
+
+    .submit-btn:hover {
+        background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100% );
+        box-shadow: 0 4px 12px rgba(96, 165, 250, 0.15);
+    }
+
+.cancel-btn {
+    background: var(--surface);
+    color: var(--text);
+    border: 1.5px solid var(--border);
+}
+
+    .cancel-btn:hover {
+        border-color: var(--primary);
+        color: var(--primary);
+    }
+
+/* 動畫效果 */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.form-section {
+    animation: fadeIn 0.5s ease-out forwards;
+}
+
+    .form-section:nth-child(2) {
+        animation-delay: 0.1s;
+    }
+
+    .form-section:nth-child(3) {
+        animation-delay: 0.2s;
+    }
+
+/* 響應式設計 */
+@media (max-width: 768px) {
+    .main-content {
+        padding: 32px 24px;
+    }
+
+    .form-section {
+        padding: 24px;
+    }
+
+    .button-group {
+        flex-direction: column;
+    }
+
+    .submit-btn,
+    .cancel-btn {
+        width: 100%;
+    }
+}
+
+/* 調整主內容區域，確保 footer 不會遮擋內容 */
+.content-wrap {
+    padding-bottom: 100px; /* 增加底部間距 */
+}
+
+/* 響應式調整 */
+@media (max-width: 768px) {
+    .content-wrap {
+        padding-bottom: 80px;
+    }
+}
+
+/* 新增樣式 */
+.location-group {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 1rem;
+}
+
+.budget-group {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 1rem;
+}
+
+.form-check {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+    .form-check input[type="checkbox"] {
+        width: auto;
+        margin: 0;
+    }
+
+.skills-input {
+    position: relative;
+}
+
+.reference-links {
+    display: flex;
+    gap: 1rem;
+}
+
+.add-link-btn {
+    padding: 0.8rem 1.5rem;
+    background: #F8FAFC;
+    border: 1px solid #E2E8F0;
+    border-radius: 8px;
+    color: #2D3748;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+    .add-link-btn:hover {
+        background: white;
+        border-color: var(--primary-color);
+    }
+
+.file-upload small {
+    display: block;
+    margin-top: 0.5rem;
+}
+
+/* 互動提示 */
+.form-group label .tooltip {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    background: #E2E8F0;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 16px;
+    font-size: 12px;
+    color: #718096;
+    margin-left: 8px;
+    cursor: help;
+}
+
+/* 提示說明樣式 */
+.form-hint {
+    margin-top: 12px;
+    padding: 16px 20px;
+    background: var(--bg-hover);
+    border-radius: 12px;
+    border-left: 3px solid var(--primary-light);
+}
+
+    .form-hint i {
+        color: var(--primary-light);
+        margin-right: 8px;
+        font-size: 1.1rem;
+    }
+
+.form-hint-title {
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+}
+
+.form-hint ul {
+    margin: 0;
+    padding-left: 32px;
+}
+
+.form-hint li {
+    color: var(--text-light);
+    margin-bottom: 8px;
+    position: relative;
+    line-height: 1.5;
+}
+
+    .form-hint li::before {
+        content: '';
+        position: absolute;
+        left: -20px;
+        top: 8px;
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--primary-light);
+        opacity: 0.7;
+    }
+
+    .form-hint li:last-child {
+        margin-bottom: 0;
+    }
+
+/* 建議說明區塊動畫 */
+@keyframes fadeInSlide {
+    from {
+        opacity: 0;
+        transform: translateY(5px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.form-hint {
+    animation: fadeInSlide 0.3s ease-out forwards;
+}

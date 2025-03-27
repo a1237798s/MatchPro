@@ -1,0 +1,828 @@
+﻿@model BackMange.DTO.TTaskDTO
+@{
+    Layout = "_FrontendLayout";
+    ViewData["Title"] = "任務詳情";
+}
+
+@section Styles
+{
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+          crossorigin="" />
+    <link rel="stylesheet" href="~/frontuse/css/task/Task_details.css" />
+    <link rel="stylesheet" href="~/frontuse/css/chat.css" />
+}
+@Html.AntiForgeryToken()
+
+
+
+
+<main class="task-details-container">
+    <br />
+    <br />
+    <div class="container mt-5">
+        <!-- 麵包屑導航 -->
+        <nav class="breadcrumb-nav">
+            <a asp-controller="FrontIndex" asp-action="Index">首頁</a>
+            <span class="breadcrumb-separator">/</span>
+            <a asp-action="missionList2">任務列表</a>
+            <span class="breadcrumb-separator">/</span>
+            <span>@Html.DisplayFor(model => model.Ftitle)</span>
+        </nav>
+
+        <!-- 任務狀態橫幅 -->
+        <div class="task-banner">
+            <div class="task-progress">
+                <span class="progress-label">任務進度</span>
+                <div class="progress-status">
+                    <span class="status-dot"></span>
+                    <span class="status-text">@Html.DisplayFor(model => model.Fstatus)</span>
+                </div>
+            </div>
+            <div class="task-deadline">
+                <i class="fas fa-clock deadline-icon"></i>
+                <span>@Html.DisplayFor(model => model.Fdeadline)截止</span>
+            </div>
+        </div>
+
+        <div class="task-header">
+            <div class="task-title-wrap">
+                <h1 class="task-title">@Html.DisplayFor(model => model.Ftitle)</h1>
+                <span class="task-status">@Html.DisplayFor(model => model.Fstatus)</span>
+                <input type="hidden" id="taskId" value="@Model.FtaskId" />
+                <input type="hidden" id="caseTitle" value="@Model.Ftitle" />
+                <input type="hidden" id="caseBudget" value="@Model.Fbudget" />
+                <input type="hidden" id="posterId" value="@Model.FposterId" />
+
+            </div>
+            <div class="task-meta">
+                <span class="location">@Html.DisplayFor(model => model.Flocation)</span>
+            </div>
+            <div class="task-tags">
+                <span class="task-tag">@Html.DisplayFor(model => model.JobName)</span>
+
+            </div>
+        </div>
+
+        <!-- 店家資訊 -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-store me-2"></i>發布者資訊</h5>
+            </div>
+            <div class="card-body">
+                <!-- 發布者資訊 -->
+                <div class="publisher-profile mb-4 pb-3 border-bottom">
+                    <div class="d-flex flex-column align-items-center text-center">
+                        <div class="publisher-avatar mb-2">
+                            <img src="@ViewBag.img" alt="發布者頭像" class="rounded-circle" />
+
+                        </div>
+                        <div class="publisher-info">
+                            <h6 class="publisher-name fs-6 fw-bold mb-1">@Html.DisplayFor(model => model.FCompanyName)</h6>
+                            <!-- <div class="rating-stars mb-2">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                            <span class="rating-score ms-2">4.5</span>
+                            </div>-->
+                            <!-- <div class="d-flex justify-content-center gap-3">
+                            <div class="task-stat">
+                            <i class="fas fa-briefcase me-1"></i>
+                            <span>15 個任務</span>
+                            </div>
+                            <div class="task-stat">
+                            <i class="fas fa-check-circle me-1"></i>
+                            <span>12 已完成</span>
+                            </div>
+                            </div>-->
+                        </div>
+                    </div>
+                </div>
+                <!-- 聯絡資訊 -->
+                <div class="info-grid">
+                    <div class="info-item">
+                        <label>聯絡人姓名</label>
+                        <span>@Html.DisplayFor(model => model.Fmember)</span>
+                    </div>
+                    <div class="info-item">
+                        <label>聯絡電話</label>
+                        <span>@Html.DisplayFor(model => model.Fphone)</span>
+                    </div>
+                    <div class="info-item">
+                        <label>電子信箱</label>
+                        <span>@Html.DisplayFor(model => model.Femail)</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 任務內容 -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-tasks me-2"></i>任務內容</h5>
+            </div>
+            <div class="card-body">
+                <p class="task-description">@Html.DisplayFor(model => model.Fdescription)</p>
+
+                <!-- 進度區塊 -->
+                <div class="progress-section">
+                    <div class="progress-bar">
+                        <div class="progress-fill"></div>
+                    </div>
+                </div>
+
+                <!-- 時間軸 -->
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-date">@Html.DisplayFor(model => model.FcreatedAt)</div>
+                        <div class="timeline-content">任務發布</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-date">@Html.DisplayFor(model => model.FupdatedAt)</div>
+                        <div class="timeline-content">預計開始時間</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-date">@Html.DisplayFor(model => model.Fdeadline)</div>
+                        <div class="timeline-content">預計完成時間</div>
+                    </div>
+                </div>
+
+                <!-- 技能需求
+                <div class="skills-required">
+                <span class="skill-tag">Photoshop</span>
+                <span class="skill-tag">Illustrator</span>
+                <span class="skill-tag">Figma</span>
+                <span class="skill-tag">品牌設計經驗</span>
+                </div>-->
+            </div>
+        </div>
+
+        <!-- 任務地點 -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-map-marker-alt me-2"></i>任務地點
+                </h5>
+            </div>
+
+            <div class="card-body">
+                <p class="location-text">@Html.DisplayFor(model => model.Flocation) @Html.DisplayFor(model => model.FlocationDetail)</p>
+                <div id="map" style="width: 100%; height: 400px;"></div>
+            </div>
+
+        </div>
+
+        <!-- 相關圖片 -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-file me-2"></i>相關圖片</h5>
+            </div>
+            <div class="card-body">
+                <div class="document-list">
+                    <div class="photos">
+                        @if (!string.IsNullOrEmpty(Model.FtimagePath))
+                        {
+                            var images = Model.FtimagePath.Split(';'); // 拆分多張圖片
+                            foreach (var imgSrc in images)
+                            {
+                                <img src="@imgSrc" alt="工作環境" class="img-fluid" style="max-width: 300px; height: auto; margin: 10px;" />
+                            }
+                        }
+                        else
+                        {
+                            <p>無圖片</p>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 預算資訊 -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-dollar-sign me-2"></i>其他資訊
+                </h5>
+            </div>
+            <div class="card-body py-3">
+                <div class="budget-info-grid">
+                    <div class="budget-item">
+                        <div class="budget-type">
+                            <i class="fas fa-clock text-muted me-2"></i>
+                            <span>薪資類型</span>
+                        </div>
+                        <div class="budget-value" >固定薪資</div>
+                    </div>
+                    <div class="budget-item">
+                        <div class="budget-type">
+                            <i class="fas fa-dollar-sign text-muted me-2"></i>
+                            <span>預算金額</span>
+                        </div>
+                        <div class="budget-value price-highlight">@Html.DisplayFor(model => model.Fbudget)</div>
+                    </div>
+                    <div class="budget-item">
+                        <div class="budget-type">
+                            <i class="fas fa-credit-card text-muted me-2"></i>
+                            <span>支付方式</span>
+                        </div>
+                        <div class="budget-value">轉帳</div>
+                    </div>
+                    <div class="budget-item">
+                        <div class="budget-type">
+                            <i class="fas fa-calendar-alt text-muted me-2"></i>
+                            <span>建立時間</span>
+                        </div>
+                        <div class="budget-value">@Html.DisplayFor(model => model.FcreatedAt)</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+            <!-- 聯繫btn-->
+            <div class="contact-buttons">
+                <button class="contact-btn chat" id="chatBtn">
+                    <i class="fas fa-comments me-2"></i>聊聊
+                </button>
+               
+            <a href="mailto:@Html.DisplayFor(model => model.Femail)?subject=任務評價通知&body=請確認以下任務的評價內容。"
+               class="contact-btn email">
+                <i class="fas fa-envelope me-2"></i> 發送郵件
+            </a>
+
+
+        </div>
+
+        <!-- 動態顯示按鈕 -->
+        <div class="action-buttons text-center">
+            @if (Model.Fstatus == "發佈中")
+            {
+                <!-- 狀態為發佈中，顯示「我要接案」按鈕 -->
+
+
+
+
+
+
+                <button id="applyTaskBtn" class="btn btn-primary">
+                    <i class="fas fa-clipboard-check"></i> 申請接案
+                </button>
+
+                <input type="hidden" id="taskId" value="@Model.FtaskId" />
+
+
+
+
+
+
+            }
+            else if (Model.Fstatus == "進行中")
+            {
+                <!-- 只有發案者能看到「完成任務並付款」 -->
+                @if (Model.CurrentUserId == Model.FposterId)
+                {
+                    @* <form asp-action="CompleteTaskAndPay" asp-route-taskId="@Model.FtaskId" method="post"> *@
+                    @*     <button type="submit" class="btn btn-success" id="payBtn"> *@
+                    @*         <i class="fas fa-check-circle me-2"></i> 完成任務並付款 *@
+                    @*     </button> *@
+                    @* </form> *@
+                    <button type="submit" class="btn btn-success" id="payBtn">
+                        <i class="fas fa-check-circle me-2"></i> 完成任務並付款
+                    </button>
+                    <button id="ConfirmCancleBtn" class="btn btn-primary">
+                        <i class="fas fa-clipboard-check"></i> 確認取消
+                    </button>
+
+                }
+
+
+                @if (Model.FAcceptedUserId != null && Model.CurrentUserId == Model.FAcceptedUserId)
+                {
+
+                    <a type="submit" class="btn btn-success">
+                        <i class="fas fa-flag me-2"></i> 任務進行中
+                    </a>
+
+
+
+                    <button id="applyCancleBtn" class="btn btn-primary">
+                        <i class="fas fa-clipboard-check"></i> 取消任務
+                    </button>
+
+                    <input type="hidden" id="taskId" value="@Model.FtaskId" />
+
+
+                }
+
+
+
+            }
+            @*   else if (Model.Fstatus == "取消申請中")
+            {
+            <!-- 只有發案者能看到「完成任務並付款」 -->
+            @if (Model.CurrentUserId == Model.FposterId)
+            {
+
+            <button type="submit" class="btn btn-success" id="payBtn">
+            <i class="fas fa-check-circle me-2"></i> 完成任務並付款
+            </button>
+
+            <form asp-action="ConfirmCancleApplication" asp-route-taskId="@Model.FtaskId" method="post">
+            <button type="submit" class="btn btn-danger">
+            <i class="fas fa-times-circle me-2"></i> 確認取消
+            </button>
+            </form>
+
+            <button id="ConfirmCancleBtn" class="btn btn-primary">
+            <i class="fas fa-clipboard-check"></i> 確認取消
+            </button>
+            }
+
+            @if (Model.CurrentUserId == Model.FAcceptedUserId)
+            {
+
+            <a  class="btn btn-success">
+            <i class="fas fa-flag me-2"></i> 任務進行中
+            </a>
+            <a  class="btn btn-warning">
+            <i class="fas fa-flag me-2"></i> 等待案主回復
+            </a>
+            }
+            } *@
+
+            else if (Model.Fstatus == "已完成" || Model.Fstatus == "等待付款")
+            {
+                <!-- 任務已完成或等待付款，顯示查看評價按鈕 -->
+                @if (Model.CurrentUserId == Model.FAcceptedUserId)
+                {
+
+
+                    <div class="budget-item card p-3 shadow-sm">
+                        <div class="budget-type d-flex align-items-center">
+                            <i class="fas fa-star text-warning me-2"></i>
+                            <span class="fw-bold">查看評價</span>
+                        </div>
+                        <div class="budget-value">
+                            <div class="rating-stars">
+                                @for (int i = 1; i <= 5; i++)
+                                {
+                                    if (i <= Model.Rating)
+                                    {
+                                        <i class="fas fa-star text-warning"></i> <!-- 滿星 -->
+                                    }
+                                    else
+                                    {
+                                        <i class="far fa-star text-secondary"></i> <!-- 空星 -->
+                                    }
+                                }
+                            </div>
+                        </div>
+                        <div class="budget-value mt-2 text-muted">
+                            <i class="fas fa-comment-dots me-2"></i>
+                            @Html.DisplayFor(model => model.Review)
+                        </div>
+                    </div>
+
+                }
+                @if (Model.CurrentUserId == Model.FposterId)
+                {
+
+                    <form asp-action="SubmitReview" method="post">
+                        <input type="hidden" name="transactionId" value="@Model.TransactionId" />
+
+                        <div class="mb-3">
+                            <label for="rating" class="form-label">評分（1-5 分）</label>
+                            <select name="rating" id="rating" class="form-select" required>
+                                <option value="5">⭐⭐⭐⭐⭐ (5)</option>
+                                <option value="4">⭐⭐⭐⭐ (4)</option>
+                                <option value="3">⭐⭐⭐ (3)</option>
+                                <option value="2">⭐⭐ (2)</option>
+                                <option value="1">⭐ (1)</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="review" class="form-label">評論</label>
+                            <textarea name="review" id="review" class="form-control" rows="3" required></textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-paper-plane"></i> 提交評價
+                        </button>
+                    </form>
+                }
+
+            }
+            else if (Model.Fstatus == "已取消")
+            {
+                <!-- 任務已完成或等待付款，顯示查看評價按鈕 -->
+                @if (Model.CurrentUserId == Model.FAcceptedUserId)
+                {
+
+                   
+
+                    <div class="budget-item card p-2 shadow-sm">
+                        <div class="budget-type d-flex align-items-center">
+                            <i class="fas fa-star text-warning me-2"></i>
+                            <span class="fw-bold">查看取消原因</span>
+                        </div>
+                        <br />
+                        
+                        <div class="budget-value mt-2 text-muted">
+                            <i class="fas fa-comment-dots me-2"></i>
+                            @Html.DisplayFor(model => model.Review)
+                        </div>
+                    </div>
+                }
+                @if (Model.CurrentUserId == Model.FposterId)
+                {
+
+                    <form asp-action="SubmitReview" method="post">
+                        <input type="hidden" name="transactionId" value="@Model.TransactionId" />
+
+                        
+
+                        <div class="mb-3">
+                            <label for="review" class="form-label">取消原因</label>
+                            <textarea name="review" id="review" class="form-control" rows="3" required></textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-paper-plane"></i> 提交取消原因
+                        </button>
+                    </form>
+                }
+
+            }
+
+
+            <!-- 返回列表 -->
+            <a asp-action="missionList2" class="btn btn-outline-secondary">
+                <i class="fas fa-arrow-left me-2"></i> 返回列表
+            </a>
+        </div>
+            @if (ViewBag.PosterId !=ViewBag.UserId && ViewBag.UserId !=0)
+            {
+                <!-- 聊天室  -->
+                <div id="chatBlock">
+                    <input type="hidden" v-model="thePosterId" />
+
+                    <div :class="['chat-bubble',  {active: isBubbleVisible}]">
+                        <!-- <strong>案主(id = {{ thePosterId }})</strong><br /> -->
+                        點此聯絡對方~
+                    </div>
+
+                    <button class="chat-toggle" ref="chatToggle">
+
+                        <img src="@ViewBag.img"
+                             alt="@Model.FFullName">
+                    </button>
+
+                    <div :class="['chat-widget', {active: isVisible}]" ref="chatWidget" v-show="isVisible">
+                        <div class="chat-widget-header">
+                            <h4>
+                                <i class="fas fa-robot"></i>
+                                @Html.DisplayFor(model => model.FFullName)
+                            </h4>
+                            <button class="chat-close" @@click="closeChat">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+
+                        <div class="chat-widget-messages" ref="messagesContainer">
+                            <div v-for="msg in currentChat.messages"
+                                 :key="msg.Time"
+                                 class="chat-message"
+                                 :class="msg.Type">
+                                {{ msg.Content }}
+                            </div>
+
+                        </div>
+
+                        <div class="chat-widget-input">
+                            <input type="text"
+                                   ref="chatInput"
+                                   v-model="message"
+                                   @@keyup.enter="sendMessage"
+                                   placeholder="輸入訊息..." />
+                            <button @@click="sendMessage"
+                                    :style="{ transform: message.trim() ? 'scale(1.1)' : 'scale(1)' }">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            }
+
+
+    </div>
+</main>
+
+
+
+
+
+
+@section Scripts
+{
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ"
+            crossorigin="anonymous"></script>
+    @* <script src="../JS/validation.js"></script> *@
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+            crossorigin="">
+    </script>
+    <!-- SigR  已於Layout掛載 -->
+    <!-- Vue3 已於Layout掛載 -->
+    <script>
+        window.POSTER_ID = '@ViewBag.PosterId';
+        window.USER_ID = '@ViewBag.UserId';
+    </script>
+    <!-- 右下聊天室 -->
+    <script src="~/frontuse/js/chat.js"></script>
+
+    <!-- Make sure you put this AFTER Leaflet's CSS -->
+    <script>
+        // 取得地址
+        var fullAddress = "@Html.Raw(Model.Flocation + ' ' + Model.FlocationDetail)";
+        var streetAddress = "@Html.Raw(Model.Flocation)"; // 只使用街道，不包含門牌號碼
+
+        // 初始化 Leaflet 地圖，預設台北101座標（避免初始畫面為空白）
+        var map = L.map('map').setView([25.033964, 121.564468], 13);
+
+        // 加入 OpenStreetMap 圖層
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        // **第一步：嘗試搜尋完整地址**
+        fetch('https://nominatim.openstreetmap.org/search?format=json&q=' + encodeURIComponent(fullAddress))
+            .then(response => response.json())
+            .then(data => {
+                if (data.length > 0) {
+                    // 成功找到完整地址
+                    var lat = parseFloat(data[0].lat);
+                    var lon = parseFloat(data[0].lon);
+                    map.setView([lat, lon], 17); // 放大視角
+                    L.marker([lat, lon]).addTo(map)
+                        .bindPopup('<b>' + fullAddress + '</b>')
+                        .openPopup();
+                } else {
+                    // **如果完整地址找不到，改用「街道級」地址**
+                    fetch('https://nominatim.openstreetmap.org/search?format=json&q=' + encodeURIComponent(streetAddress))
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.length > 0) {
+                                var lat = parseFloat(data[0].lat);
+                                var lon = parseFloat(data[0].lon);
+                                map.setView([lat, lon], 15); // 降低視角，顯示較大區域
+                                L.marker([lat, lon]).addTo(map)
+                                    .bindPopup('<b>（無法精確到門牌號碼，顯示街道級）<br>' + streetAddress + '</b>')
+                                    .openPopup();
+                            } else {
+                                alert("❌ 找不到該地點，請確認地址是否正確！");
+                            }
+                        })
+                        .catch(error => console.error('地理編碼錯誤:', error));
+                }
+            })
+            .catch(error => console.error('地理編碼錯誤:', error));
+
+
+
+
+
+    </script>
+    <script>
+        const taskId = @Model.FtaskId;
+        const taskTitle = @Html.Raw(Json.Serialize(Model.Ftitle));
+        const ownerId = @Model.FposterId;
+        const currentUserId = @Model.CurrentUserId;
+
+        $(document).ready(function () {
+            $("#applyTaskBtn").click(function () {
+                 // 在 ajax 呼叫前先檢查變數值
+                console.log('發送通知的變數值：', {
+                    ownerId,
+                    taskTitle,
+                    taskId,
+                    currentUserId
+                });
+                var taskId = @Json.Serialize(Model.FtaskId); // 從 Model 取得任務 ID
+
+                // 申請接案 
+                $.ajax({
+                    url: "/Frontend/ApplyForTask", // 記得修改成你的 Controller 名稱
+                    type: "POST",
+                    data: { taskId: taskId },
+                    headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() }, // CSRF 防禦
+                    success: function (response) {
+                        console.log(response);
+                        if (response.success) {
+                            // 顯示成功訊息
+                            Swal.fire({
+                                icon: 'success',
+                                title: '申請成功',
+                                text: response.message,
+                                confirmButtonColor: '#3085d6',
+                                confirmButtonText: '確定'
+                            }).then(() => {
+                                location.reload(); // 重新整理頁面
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'warning',
+                                title: '提醒！',
+                                text: response.message,
+                                confirmButtonColor: '#d33',
+                                confirmButtonText: '了解'
+                            });
+
+                            // 如果需要跳轉到登入頁
+                            if (response.redirect) {
+                                window.location.href = response.redirect;
+                            }
+                        }
+                    },
+                    error: function () {
+                        Swal.fire({
+                            icon: 'error',
+                            title: '發生錯誤',
+                            text: '請稍後再試！',
+                            confirmButtonColor: '#d33',
+                            confirmButtonText: '關閉'
+                        });
+                    }
+                });
+
+                // 通知寄送：建立通知物件
+                const notificationData = {
+                    UserId: parseInt(ownerId),
+                    Content: `您的案件「${taskTitle}」有新的應徵者`,
+                    Type: "Case",
+                    RelatedId: parseInt(taskId),
+                    SenderId: parseInt(currentUserId),
+                };
+                // console.log('notificationData:', notificationData);
+                // 檢查 URL 是否正確
+                // console.log('API URL:', '/api/Notify/TaskNotification');
+                // 檢查發送的資料
+                // console.log('發送的資料:', notificationData);
+
+                // 修改 fetch 呼叫，加入更多除錯資訊
+                fetch('/api/Notify/TaskNotification', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        // 加入 CSRF token 如果需要的話
+                        'X-CSRF-TOKEN': document.querySelector('input[name="__RequestVerificationToken"]').value
+                    },
+                    body: JSON.stringify(notificationData)
+                })
+                .then(async response => {
+                    // 如果回應不是 2xx，拋出詳細錯誤
+                    if (!response.ok) {
+                        const errorText = await response.text();
+                        throw new Error(`HTTP error! status: ${response.status}, body: ${errorText}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('成功回應:', data);
+                    if (data.success) {
+                        // console.log("通知發送成功");
+                    } else {
+                        console.error("通知發送失敗：", data.message);
+                    }
+                })
+                .catch(async error => {
+                    // 更詳細的錯誤記錄
+                    console.error("完整錯誤資訊：", {
+                        error: error,
+                        message: error.message,
+                        notificationData: notificationData,  // 記錄發送的資料
+                        url: '/api/Notify/TaskNotification'  // 記錄目標 URL
+                    });
+                });
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            $("#applyCancleBtn").click(function () {
+                var taskId = @Json.Serialize(Model.FtaskId); // 從 Model 取得任務 ID
+
+                $.ajax({
+                    url: "/Frontend/ApplyForCancle", // 記得修改成你的 Controller 名稱
+                    type: "POST",
+                    data: { taskId: taskId },
+                    headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() }, // CSRF 防禦
+                    success: function (response) {
+                        console.log(response);
+                        if (response.success) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: '送出取消',
+                                text: response.message,
+                                confirmButtonColor: '#3085d6',
+                                confirmButtonText: '確定'
+                            }).then(() => {
+                                location.reload(); // 重新整理頁面
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'warning',
+                                title: '提醒！',
+                                text: response.message,
+                                confirmButtonColor: '#d33',
+                                confirmButtonText: '了解'
+                            });
+
+                            // 如果需要跳轉到登入頁
+                            if (response.redirect) {
+                                window.location.href = response.redirect;
+                            }
+                        }
+                    },
+                    error: function () {
+                        Swal.fire({
+                            icon: 'error',
+                            title: '發生錯誤',
+                            text: '請稍後再試！',
+                            confirmButtonColor: '#d33',
+                            confirmButtonText: '關閉'
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            $("#ConfirmCancleBtn").click(function () {
+                var taskId = @Json.Serialize(Model.FtaskId); // 從 Model 取得任務 ID
+
+                $.ajax({
+                    url: "/Frontend/ConfirmCancleApplication", // 記得修改成你的 Controller 名稱
+                    type: "POST",
+                    data: { taskId: taskId },
+                    headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() }, // CSRF 防禦
+                    success: function (response) {
+                        console.log(response);
+                        if (response.success) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: '送出取消',
+                                text: response.message,
+                                confirmButtonColor: '#3085d6',
+                                confirmButtonText: '確定'
+                            }).then(() => {
+                                location.reload(); // 重新整理頁面
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'warning',
+                                title: '提醒！',
+                                text: response.message,
+                                confirmButtonColor: '#d33',
+                                confirmButtonText: '了解'
+                            });
+
+                            // 如果需要跳轉到登入頁
+                            if (response.redirect) {
+                                window.location.href = response.redirect;
+                            }
+                        }
+                    },
+                    error: function () {
+                        Swal.fire({
+                            icon: 'error',
+                            title: '發生錯誤',
+                            text: '請稍後再試！',
+                            confirmButtonColor: '#d33',
+                            confirmButtonText: '關閉'
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+    <!--付款用 -->
+    @if (Model.CurrentUserId == Model.FposterId && Model.Fstatus == "進行中")
+    {
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+        <script src="@Url.Content("~/frontuse/js/ecpayBtn.js")"
+                type="text/javascript"
+                async
+                defer
+                onerror="console.error('Failed to load ecpayBtn.js')">
+        </script>
+    }
+
+
+}

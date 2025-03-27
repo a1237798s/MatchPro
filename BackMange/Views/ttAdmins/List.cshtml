@@ -1,0 +1,89 @@
+﻿@model IEnumerable<BackMange.DTO.CAdminDTO>
+@{
+    ViewData["Title"] = "管理員維護";
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">主頁</a></li>
+        <li class="breadcrumb-item active" aria-current="page">管理員列表</li>
+    </ol>
+</nav>
+
+<h1>管理員維護</h1>
+
+
+@using (Html.BeginForm())
+{
+    @:管理員查詢 @Html.TextBox("txtKeyword", ViewBag.Keyword as string, new { @class = "form-control d-inline-block w-auto mx-2" })
+    <input type="submit" value="查詢" class="btn btn-primary" />
+}
+
+
+<h3>
+    <a asp-action="Create" class="btn btn-success mt-3 mb-3">新增管理員</a>
+</h3>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            
+            <th>管理員編號</th>
+            <th>姓名</th>
+            <th>Email</th>
+            <th>手機號碼</th>
+            <th>管理員等級</th>
+            <th>帳號狀態</th>
+            <th>建立時間</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            int rowNumber = 0;
+        }
+        @foreach (var item in Model)
+        {
+            rowNumber++;
+
+            <tr>
+                
+                <td>@Html.DisplayFor(modelItem => item.FadminNo)</td>
+                <td>@Html.DisplayFor(modelItem => item.FfullName)</td>
+                <td>@Html.DisplayFor(modelItem => item.Femail)</td>
+                <td>@Html.DisplayFor(modelItem => item.FmobilePhone)</td>
+                <td>
+                    @{
+                        string levelText = item.FadminLevel switch
+                        {
+                            1 => "<span class='badge bg-primary'>一級管理員</span>",
+                            2 => "<span class='badge bg-warning text-dark'>二級管理員</span>",
+                            3 => "<span class='badge bg-danger'>三級管理員</span>",
+                            _ => "<span class='badge bg-secondary'>未知等級</span>"
+                        };
+                    }
+                    @Html.Raw(levelText)
+                </td>
+                <td>
+                    <span class="@($"badge bg-{(item.FstatusId == 1 ? "success" : item.FstatusId == 2 ? "warning text-dark" : "danger")}")">
+                        @item.FstatusName
+                    </span>
+                </td>
+                <td>@(item.FcreatedAt.HasValue ? item.FcreatedAt.Value.ToString("yyyy-MM-dd") : "N/A")</td>
+                <td>
+                    <div class="btn-group">
+                        <a asp-action="Edit" asp-route-id="@item.FadminId"
+                           class="btn btn-warning btn-sm">修改</a>
+
+                        @if (item.FstatusId != 3)
+                        {
+                            <a asp-action="Delete" asp-route-id="@item.FadminId"
+                               class="btn btn-danger btn-sm"
+                               onclick="return confirm('確定要將此管理員設為已刪除嗎？')">刪除</a>
+                        }
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,32 @@
+﻿@model BackMange.DTO.AnnounceCategoryDTO
+
+@{
+    ViewData["Title"] = "公告類別新增";
+}
+
+<h1>新增公告類別</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="CreateCategory">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group mb-3">
+                <label asp-for="FCategoryName" class="control-label"></label>
+                <input asp-for="FCategoryName" class="form-control" />
+                <span asp-validation-for="FCategoryName" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <input type="submit" value="新增類別" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="List" style="">取消</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

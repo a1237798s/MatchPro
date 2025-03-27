@@ -1,0 +1,120 @@
+﻿<BackMange.Models.TEcpayOrder>
+    @{
+        ViewData["Title"] = "訂單紀錄";
+    }
+
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">主頁</a></li>
+            <li class="breadcrumb-item active" aria-current="page">訂單列表</li>
+        </ol>
+    </nav>
+
+    <h1>訂單紀錄</h1>
+
+    @using (Html.BeginForm("Index", "BEcpayOrders", FormMethod.Get))
+    {
+        @:訂單查詢 @Html.TextBox("txtKeyword", ViewBag.Keyword as string, new { @class = "form-control d-inline-block w-auto mx-2" })
+        <input type="submit" value="查詢" class="btn btn-primary" />
+    }
+
+    <table class="table table-striped mt-3">
+        <thead>
+            <tr>
+                <th>訂單編號</th>
+                <th>任務名稱</th>
+                <th>交易金額</th>
+                <th>付款狀態</th>
+                <th>付款時間</th>
+                <th>發案者</th>
+                <th>接案者</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.MerchantTradeNo</td>
+                    <td>
+                        @if (item.Ftask != null)
+                        {
+                            <a asp-controller="Quest" asp-action="Detail" asp-route-id="@item.FtaskId"
+                               class="text-primary">@item.Ftask.Ftitle</a>
+                        }
+                    </td>
+                    <td>@item.TradeAmt?.ToString("C0")</td>
+                    <td>
+                        @{
+                            string statusText = item.RtnCode switch
+                            {
+                                1 => "<span class='badge bg-success'><i class='bi bi-check-circle'></i> 付款成功</span>",
+                                0 => "<span class='badge bg-warning text-dark'><i class='bi bi-hourglass'></i> 待付款</span>",
+                                _ => "<span class='badge bg-danger'><i class='bi bi-x-circle'></i> 付款失敗</span>"
+                            };
+                        }
+                        @Html.Raw(statusText)
+                    </td>
+                    <td>@(item.PaymentDate?.ToString("yyyy-MM-dd HH:mm") ?? "尚未付款")</td>
+                    <td>
+                        @if (item.Fposter != null)
+                        {
+                            <span title="@item.Fposter.Femail">@item.Fposter.FfullName</span>
+                        }
+                    </td>
+                    <td>
+                        @if (item.Fworker != null)
+                        {
+                            <span title="@item.Fworker.Femail">@item.Fworker.FfullName</span>
+                        }
+                    </td>
+                    <td>
+                        <div class="btn-group">
+                            <a asp-action="Details" asp-route-id="@item.MerchantTradeNo"
+                               class="btn btn-info btn-sm">詳細</a>
+                            @if (item.RtnCode != 1)
+                            {
+                                <a asp-action="Edit" asp-route-id="@item.MerchantTradeNo"
+                                   class="btn btn-warning btn-sm">修改</a>
+                            }
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <!-- 分頁控制項 -->
+    <div class="d-flex justify-content-center mt-4">
+        <ul class="pagination">
+            <li class="page-item @(ViewBag.PageNumber == 1 ? "disabled" : "")">
+                <a class="page-link"
+                   asp-action="Index"
+                   asp-route-pageNumber="@(ViewBag.PageNumber - 1)"
+                   asp-route-txtKeyword="@ViewBag.Keyword">
+                    上一頁
+                </a>
+            </li>
+
+            @for (var i = 1; i <= ViewBag.TotalPages; i++)
+            {
+                <li class="page-item @(ViewBag.PageNumber == i ? "active" : "")">
+                    <a class="page-link"
+                       asp-action="Index"
+                       asp-route-pageNumber="@i"
+                       asp-route-txtKeyword="@ViewBag.Keyword">
+                        @i
+                    </a>
+                </li>
+            }
+
+            <li class="page-item @(ViewBag.PageNumber == ViewBag.TotalPages ? "disabled" : "")">
+                <a class="page-link"
+                   asp-action="Index"
+                   asp-route-pageNumber="@(ViewBag.PageNumber + 1)"
+                   asp-route-txtKeyword="@ViewBag.Keyword">
+                    下一頁
+                </a>
+            </li>
+        </ul>
+    </div>

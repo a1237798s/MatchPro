@@ -1,0 +1,145 @@
+﻿@model BackMange.DTO.TTaskDTO
+
+@{
+    ViewData["Title"] = "任務詳細資料";
+}
+
+<h1>任務詳細資料</h1>
+
+<div>
+    <h4>@Model.Ftitle</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.FtaskId)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.FtaskId)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.FposterId)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.FposterId)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.FcategoryId)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.FcategoryId)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Ftitle)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Ftitle)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Fdescription)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Fdescription)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Fbudget)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Fbudget)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Flocation)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Flocation)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.FlocationDetail)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.FlocationDetail)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Fmember)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Fmember)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Fphone)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Fphone)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Femail)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Femail)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Fstatus)
+        </dt>
+        <dd class="col-sm-10">
+            @{
+                string statusClass = Model.Fstatus == "已完成" ? "text-success" : "text-primary";
+            }
+            <span class="@statusClass fw-bold">@Html.DisplayFor(model => model.Fstatus)</span>
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Fdeadline)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Fdeadline)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.FcreatedAt)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.FcreatedAt)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.FupdatedAt)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.FupdatedAt)
+        </dd>
+        <dt class="col-sm-2">
+            現有任務照片
+        </dt>
+        <dd class="col-sm-10 d-flex align-items-center">
+            @if (!string.IsNullOrEmpty(Model.FtimagePath))
+            {
+                <div class="d-flex flex-wrap">
+                    @foreach (var imagePath in Model.FtimagePath.Split(';'))
+                    {
+                        <div class="me-3 mb-2">
+                            <img src="@imagePath" alt="任務圖片" style="max-width: 200px; height: auto;" />
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <p>尚未上傳圖片</p>
+            }
+        </dd>
+    </dl>
+</div>
+
+<div class="mt-4">
+    <a asp-action="Edit" asp-route-id="@Model.FtaskId" class="btn btn-primary">
+        <i class="bi bi-pencil"></i> 修改
+    </a>
+
+    @if (Model.Fstatus == "已完成")
+    {
+        <a asp-controller="BEcpayOrders" asp-action="Details"
+           asp-route-id="@ViewBag.OrderId" class="btn btn-info">
+            <i class="bi bi-receipt"></i> 查看交易明細
+        </a>
+    }
+
+    <a asp-action="List" class="btn btn-secondary">
+        <i class="bi bi-arrow-left"></i> 回到案件列表
+    </a>
+</div>

@@ -1,0 +1,338 @@
+﻿@model BackMange.ViewModels.AccountViewModels
+@{
+    ViewData["Title"] = "Login";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>登入 - MatchPro</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap"
+          rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
+          rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    @* <link href="~/frontuse/css/index.css" rel="stylesheet" /> *@
+    <link href="~/frontuse/css/nav.css" rel="stylesheet" />
+    <link href="~/frontuse/css/login.css" rel="stylesheet" />
+    @* <link href="~/frontuse/css/HFN.css" rel="stylesheet" /> *@
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
+</head>
+<body>
+    <section class="login-section" id="VuePage">
+        <div class="login-container">
+            <div class="login-left">
+                <img src="~/frontuse/imgs/Login.webp" alt="Lighthouse" class="login-image">
+            </div>
+
+            <div class="login-right">
+                <div class="login-content">
+                    <div class="logo">
+                        <div class="logo-text">
+                            <span class="match">Match</span><span class="pro">Pro</span>
+                        </div>
+                    </div>
+
+                    <!-- 登入表單 -->
+                    <form v-if="!isForgotPassword && !isResetPassword" method="post" class="login-form" id="loginForm">
+                        <p class="login-subtitle">探索屬於你的精彩機會</p>
+                        <div class="form-group">
+                            <label>帳號 <span class="required">*</span></label>
+                            <input type="email" class="form-control" placeholder="請輸入您的電子帳號" v-model="form.Femail" required />
+                        </div>
+                        <div class="form-group">
+                            <label>密碼 <span class="required">*</span></label>
+                            <div class="position-relative">
+                                <input v-bind:type="showPassword ? 'text' : 'password'"
+                                       v-model.trim="form.FpasswordHash"
+                                       class="form-control"
+                                       placeholder="請輸入您的密碼"
+                                       required />
+                                <i class="bi position-absolute"
+                                   style="right: 15px; top: 50%; transform: translateY(-50%); cursor: pointer;"
+                                   v-bind:class="{'bi-eye': !showPassword, 'bi-eye-slash': showPassword}"
+                                   v-on:click="showPassword = !showPassword"></i>
+                            </div>
+                        </div>
+                        <button type="submit" class="submit-btn" v-on:click="doLogin">登入</button>
+                        <div class="text-end mt-2">
+                            <a href="#" class="text-decoration-none" v-on:click.prevent="isForgotPassword = true">忘記密碼？</a>
+                        </div>
+                    </form>
+
+                    <!-- 忘記密碼表單 -->
+                    <form v-if="isForgotPassword" method="post" class="login-form" id="forgotPasswordForm">
+                        <p class="login-subtitle">請輸入您的 Email，我們將發送重設連結</p>
+                        <div class="form-group">
+                            <label>Email <span class="required">*</span></label>
+                            <input type="email" class="form-control" placeholder="請輸入您的 Email" v-model="forgotPasswordEmail" required />
+                        </div>
+                        <div v-if="forgotPasswordMessage" class="alert alert-info">{{ forgotPasswordMessage }}</div>
+                        <div v-if="forgotPasswordError" class="alert alert-danger">{{ forgotPasswordError }}</div>
+                        <button type="submit" class="submit-btn" v-on:click="sendResetEmail">發送重置密碼郵件</button>
+                        <div class="d-flex justify-content-end">                            
+                            <button type="button" class="btn-back" v-on:click="isForgotPassword = false">返回</button>
+                        </div>
+                    </form>
+
+                    <!-- 重設密碼表單 -->
+                    <form v-if="isResetPassword" method="post" class="login-form" id="resetPasswordForm">
+                        <p class="login-subtitle">請輸入您的新密碼</p>
+
+                        <!-- 新密碼輸入框 -->
+                        <div class="form-group">
+                            <label>新密碼 <span class="required">*</span></label>
+                            <div class="position-relative">
+                                <input v-bind:type="showNewPassword ? 'text' : 'password'"
+                                       v-model.trim="newPassword"
+                                       class="form-control"
+                                       id="newPassword"
+                                       autocomplete="new-password"
+                                       pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{6,}"
+                                       title="密碼必須包含大小寫字母和數字，最少6個字元"
+                                       placeholder="請輸入新密碼"
+                                       required />
+                                <i class="bi position-absolute"
+                                   style="right: 15px; top: 50%; transform: translateY(-50%); cursor: pointer;"
+                                   v-bind:class="{'bi-eye': !showNewPassword, 'bi-eye-slash': showNewPassword}"
+                                   v-on:click="showNewPassword = !showNewPassword"></i>
+                            </div>
+                            <div v-if="newPasswordError" class="error-message">
+                                密碼必須包含大小寫字母和數字，最少6個字元
+                            </div>
+                        </div>
+
+                        <!-- 確認密碼輸入框 -->
+                        <div class="form-group">
+                            <label>確認新密碼 <span class="required">*</span></label>
+                            <div class="position-relative">
+                                <input v-bind:type="showConfirmPassword ? 'text' : 'password'"
+                                       v-model.trim="confirmNewPassword"
+                                       class="form-control"
+                                       id="confirmNewPassword"
+                                       autocomplete="new-password"
+                                       pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{6,}"
+                                       title="密碼必須包含大小寫字母和數字，最少6個字元"
+                                       placeholder="請再次輸入新密碼"
+                                       required />
+                                <i class="bi position-absolute"
+                                   style="right: 15px; top: 50%; transform: translateY(-50%); cursor: pointer;"
+                                   v-bind:class="{'bi-eye': !showConfirmPassword, 'bi-eye-slash': showConfirmPassword}"
+                                   v-on:click="showConfirmPassword = !showConfirmPassword"></i>
+                            </div>
+                            <div v-if="confirmPasswordError" class="error-message">
+                                密碼必須包含大小寫字母和數字，最少6個字元
+                            </div>
+                        </div>
+
+                        <div v-if="!passwordsMatch && showPasswordMatchError" class="error-message">
+                            密碼與確認密碼不符
+                        </div>
+
+                        <div v-if="resetPasswordMessage" class="alert alert-success">{{ resetPasswordMessage }}</div>
+                        <div class="form-nav ">
+                            <button type="submit" class="submit-btn" v-on:click="resetPassword"
+                                    v-bind:disabled="!isPasswordValid">
+                                重設密碼
+                            </button>
+                        </div>
+                    </form>
+
+                    <div class="divider"><span>或是</span></div>
+                    <div class="social-login">
+                        <div id="g_id_onload"
+                             data-client_id="60090469719-3hb6kssssl803b7iksnv3i5cnagi1dvl.apps.googleusercontent.com"
+                             data-callback="handleCredentialResponse"
+                             data-auto_prompt="false">
+                        </div>
+                        <div class="g_id_signin"
+                             data-type="standard"
+                             data-size="large"
+                             data-theme="outline"
+                             data-text="sign_in_with"
+                             data-shape="rectangular"
+                             data-logo_alignment="left">
+                        </div>
+                    </div>
+                    <div class="form-footer">
+                        <p>還沒有帳號？<a href="@Url.Action("Register", "Account")">立即註冊</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
+
+    <script>
+        // Google 登入回調函數
+        function handleCredentialResponse(response) {
+            if (window.VuePage) {
+                window.VuePage.handleCredentialResponse(response);
+            }
+        }
+
+        var VuePage = new Vue({
+            el: '#VuePage',
+            data: {
+                showPassword: false,
+                showNewPassword: false,
+                showConfirmPassword: false,
+                newPasswordError: false,
+                confirmPasswordError: false,
+                showPasswordMatchError: false,
+                isForgotPassword: false,
+                isResetPassword: false,
+                resetToken: '',
+                form: {
+                    Femail: '',
+                    FpasswordHash: ''
+                },
+                forgotPasswordEmail: '',
+                forgotPasswordMessage: '',
+                forgotPasswordError: '',
+                newPassword: '',
+                confirmNewPassword: '',
+                resetPasswordMessage: ''
+            },
+            computed: {
+                passwordsMatch() {
+                    return this.newPassword === this.confirmNewPassword;
+                },
+                isPasswordValid() {
+                    const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{6,}$/;
+                    return passwordPattern.test(this.newPassword) &&
+                           passwordPattern.test(this.confirmNewPassword) &&
+                           this.passwordsMatch;
+                }
+            },
+            methods: {
+                doLogin(event) {
+                    event.preventDefault();
+                    $.ajax({
+                        url: '@Url.Action("DoLogin", "Account")',
+                        type: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify(this.form),
+                        success: function (datas) {
+                            if (datas.ErrMsg) {
+                                alert(datas.ErrMsg);
+                            } else {
+                                alert(datas.ResultMsg);
+                                window.location.href = '/FrontIndex/Index';
+                            }
+                        }
+                    });
+                },
+                handleCredentialResponse(response) {
+                    $.ajax({
+                        url: '@Url.Action("GoogleResponse", "Account")',
+                        type: 'POST',
+                        data: { credential: response.credential },
+                        success: function(result) {
+                            if (result.success) {
+                               window.location.href = '/FrontIndex/Index';
+                            } else {
+                                alert(result.message);
+                            }
+                        },
+                        error: function() {
+                            alert('登入失敗，請稍後再試');
+                        }
+                    });
+                },
+                sendResetEmail(event) {
+                    event.preventDefault();
+                    var self = this;
+                    $.ajax({
+                        url: '@Url.Action("ForgotPassword", "Account")',
+                        type: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify({ Femail: self.forgotPasswordEmail }),
+                        success: function () {
+                            self.forgotPasswordMessage = "密碼重置郵件已發送，請檢查您的信箱";
+                        },
+                        error: function () {
+                            self.forgotPasswordError = "無法找到該 Email，請確認輸入是否正確";
+                        }
+                    });
+                },
+                resetPassword(event) {
+                    event.preventDefault();
+
+                    // 驗證密碼格式
+                    this.newPasswordError = !this.validatePassword(this.newPassword);
+                    this.confirmPasswordError = !this.validatePassword(this.confirmNewPassword);
+
+                    // 驗證密碼匹配
+                    this.showPasswordMatchError = !this.passwordsMatch;
+
+                    if (this.newPasswordError || this.confirmPasswordError || !this.passwordsMatch) {
+                        return;
+                    }
+
+                    $.ajax({
+                        url: '@Url.Action("ResetPassword", "Account")',
+                        type: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify({
+                            token: this.resetToken,
+                            password: this.newPassword
+                        }),
+                        success: function () {
+                            alert("密碼已重設成功，請重新登入");
+                            window.location.href = '@Url.Action("Login", "Account")';
+                        },
+                        error: function() {
+                            alert("重設密碼失敗，請稍後再試");
+                        }
+                    });
+                },
+                validatePassword(password) {
+                    const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{6,}$/;
+                    return passwordPattern.test(password);
+                }
+            },
+            watch: {
+                newPassword() {
+                    if (this.newPassword) {
+                        this.newPasswordError = !this.validatePassword(this.newPassword);
+                    }
+                    if (this.confirmNewPassword) {
+                        this.showPasswordMatchError = !this.passwordsMatch;
+                    }
+                },
+                confirmNewPassword() {
+                    if (this.confirmNewPassword) {
+                        this.confirmPasswordError = !this.validatePassword(this.confirmNewPassword);
+                        this.showPasswordMatchError = !this.passwordsMatch;
+                    }
+                }
+            },
+            mounted() {
+                const urlParams = new URLSearchParams(window.location.search);
+                const token = urlParams.get('token');
+                if (token) {
+                    this.isResetPassword = true;
+                    this.resetToken = token;
+                }
+            }
+        });
+        window.VuePage = VuePage;
+    </script>
+    @if (TempData["AlertMessage"] != null)
+    {
+        <script>
+            alert(@Html.Raw(Json.Serialize(TempData["AlertMessage"])));
+        </script>
+    }
+
+</body>
+</html>

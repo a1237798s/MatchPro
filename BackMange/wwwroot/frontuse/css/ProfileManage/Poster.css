@@ -1,0 +1,332 @@
+/* 提案管理 */
+.proposal-management {
+  padding: 20px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+/* 頁面標題 */
+.proposal-management .page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #edf2f7;
+}
+
+.proposal-management .page-header h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #1a202c;
+  margin: 0;
+}
+
+/* 新增提案按鈕 */
+.btn-new-proposal {
+  background: #4caf50;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.btn-new-proposal:hover {
+  background: #45a049;
+  transform: translateY(-1px);
+}
+
+.btn-new-proposal i {
+  font-size: 1rem;
+}
+
+/* 提案列表區塊 */
+.proposal-list {
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid #edf2f7;
+  padding: 1rem 2rem;
+  margin-bottom: 15px;
+}
+
+/* 篩選標籤 */
+.proposal-management .proposal-filter-tabs {
+  margin: 20px 0;
+  display: flex;
+  gap: 12px;
+}
+
+.proposal-management .filter-tab {
+    position:relative;
+    padding: 8px 16px;
+    margin: 0px 8px;
+    border: 1px solid #e0e0e0;
+    border-radius: 20px;
+    background: white;
+    color: #666;
+    transition: color 0.3s ease;
+    cursor: pointer;
+}
+
+    .proposal-management .filter-tab .badge {
+        position: absolute;
+        top: -5px;
+        right: -5px;
+        background-color: #e45959;
+        color: white;
+        font-size: 12px;
+        font-weight: bold;
+        padding: 3px 6px;
+        border-radius: 50%;
+        min-width: 18px;
+        text-align: center;
+    }
+
+.proposal-management .filter-tab:hover {
+  color: #2196f3;
+}
+
+.proposal-management .filter-tab.active {
+  background: #2196f3;
+  color: white;
+  border-color: #2196f3;
+}
+
+/* 提案卡片列表 */
+.proposal-cards {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
+}
+
+/* 提案卡片 */
+.proposal-card {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s ease;
+}
+
+.proposal-card:hover {
+  transform: translateY(-2px);
+}
+
+.proposal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.proposal-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #333;
+  margin: 0;
+}
+
+a.workername {
+  color: #3f9cf9;
+  font-size: 1.2rem;
+  text-decoration: none;
+}
+
+.proposal-date {
+  color: #888;
+  font-size: 0.9rem;
+}
+
+.proposal-content {
+  color: #666;
+  margin-bottom: 16px;
+  line-height: 1.5;
+}
+
+.proposal-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.proposal-info {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+/* 狀態標籤 */
+.proposal-status {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+}
+
+.proposal-status.status-publishing {
+  background: #ebf8ff;
+  color: #3182ce;
+}
+
+.proposal-status.status-reviewing {
+  background: #a7a58c;
+  color: white;
+}
+
+.status-pending {
+  background: #fff3e0;
+  color: #f57c00;
+}
+
+.status-accepted {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+.status-rejected {
+  background: rgba(245, 101, 101, 0.1);
+  color: #c53030;
+}
+
+.proposal-amount {
+  color: #2196f3;
+  font-weight: 600;
+}
+
+/* 按鈕樣式 */
+.proposal-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.proposal-actions .btn-action {
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: 1px solid #e0e0e0;
+  background: white;
+  color: #666;
+  transition: all 0.2s ease;
+}
+
+.proposal-actions .btn-action:hover {
+  background: #f5f5f5;
+}
+
+.proposal-actions .btn-delete {
+  color: #f44336;
+  border-color: #f44336;
+}
+
+.proposal-actions .btn-delete:hover {
+  background: #ffebee;
+}
+
+.proposal-actions .btn-action.btn-accept {
+    border: 1px solid #4caf50;
+    color: #4caf50;
+}
+.proposal-actions .btn-action.btn-accept:hover {
+    background: #62be65;
+    color: white;
+}
+/* 響應式調整 */
+@media (max-width: 768px) {
+  .proposal-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .proposal-footer {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .proposal-actions {
+    width: 100%;
+  }
+
+  .btn-action {
+    flex: 1;
+    text-align: center;
+  }
+
+  .proposal-filter-tabs {
+    overflow-x: auto;
+    padding-bottom: 8px;
+  }
+}
+
+/* 提案表單 */
+.proposal-form .form-group {
+  margin-bottom: 20px;
+}
+
+.proposal-form label {
+  display: block;
+  margin-bottom: 8px;
+  color: #333;
+  font-weight: 500;
+}
+
+.proposal-form .form-control {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  transition: border-color 0.3s ease;
+}
+
+.proposal-form .form-control:focus {
+  border-color: #2196f3;
+  outline: none;
+}
+
+.proposal-form .input-group {
+  display: flex;
+}
+
+.proposal-form .input-group-text {
+  padding: 0.5rem 0.75rem;
+  background: #f7fafc;
+  border: 1px solid #e2e8f0;
+  border-right: none;
+  border-radius: 6px 0 0 6px;
+  color: #4a5568;
+}
+
+.proposal-form .input-group .form-control {
+  border-radius: 0 6px 6px 0;
+}
+
+/* Modal 按鈕 */
+.modal-footer .btn {
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border-radius: 6px;
+}
+
+/* .modal-footer .btn-primary {
+    background: #805ad5;
+    border-color: #805ad5;
+    color: #fff;
+}
+
+.modal-footer .btn-primary:hover {
+    background: #6b46c1;
+    border-color: #6b46c1;
+} */
+
+.modal-footer .btn-secondary {
+  background: #fff;
+  border-color: #e2e8f0;
+  color: #4a5568;
+}
+
+.modal-footer .btn-secondary:hover {
+  background: #f7fafc;
+}

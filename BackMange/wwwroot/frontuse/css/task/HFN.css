@@ -1,0 +1,572 @@
+/* 通用樣式 */
+:root {
+    --primary-color: #97CBFF;
+    --primary-dark: #63B3ED;
+    --text-dark: #2D3748;
+    --text-light: #4A5568;
+    --gray-light: #E2E8F0;
+    --white: #FFFFFF;
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --transition: all 0.3s ease;
+}
+
+/* ==========================================================================
+   基本設定
+========================================================================== */
+body {
+    min-height: 100vh;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ==========================================================================
+   Logo 樣式
+========================================================================== */
+/* Logo 文字效果 */
+.match {
+    color: #4A90E2;
+    text-shadow: 3px 3px 0 #1B3B5E, -3px -3px 0 #1B3B5E, 3px -3px 0 #1B3B5E, -3px 3px 0 #1B3B5E, 0 0 15px rgba(74, 144, 226, 0.6);
+    display: inline-block;
+    transform: translateZ(10px);
+}
+
+.pro {
+    color: #FFD700;
+    text-shadow: 3px 3px 0 #8B7355, -3px -3px 0 #8B7355, 3px -3px 0 #8B7355, -3px 3px 0 #8B7355, 0 0 15px rgba(255, 215, 0, 0.6);
+    display: inline-block;
+    transform: translateZ(10px);
+}
+
+/* ==========================================================================
+   Header 區塊
+========================================================================== */
+header {
+    background: #fff;
+}
+
+.main-header {
+    position: fixed;
+    width: 100%;
+    z-index: 1000;
+    top: 0;
+    height: 80px;
+}
+
+/* Header 容器 */
+.header-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 80px; /* 固定高度 */
+}
+
+/* Logo 區塊 */
+.logo {
+    display: flex;
+    align-items: center;
+    height: 100%;
+}
+
+.logo-text {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 22px;
+    display: flex;
+    gap: 3px;
+    align-items: center; /* 確保文字垂直置中 */
+}
+
+/* ==========================================================================
+   Nav
+========================================================================== */
+/* 主導覽列 */
+.main-nav {
+    background: #f8f9fa;
+    padding: 0;
+    position: fixed;
+    top: 80px;
+    width: 100%;
+    z-index: 999;
+    height: 0;
+    overflow: hidden;
+    border-bottom: 1px solid #e9ecef;
+    transition: height 0.3s ease;
+}
+
+/* 導覽列展開效果 */
+.main-header:hover .main-nav {
+    height: 56px;
+}
+
+/* 導覽列清單 */
+.main-nav ul {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    list-style: none;
+    display: flex;
+    gap: 30px;
+    height: 100%;
+    align-items: center;
+}
+
+/* 導覽列連結樣式 */
+.main-header .main-nav ul li a,
+.main-header .main-nav ul li a.active {
+    color: #666;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 15px;
+    padding: 0 20px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    transition: color 0.3s ease;
+}
+
+    /* 導覽列連結 hover 效果 */
+    .main-header .main-nav ul li a:hover {
+        color: #4DA6FF !important;
+        cursor: pointer;
+    }
+
+/* ==========================================================================
+   按鈕樣式
+========================================================================== */
+/* 右側按鈕容器 */
+.right-buttons {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    height: 100%; /* 設定高度與 header 一致 */
+}
+
+/* 登入按鈕 */
+.login-btn {
+    background: none;
+    color: #333;
+    padding: 12px 24px;
+    font-weight: 500;
+    font-size: 15px;
+    border: none;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    height: 44px;
+    text-decoration: none;
+}
+
+/* 註冊按鈕 */
+.creatuser-btn {
+    background: #4DA6FF;
+    color: white;
+    padding: 0 28px;
+    font-weight: 500;
+    font-size: 15px;
+    border: none;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(77, 166, 255, 0.2);
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ==========================================================================
+   Footer 
+========================================================================== */
+footer {
+    background: #84C1FF !important;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: auto;
+}
+
+    footer .container {
+        text-align: center;
+    }
+
+    footer p {
+        color: #2D3748;
+        font-size: 0.85rem;
+        font-weight: 400;
+        letter-spacing: 0.2px;
+        margin: 0;
+    }
+
+/* 響應式調整 */
+@media (max-width: 768px) {
+    footer {
+        height: 50px;
+    }
+
+        footer p {
+            font-size: 0.8rem;
+        }
+}
+
+/* ==========================================================================
+   響應式設計
+========================================================================== */
+@media (max-width: 768px) {
+    /* 漢堡選單按鈕 */
+    .nav-toggle {
+        display: block;
+    }
+
+    /* 手機版導覽列 */
+    .main-nav {
+        height: auto;
+        position: fixed;
+        top: 80px;
+        left: -100%;
+        width: 250px;
+        height: calc(100vh - 80px);
+        background: #f8f9fa;
+        transition: left 0.3s ease-in-out;
+        overflow: visible;
+    }
+
+        .main-nav.show {
+            left: 0;
+        }
+
+    /* 其他響應式調整... */
+}
+
+/* ==========================================================================
+ header
+========================================================================== */
+
+header {
+    background: #fff;
+}
+
+.main-header {
+    position: fixed;
+    width: 100%;
+    z-index: 1000;
+    top: 0;
+    height: 80px;
+}
+
+/* 主容器 */
+.creatuser-container {
+    position: relative;
+    padding: 80px 20px;
+    background: #FFFFFF;
+    backdrop-filter: blur(8px);
+    min-height: calc(100vh - 100px);
+    display: flex;
+    align-items: flex-start;
+}
+
+.content-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    gap: 60px;
+    margin-top: 120px;
+}
+
+header .logo {
+    display: flex;
+    align-items: center;
+}
+
+    header .logo img {
+        height: 40px;
+        margin-right: 10px;
+    }
+
+/* ==========================================================================
+ logo
+========================================================================== */
+
+.logo-text .match {
+    color: #4DA6FF;
+}
+
+.logo-text .pro {
+    color: #FFE066;
+}
+
+/* ==========================================================================
+按鈕
+========================================================================== */
+.right-buttons a {
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+}
+
+/* ==========================================================================
+ 導覽
+========================================================================== */
+.main-nav {
+    background: #f8f9fa;
+    padding: 0;
+    position: fixed;
+    top: 80px;
+    width: 100%;
+    z-index: 999;
+    height: 0;
+    overflow: hidden;
+    border-bottom: 1px solid #e9ecef;
+    transition: height 0.3s ease;
+}
+
+/* 當滑鼠移到 header 時顯示導覽列 */
+.main-header:hover .main-nav {
+    height: 56px;
+}
+
+.main-nav ul {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    list-style: none;
+    display: flex;
+    gap: 30px;
+    height: 100%;
+    align-items: center;
+}
+
+/* 導覽列連結樣式 */
+.main-header .main-nav ul li a,
+.main-header .main-nav ul li a.active {
+    color: #666;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 15px;
+    padding: 0 20px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    transition: color 0.3s ease;
+}
+
+    .main-header .main-nav ul li a:hover {
+        color: #4DA6FF !important;
+        cursor: pointer;
+    }
+
+/* ==========================================================================
+ hover
+========================================================================== */ .login-btn:hover {
+    color: #4DA6FF;
+}
+
+.creatuser-btn:hover {
+    background: #3D96FF;
+    box-shadow: 0 4px 12px rgba(77, 166, 255, 0.3);
+}
+
+
+/* ==========================================================================
+========================================================================== */
+
+main {
+    flex: 1 0 auto;
+    padding-top: 136px;
+    background: #1a1a1a;
+}
+
+/* =========================================================================
+game
+========================================================================== */
+
+.game-intro {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    color: #fff;
+}
+
+/* 遊戲標題 */
+.game-title {
+    font-size: 48px;
+    font-weight: 700;
+    margin-bottom: 30px;
+    text-align: center;
+    color: #fff;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+}
+
+/* 遊戲描述 */
+.game-description {
+    font-size: 16px;
+    line-height: 1.8;
+    margin-bottom: 30px;
+    text-align: center;
+    color: #ccc;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+
+/* ==========================================================================*/
+/* 向下捲動提示 */
+.scroll-down {
+    text-align: center;
+    margin-top: 40px;
+    color: #fff;
+    font-size: 14px;
+    opacity: 0.8;
+    animation: bounce 2s infinite;
+}
+
+/* 箭頭動畫 */
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+    }
+
+    40% {
+        transform: translateY(-10px);
+    }
+
+    60% {
+        transform: translateY(-5px);
+    }
+}
+/* ==========================================================================*/
+
+
+/* 背景圖片設置 */
+.game-banner {
+    position: relative;
+    width: 100%;
+    height: 600px;
+    background-image: url('path_to_your_image.jpg');
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+    .game-banner::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+    }
+
+/* 響應式設計 */
+@media (max-width: 768px) {
+    .header-container {
+        padding: 0 20px;
+    }
+
+    .logo-text {
+        font-size: 20px;
+    }
+
+    .creatuser-btn {
+        padding: 0 20px;
+        height: 40px;
+    }
+
+    .game-title {
+        font-size: 36px;
+    }
+
+    .game-description {
+        font-size: 14px;
+        padding: 0 20px;
+    }
+
+    .game-banner {
+        height: 400px;
+    }
+}
+
+/* Logo 懸停*/
+header .logo:hover img {
+    transform: scale(1.05);
+    transition: transform 0.3s ease;
+}
+
+@media (max-width: 768px) {
+    .content-wrapper {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .character-section,
+    .title-section {
+        width: 100%;
+    }
+}
+
+/* 漢堡選單按鈕樣式 */
+.nav-toggle {
+    display: none; /* 預設隱藏 */
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    color: #333;
+}
+
+/* 手機版的樣式 */
+@media (max-width: 768px) {
+    .nav-toggle {
+        display: block;
+    }
+
+    .main-nav {
+        height: auto; /* 重置高度 */
+        position: fixed;
+        top: 80px;
+        left: -100%;
+        width: 250px;
+        height: calc(100vh - 80px);
+        background: #f8f9fa;
+        transition: left 0.3s ease-in-out;
+        overflow: visible; /* 重置 overflow */
+    }
+
+        .main-nav.show {
+            left: 0;
+        }
+
+    .main-header:hover .main-nav {
+        height: calc(100vh - 80px);
+    }
+
+    .main-nav ul {
+        flex-direction: column;
+        padding: 20px 0;
+        height: auto;
+    }
+
+    .main-nav li {
+        width: 100%;
+    }
+
+    .main-nav a {
+        padding: 15px 20px;
+        width: 100%;
+        justify-content: flex-start;
+    }
+}
+
+/* 像素字體1 */
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');

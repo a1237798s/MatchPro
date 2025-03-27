@@ -1,0 +1,214 @@
+﻿@model BackMange.DTO.CUserDTO
+
+@{
+    ViewData["Title"] = "Create";
+
+}
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+<h1>新增會員資料</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create" method="post" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group">
+                <label asp-for="FfullName" class="control-label"></label>
+                <input asp-for="FfullName" class="form-control" />
+                <span asp-validation-for="FfullName" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Femail" class="control-label"></label>
+                <input asp-for="Femail" class="form-control" type="email" />
+                <span asp-validation-for="Femail" class="text-danger"></span>
+            </div>
+
+            <!-- 密碼欄位 -->
+            <div class="form-group">
+                <label asp-for="FpasswordHash" class="control-label">密碼</label>
+                <div class="input-group">
+                    <input asp-for="FpasswordHash" class="form-control" type="password"
+                           pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{6,}$"
+                           title="密碼必須包含大小寫字母和數字，且至少6個字元" />
+                    <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                        <i class="bi bi-eye"></i>
+                    </button>
+                </div>
+                <span asp-validation-for="FpasswordHash" class="text-danger"></span>
+            </div>
+
+            <!-- 確認密碼欄位 -->
+            <div class="form-group">
+                <label for="confirmPassword" class="control-label">確認密碼</label>
+                <div class="input-group">
+                    <input type="password" id="confirmPassword" name="confirmPassword"
+                           class="form-control" />
+                    <button class="btn btn-outline-secondary" type="button" id="toggleConfirmPassword">
+                        <i class="bi bi-eye"></i>
+                    </button>
+                </div>
+                <span id="passwordError" class="text-danger"></span>
+            </div>
+
+            <!-- 新增身分證字號欄位 -->
+            <div class="form-group">
+                <label asp-for="FidNumber" class="control-label">身分證字號</label>
+                <input asp-for="FidNumber" class="form-control"
+                       pattern="^[A-Z][12]\d{8}$"
+                       title="請輸入正確的身分證字號格式" />
+                <span asp-validation-for="FidNumber" class="text-danger"></span>
+            </div>
+
+            <!-- 新增統一編號欄位 -->
+            <div class="form-group">
+                <label asp-for="FcompanyNumber" class="control-label">統一編號</label>
+                <input asp-for="FcompanyNumber" class="form-control"
+                       pattern="^\d{8}$"
+                       title="請輸入8位數字的統一編號" />
+                <span asp-validation-for="FcompanyNumber" class="text-danger"></span>
+            </div>
+
+            <!-- 隱藏的登入類型欄位，預設為一般帳號 -->
+            <input type="hidden" asp-for="FloginType" value="Local" />
+
+
+
+            <div class="form-group">
+                <label asp-for="FphoneNumber" class="control-label"></label>
+                <input asp-for="FphoneNumber" class="form-control" type="tel" />
+                <span asp-validation-for="FphoneNumber" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Faddress" class="control-label"></label>
+                <input asp-for="Faddress" class="form-control" />
+                <span asp-validation-for="Faddress" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Fbirthday" class="control-label"></label>
+                <input asp-for="Fbirthday" class="form-control" type="date" />
+                <span asp-validation-for="Fbirthday" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Fgender" class="control-label"></label>
+                <select asp-for="Fgender" class="form-control">
+                    <option value="">請選擇性別</option>
+                    <option value="M">男</option>
+                    <option value="F">女</option>
+                    <option value="O">其他</option>
+                </select>
+                <span asp-validation-for="Fgender" class="text-danger"></span>
+            </div>
+
+            @* <div class="form-group"> *@
+            @*     <label asp-for="FprofileImageUrl" class="control-label">上傳照片</label> *@
+            @*     <input type="file" name="photoPath" class="form-control" /> *@
+            @*     <span asp-validation-for="FprofileImageUrl" class="text-danger"></span> *@
+            @* </div> *@
+
+            <div class="form-group mt-3">
+                <input type="submit" value="送出並新增" class="btn btn-primary" />
+                <a asp-action="List" class="btn btn-secondary">取消</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        $(document).ready(function () {
+            // 原有的密碼相關程式碼保留
+            function togglePasswordVisibility(inputId, buttonId) {
+                const input = $(inputId);
+                const button = $(buttonId);
+                const icon = button.find('i');
+
+                button.click(function () {
+                    const type = input.attr('type') === 'password' ? 'text' : 'password';
+                    input.attr('type', type);
+                    icon.toggleClass('bi-eye bi-eye-slash');
+                });
+            }
+
+            togglePasswordVisibility('#FpasswordHash', '#togglePassword');
+            togglePasswordVisibility('#confirmPassword', '#toggleConfirmPassword');
+
+            // Email 即時檢查
+            $('#Femail').on('change', function() {
+                const email = $(this).val();
+                if (email) {
+                    $.get('/ttUser/CheckEmail', { email: email }, function(exists) {
+                        if (exists) {
+                            alert('此 Email 已經被使用');
+                            $('#Femail').val('').focus();
+                        }
+                    });
+                }
+            });
+
+            // 表單提交驗證
+            $('form').on('submit', function (e) {
+                const password = $('#FpasswordHash').val();
+                const confirmPassword = $('#confirmPassword').val();
+                const passwordError = $('#passwordError');
+
+                // 密碼驗證
+                if (password !== confirmPassword) {
+                    e.preventDefault();
+                    passwordError.text('密碼與確認密碼不符');
+                    return false;
+                }
+
+                const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{6,}$/;
+                if (!passwordPattern.test(password)) {
+                    e.preventDefault();
+                    passwordError.text('密碼必須包含大小寫字母和數字，且至少6個字元');
+                    return false;
+                }
+
+                // 檢查統一編號
+                const companyNumber = $('#FcompanyNumber').val();
+                if (companyNumber && companyNumber.length !== 8) {
+                    e.preventDefault();
+                    alert('統一編號必須是8位數字');
+                    return false;
+                }
+
+                // 檢查身分證字號
+                const idNumber = $('#FidNumber').val();
+                if (idNumber) {
+                    const idPattern = /^[A-Z][12]\d{8}$/;
+                    if (!idPattern.test(idNumber)) {
+                        e.preventDefault();
+                        alert('身分證字號格式不正確（須為一個大寫字母開頭，第二碼為1或2，後面接8個數字）');
+                        return false;
+                    }
+                }
+
+                passwordError.text('');
+                return true;
+            });
+
+            // 即時密碼驗證
+            $('#FpasswordHash, #confirmPassword').on('input', function() {
+                const password = $('#FpasswordHash').val();
+                const confirmPassword = $('#confirmPassword').val();
+                const passwordError = $('#passwordError');
+
+                if (confirmPassword && password !== confirmPassword) {
+                    passwordError.text('密碼與確認密碼不符');
+                } else {
+                    passwordError.text('');
+                }
+            });
+        });
+    </script>
+}

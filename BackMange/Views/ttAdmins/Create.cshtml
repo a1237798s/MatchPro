@@ -1,0 +1,111 @@
+﻿@model BackMange.DTO.CAdminDTO
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>新增管理員</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group">
+                <label asp-for="FadminNo" class="control-label"></label>
+                <input asp-for="FadminNo" class="form-control" readonly value="@ViewBag.NewAdminNo"
+                       style="background-color: rgba(233, 236, 239, 0.5); border: 1px solid #ced4da;" />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="FfullName" class="control-label"></label>
+                <input asp-for="FfullName" class="form-control" />
+                <span asp-validation-for="FfullName" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Femail" class="control-label"></label>
+                <input asp-for="Femail" class="form-control" />
+                <span asp-validation-for="Femail" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="FadmPassword" class="control-label"></label>
+                <div class="input-group">
+                    <input asp-for="FadmPassword" class="form-control" type="password" autocomplete="off" />
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" type="button" onclick="togglePassword('FadmPassword')">
+                            <i class="fas fa-eye" id="toggleFadmPassword"></i>
+                        </button>
+                    </div>
+                </div>
+                <span asp-validation-for="FadmPassword" class="text-danger"></span>
+            </div>
+
+            <!--  確認密碼 -->
+            <div class="form-group">
+                <label asp-for="ConfirmPassword" class="control-label"></label>
+                <div class="input-group">
+                    <input asp-for="ConfirmPassword" class="form-control" type="password" autocomplete="off" />
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" type="button" onclick="togglePassword('ConfirmPassword')">
+                            <i class="fas fa-eye" id="toggleConfirmPassword"></i>
+                        </button>
+                    </div>
+                </div>
+                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="FmobilePhone" class="control-label"></label>
+                <input asp-for="FmobilePhone" class="form-control" />
+                <span asp-validation-for="FmobilePhone" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="FadminLevel" class="control-label"></label>
+                <select asp-for="FadminLevel" class="form-control">
+                    <option value="1">一級管理員</option>
+                    <option value="2">二級管理員</option>
+                    <option value="3">三級管理員</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="FstatusId" class="control-label"></label>
+                <select asp-for="FstatusId" class="form-control">
+                    <option value="1">啟用中</option>
+                    <option value="2">未認證</option>
+                    <option value="3">已停用</option>
+                </select>
+            </div>
+
+            <div class="form-group mt-3">
+                <input type="submit" value="建立" class="btn btn-primary" />
+                <a asp-action="List" class="btn btn-secondary">返回列表</a>
+            </div>
+        </form>
+    </div>
+</div>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        function togglePassword(fieldId) {
+            const passwordInput = document.getElementById(fieldId);
+            const toggleIcon = document.getElementById('toggle' + fieldId);
+
+            if (passwordInput.type === "password") {
+                passwordInput.type = "text";
+                toggleIcon.classList.remove("fa-eye");
+                toggleIcon.classList.add("fa-eye-slash");
+            } else {
+                passwordInput.type = "password";
+                toggleIcon.classList.remove("fa-eye-slash");
+                toggleIcon.classList.add("fa-eye");
+            }
+        }
+    </script>
+}

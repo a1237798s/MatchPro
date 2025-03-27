@@ -1,0 +1,208 @@
+﻿@{
+    Layout = "_FrontendLayout";
+}
+@section Styles {
+    <link href="https://fonts.googleapis.com/earlyaccess/cwtexkai.css"
+          rel="stylesheet" />
+    <link rel="stylesheet" href="~/frontuse/css/index.css" />
+    <link href="~/frontuse/css/chat.css" rel="stylesheet" />
+
+}
+<section class="hero-section">
+    <div class="container">
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1 class="hero-title">
+                    打造您的 <span class="text-highlight">專業接案生涯</span>
+                </h1>
+                <p class="hero-description">
+                    無論您是自由工作者還是企業，MatchPro 都能為您提供最佳的媒合服務
+                </p>
+                <div class="hero-buttons">
+                    <a asp-action="Login" asp-controller="Account"  class="primary-btn">了解更多</a>
+                    
+                </div>
+            </div>
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <span class="stat-number">5000+</span><span class="stat-label">成功案例</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">3000+</span><span class="stat-label">活躍會員</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">98%</span><span class="stat-label">滿意度</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<main class="creatuser-container">
+    <div class="pixel-background"></div>
+    <div class="content-wrapper">
+        <div class="character-section">
+            <div class="SpritesheetSlider">
+                <div class="Character Character--walk-down">
+                    <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/21542/WalkingDemo-Shadow.png"
+                         class="Character_shadow PixelArtImage" />
+                </div>
+                <div class="Navigation flex-center"></div>
+                <!-- 箭頭按鈕 -->
+                <button class="NextSpritesheetButton NextSpritesheetButton--prev"
+                        onclick="setPreviousActive()">
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                         viewBox="0 -0.5 4 7"
+                         shape-rendering="crispEdges">
+                        <path stroke="#434343"
+                              d="M3 0h1M2 1h1M1 2h1M0 3h1M1 4h1M2 5h1M3 6h1" />
+                    </svg>
+                </button><button class="NextSpritesheetButton NextSpritesheetButton--next"
+                                 onclick="setNextActive()">
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                         viewBox="0 -0.5 4 7"
+                         shape-rendering="crispEdges">
+                        <path stroke="#434343"
+                              d="M0 0h1M1 1h1M2 2h1M3 3h1M2 4h1M1 5h1M0 6h1" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <div class="title-section">
+            <div class="start-content">
+                <div class="company-name">
+                    <span class="match">Match</span><span class="pro">Pro</span>
+                </div>
+                <div class="pixel-border"></div>
+            </div>
+        </div>
+    </div>
+</main>
+<section class="process-section">
+    <div class="container">
+        <h2 class="section-title">簡單四步驟，開始您的接案之旅</h2>
+        <div class="process-grid">
+            <div class="process-item">
+                <div class="process-number">01</div>
+                <i class="bi bi-person-plus"></i>
+                <h3>註冊帳號</h3>
+                <p>快速完成註冊，立即加入我們的平台</p>
+            </div>
+            <div class="process-item">
+                <div class="process-number">02</div>
+                <i class="bi bi-file-earmark-text"></i>
+                <h3>完善檔案</h3>
+                <p>展示您的專業技能和過往作品</p>
+            </div>
+            <div class="process-item">
+                <div class="process-number">03</div>
+                <i class="bi bi-search"></i>
+                <h3>瀏覽案件</h3>
+                <p>尋找適合您的優質案件</p>
+            </div>
+            <div class="process-item">
+                <div class="process-number">04</div>
+                <i class="bi bi-check2-circle"></i>
+                <h3>開始合作</h3>
+                <p>與優質案主展開愉快合作</p>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="categories-section">
+    <div class="container">
+        <h2 class="section-title">多元案件類型</h2>
+        <div class="categories-grid">
+            <div class="category-item">
+                <i class="bi bi-code-slash"></i>
+                <h3>程式開發</h3>
+                <span class="category-count">500+個案件</span>
+            </div>
+            <div class="category-item">
+                <i class="bi bi-palette"></i>
+                <h3>設計創意</h3>
+                <span class="category-count">300+個案件</span>
+            </div>
+            <div class="category-item">
+                <i class="bi bi-translate"></i>
+                <h3>文字翻譯</h3>
+                <span class="category-count">200+個案件</span>
+            </div>
+            <div class="category-item">
+                <i class="bi bi-camera"></i>
+                <h3>影像製作</h3>
+                <span class="category-count">150+個案件</span>
+            </div>
+            <div class="category-item">
+                <i class="bi bi-megaphone"></i>
+                <h3>行銷企劃</h3>
+                <span class="category-count">250+個案件</span>
+            </div>
+            <div class="category-item">
+                <i class="bi bi-plus-circle"></i>
+                <h3>更多類型</h3>
+                <span class="category-count">探索更多機會</span>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="advantages-section">
+    <div class="container">
+        <h2 class="section-title">為什麼選擇 MatchPro？</h2>
+        <div class="advantages-grid">
+            <div class="advantage-item">
+                <i class="bi bi-shield-check"></i>
+                <h3>安全支付</h3>
+                <p>專業的第三方支付系統，確保交易安全</p>
+            </div>
+            <div class="advantage-item">
+                <i class="bi bi-graph-up"></i>
+                <h3>成長機會</h3>
+                <p>豐富的案件資源，助您快速累積經驗</p>
+            </div>
+            <div class="advantage-item">
+                <i class="bi bi-people"></i>
+                <h3>活躍社群</h3>
+                <p>龐大的接案者社群，交流學習共同成長</p>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="intro-banner">
+    <div class="container">
+        <div class="intro-content">
+            <h1>
+                <span class="highlight-blue">接案</span>與<span class="highlight-gold">發案</span>的最佳平台
+            </h1>
+            <p class="intro-description">
+                MatchPro 為您打造專業的接案媒合平台，讓優秀人才與優質案件完美配對
+            </p>
+            <div class="intro-features">
+                <div class="feature-item">
+                    <i class="bi bi-shield-check"></i><span>安全認證</span>
+                </div>
+                <div class="feature-item">
+                    <i class="bi bi-lightning-charge"></i><span>快速媒合</span>
+                </div>
+                <div class="feature-item">
+                    <i class="bi bi-cash-stack"></i><span>保障交易</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+        <script src="~/frontuse/js/index.js"></script> 
+    <svg style="position: absolute; width: 0; height: 0" aria-hidden="true"> 
+         <defs> 
+            <filter id="rough-edges">
+                <feTurbulence type="fractalNoise"
+                              baseFrequency="0.1"
+                              numOctaves="2"
+                              result="noise" />
+                <feDisplacementMap in="SourceGraphic" in2="noise" scale="2" />
+            </filter>
+        </defs>
+    </svg>
+   
+ }

@@ -1,0 +1,87 @@
+﻿@model BackMange.Models.TEcpayOrder
+@{
+    ViewData["Title"] = "編輯訂單資料";
+}
+
+<h1>編輯訂單資料</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <!-- 訂單編號 (不可修改) -->
+            <div class="form-group">
+                <label asp-for="MerchantTradeNo" class="control-label">訂單編號</label>
+                <input asp-for="MerchantTradeNo" class="form-control" readonly
+                       style="background-color: rgba(233, 236, 239, 0.5); border: 1px solid #ced4da;" />
+            </div>
+
+            <!-- 任務資訊 (不可修改) -->
+            <div class="form-group">
+                <label class="control-label">任務名稱</label>
+                <input value="@Model.Ftask?.Ftitle" class="form-control" readonly
+                       style="background-color: rgba(233, 236, 239, 0.5); border: 1px solid #ced4da;" />
+            </div>
+
+            <!-- 交易金額 (不可修改) -->
+            <div class="form-group">
+                <label asp-for="TradeAmt" class="control-label">交易金額</label>
+                <input value="@Model.TradeAmt?.ToString("C0")" class="form-control" readonly
+                       style="background-color: rgba(233, 236, 239, 0.5); border: 1px solid #ced4da;" />
+            </div>
+
+            <!-- 付款狀態 -->
+            <div class="form-group">
+                <label asp-for="RtnCode" class="control-label">付款狀態</label>
+                <select asp-for="RtnCode" class="form-control">
+                    <option value="0" selected="@(Model.RtnCode == 0)">待付款</option>
+                    <option value="1" selected="@(Model.RtnCode == 1)">付款成功</option>
+                    <option value="2" selected="@(Model.RtnCode == 2)">付款失敗</option>
+                </select>
+                <span asp-validation-for="RtnCode" class="text-danger"></span>
+            </div>
+
+            <!-- 狀態說明 -->
+            <div class="form-group">
+                <label asp-for="RtnMsg" class="control-label">狀態說明</label>
+                <textarea asp-for="RtnMsg" class="form-control" rows="3"></textarea>
+                <span asp-validation-for="RtnMsg" class="text-danger"></span>
+            </div>
+
+            <!-- 付款時間 -->
+            <div class="form-group">
+                <label asp-for="PaymentDate" class="control-label">付款時間</label>
+                <input value="@(Model.PaymentDate?.ToString("yyyy-MM-dd HH:mm:ss") ?? "尚未付款")"
+                       class="form-control" readonly
+                       style="background-color: rgba(233, 236, 239, 0.5); border: 1px solid #ced4da;" />
+            </div>
+
+
+
+            <!-- 隱藏欄位 -->
+            <input type="hidden" asp-for="MemberId" />
+            <input type="hidden" asp-for="TradeNo" />
+            <input type="hidden" asp-for="PaymentType" />
+            <input type="hidden" asp-for="PaymentTypeChargeFee" />
+            <input type="hidden" asp-for="TradeDate" />
+            <input type="hidden" asp-for="FtaskId" />
+            <input type="hidden" asp-for="FposterId" />
+            <input type="hidden" asp-for="FworkerId" />
+
+
+            <!-- 操作按鈕 -->
+            <div class="form-group mt-3">
+                <input type="submit" value="儲存" class="btn btn-primary" />
+                <a asp-action="Index" class="btn btn-secondary">返回列表</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

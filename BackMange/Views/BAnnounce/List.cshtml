@@ -1,0 +1,57 @@
+﻿@model IEnumerable<BackMange.DTO.AnnounceDTO>
+
+@{
+    ViewData["Title"] = "List";
+}
+
+@* breadcrumb *@
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">主頁</a></li>
+        <li class="breadcrumb-item active" aria-current="page">公告列表</li>
+    </ol>
+</nav>
+
+<h1>網站公告</h1>
+
+<div class="d-flex justify-content-end">
+    <p>
+        <a asp-action="Create" class="btn btn-success me-3">發布公告</a>
+    </p>
+    <p>
+        <a asp-action="CreateCategory" class="btn btn-info">公告類別管理</a>
+    </p>
+</div>
+<table id="announceTable" class="table table-hover table-striped">
+    <thead>
+        <tr>
+            <th>
+                編號
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FTitle)
+            </th>           
+            <th>
+                @Html.DisplayNameFor(model => model.FCategoryName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FPriority)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FUpdatedAt)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FCreatedAt)
+            </th>           
+            <th></th>
+        </tr>
+    </thead> 
+</table>
+
+@section Scripts
+{
+    <script src="~/js/Announce/AnnounceTable.js"></script>
+}

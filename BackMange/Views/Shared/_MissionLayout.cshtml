@@ -1,0 +1,58 @@
+﻿<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+
+    <!-- 引入共用樣式 -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/newheader.css" />
+    <link rel="stylesheet" href="/css/HF.css" />
+    <link rel="stylesheet" href="/css/Pcard.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/header.css" />
+
+    @RenderSection("Styles", required: false)
+</head>
+<body class="page-container">
+    <!-- Header -->
+    <header class="main-header">
+        <div class="header-container">
+            <div class="logo">
+                <img src="" alt="Logo" />
+            </div>
+            <div class="right-buttons">
+                <a class="login-btn" id="login-btn" href="/Account/Login">
+                    <i class="bi bi-person-fill"></i> 登入
+                </a>
+                <button class="creatuser-btn">註冊</button>
+            </div>
+        </div>
+        <nav class="main-nav">
+            <ul>
+                <li><a href="~/Frontend/missionList2" class="active">我要接案</a></li>
+                <li><a href="~/Frontend/missionCreate">我要發案</a></li>
+                <li><a href="/Contact">聯絡我們</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="content-wrap">
+        @RenderBody()
+    </main>
+
+    <!-- Footer -->
+    <footer class="mt-5 bg-dark text-light py-3">
+        <div class="container text-center">
+            <p class="mb-0">Copyright © 2024 版權所有</p>
+        </div>
+    </footer>
+
+    <!-- 引入共用腳本 -->
+    <script src="/js/Pcard.js"></script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

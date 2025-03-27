@@ -1,0 +1,78 @@
+﻿@{
+    Layout = "_FrontendLayout";
+}
+@model BackMange.DTO.AnnounceDTO
+
+@section Styles
+{
+    <link href="https://cdn.datatables.net/v/bs5/dt-2.2.1/datatables.min.css" rel="stylesheet" />
+    <link href="~/frontuse/css/index.css" rel="stylesheet" />
+    <link href="~/css/Announce/Announce.css" rel="stylesheet" />
+}
+
+<main class="announce-container">
+    <div class="pixel-background"></div>
+    <!-- 主內容 -->
+    <section class="w-100 d-flex" style="min-height: calc(100vh - 176px)">
+        <!-- 側邊篩選欄位 -->
+        <aside class="col-3 d-flex justify-content-center align-items-start pt-4">
+            <div class="sidebar p-4 bg-white rounded-4 shadow">
+                <h3 class="mb-4 text-primary">
+                    <i class="fas fa-bullhorn me-2"></i>公告類別
+                </h3>
+                <hr class="mb-4" />
+                <ul class="list-unstyled">
+                    <li class="mb-3">
+                        <a href="/FAnnounce/Fontend?categoryId=0" 
+                            class="text-decoration-none text-dark d-flex align-items-center" data-category-id="0">
+                            <i class="fas fa-newspaper me-2"></i>全部
+                        </a>
+                    </li>
+                    @foreach (var category in ViewBag.category)
+                    {
+                        <li class="mb-3">
+                            <a href="/FAnnounce/Fontend?categoryId=@category.FCategoryId"
+                                class="category-filter text-decoration-none text-dark d-flex align-items-center" >
+                                <i class="fas fa-newspaper me-2"></i>@category.FCategoryName
+                            </a>
+                        </li>
+                    }
+                    <li class="mb-3">
+                        <a href="#"
+                            class="text-decoration-none text-dark d-flex align-items-center" data-category-id="3">
+                            <i class="fas fa-file-contract me-2"></i>服務條款
+                        </a>
+                    </li>
+                    <li class="mb-3">
+                        <a href="#"
+                            class="text-decoration-none text-dark d-flex align-items-center" data-category-id="4">
+                            <i class="fas fa-shield-alt me-2"></i>隱私權聲明
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </aside>
+        <!-- 公告內容 -->
+        <article class="col-9 d-flex justify-content-center align-items-start pt-4 pe-4">
+            <div class="card w-100 rounded-4 shadow-sm border-0">
+                <div class="card-header bg-primary text-white py-3 rounded-top-4">
+                    <h4 class="mb-0"><i class="fas fa-list-ul me-2"></i>@Model.FTitle</h4>
+                </div>
+                <div class="card-body" style="height:70vh">
+                    @Model.FContent
+                </div>
+                <div class="w-100 d-flex justify-content-end align-content-end p-3">
+                    <label>@Model.FCreatedAt</label>
+                </div>
+            </div>
+        </article>
+    </section>
+</main>
+   
+@section Scripts
+{
+    <!-- jQuery -->
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/js/Announce/FontAnnounceTable.js"></script>
+}
+   

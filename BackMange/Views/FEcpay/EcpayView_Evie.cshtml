@@ -1,0 +1,67 @@
+﻿@model System.Collections.Generic.Dictionary<string, string>
+@{
+    Layout =null;
+}
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>付款成功</title>
+    <link rel="stylesheet" href="~/frontuse/css/Eviepay.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap"
+          rel="stylesheet" />
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+</head>
+<body>
+    <input id="TaskId" type="hidden" value="@Model["CustomField2"] />
+    <div class="success-container">
+        <div class="success-card">
+            <div class="success-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h2>付款成功！</h2>
+            <div class="amount-section">
+                <span class="amount">NT$ @Model["TradeAmt"]</span>
+            </div>
+
+            <div class="transaction-details">
+                <div class="detail-item">
+                    <span class="label">案件名稱</span>
+                    <span class="value" >@Model["CustomField1"]</span>
+                    
+                </div>
+                <div class="detail-item">
+                    <span class="label" >訂單編號</span>
+                    <span class="value" >@Model["MerchantTradeNo"]</span>
+                </div>
+                <div class="detail-item">
+                    <span class="label">付款時間</span>
+                    <span class="value" >@Model["PaymentDate"]</span>
+                </div>
+                <div class="detail-item">
+                    <span class="label">付款方式</span>
+                    <span class="value">@Model["PaymentType"]  <br /> (****-****-****-2222)</span>
+                </div>
+            </div>
+
+            <div class="button-group">
+                <a asp-controller="FrontIndex" asp-action="Index" class="back-btn">
+                    <i class="fas fa-home"></i>
+                    返回首頁
+                </a>
+                <a style="text-decoration:none" asp-controller="Frontend" asp-action="missionDetail" asp-route-id="@Model["CustomField2"]" class="btn-proposal">
+                    <button class="detail-btn">
+                        <i class="fas fa-file-alt"></i>
+                        返回該任務詳情
+                    </button>
+                    
+                    </a>
+
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+

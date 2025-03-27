@@ -1,0 +1,939 @@
+/* 通用樣式 */
+:root {
+  --primary-color: #97CBFF;
+  --primary-dark: #63B3ED;
+  --text-dark: #2D3748;
+  --text-light: #4A5568;
+  --gray-light: #E2E8F0;
+  --white: #FFFFFF;
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --transition: all 0.3s ease;
+}
+
+/* ==========================================================================
+   基本設定
+========================================================================== */
+body {
+  min-height: 100vh;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  font-family: 'Noto Sans TC', sans-serif;
+}
+
+/* ==========================================================================
+   Header 區塊
+========================================================================== */
+header {
+  background: #fff;
+}
+
+.main-header {
+  position: fixed;
+  width: 100%;
+  z-index: 1000;
+  top: 0;
+  height: 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Header 容器 */
+.header-container {
+  max-width: 1100px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 16px 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 100%;
+}
+
+
+/* Logo 區塊 */
+.logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo-text {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 22px;
+  display: flex;
+  gap: 3px;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Logo 文字效果 */
+.match {
+  color: #4A90E2;
+  text-shadow: 
+    3px 3px 0 #1B3B5E,
+    -3px -3px 0 #1B3B5E,
+    3px -3px 0 #1B3B5E,
+    -3px 3px 0 #1B3B5E,
+    0 0 15px rgba(74, 144, 226, 0.6);
+  display: inline-block;
+  transform: translateZ(10px);
+}
+
+.pro {
+  color: #FFD700;
+  text-shadow: 
+    3px 3px 0 #8B7355,
+    -3px -3px 0 #8B7355,
+    3px -3px 0 #8B7355,
+    -3px 3px 0 #8B7355,
+    0 0 15px rgba(255, 215, 0, 0.6);
+  display: inline-block;
+  transform: translateZ(10px);
+}
+
+/* 導覽列 */
+.main-nav {
+  background: #f8f9fa;
+  padding: 0;
+  position: fixed;
+  top: 80px;
+  width: 100%;
+  z-index: 999;
+  height: 0;
+  overflow: hidden;
+  border-bottom: 1px solid #e9ecef;
+  transition: height 0.3s ease;
+  text-align: center;
+  display: flex;
+  justify-content: center; 
+}
+
+.main-header:hover .main-nav {
+  height: 56px;
+}
+
+.main-nav ul {
+  max-width: 1100px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 30px;
+  list-style: none;
+  display: flex;
+  gap: 30px;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+}
+
+.main-nav ul li a,
+.main-nav ul li a.active {
+  color: #666;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 15px;
+  padding: 0 30px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  transition: color 0.3s ease;
+}
+
+.main-nav ul li a:hover {
+  color: #4DA6FF !important;
+  cursor: pointer;
+}
+
+/* 按鈕樣式 */
+.right-buttons {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.user-btns {
+    display: flex;
+    align-items: center;
+    gap: 0px;
+}
+
+.login-btn {
+  background: none;
+  color: #333;
+  padding: 12px 24px;
+  font-weight: 500;
+  font-size: 15px;
+  border: none;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 44px;
+  text-decoration: none;
+}
+
+.creatuser-btn {
+  background: #4DA6FF;
+  color: white;
+  padding: 12px 28px;
+  font-weight: 500;
+  font-size: 15px;
+  border: none;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(77, 166, 255, 0.2);
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Header 響應式設計 */
+@media (max-width: 768px) {
+  .header-container {
+    padding: 16px 20px;
+  }
+  
+  .nav-toggle {
+    display: block;
+  }
+
+  .main-nav {
+    height: auto;
+    position: fixed;
+    top: 80px;
+    left: -100%;
+    width: 250px;
+    height: calc(100vh - 80px);
+    background: #f8f9fa;
+    transition: left 0.3s ease-in-out;
+    overflow: visible;
+  }
+
+  .main-nav.show {
+    left: 0;
+  }
+
+  .main-nav ul {
+    flex-direction: column;
+    padding: 20px 0;
+  }
+
+  .main-nav ul li a {
+    padding: 12px 20px;
+    width: 100%;
+  }
+}
+
+/* ==========================================================================
+   Footer 
+========================================================================== */
+footer {
+  background: var(--primary-color);
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: auto;
+  width: 100%;
+}
+
+footer .container {
+  text-align: center;
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+footer p {
+  margin: 0;
+  color: #2D3748;
+  text-align: center;
+  font-size: 0.85rem;
+  font-weight: 400;
+  letter-spacing: 0.2px;
+}
+
+/* 響應式調整 */
+@media (max-width: 768px) {
+    footer {
+        height: 50px;
+    }
+    
+    footer p {
+        font-size: 0.8rem;
+    }
+}
+
+/* ==========================================================================
+   響應式設計
+========================================================================== */
+@media (max-width: 768px) {
+  
+  .nav-toggle {
+    display: block;
+  }
+
+  .main-nav {
+    height: auto;
+    position: fixed;
+    top: 80px;
+    left: -100%;
+    width: 250px;
+    height: calc(100vh - 80px);
+    background: #f8f9fa;
+    transition: left 0.3s ease-in-out;
+    overflow: visible;
+  }
+
+  .main-nav.show {
+    left: 0;
+  }
+
+  /* 其他響應式調整... */
+}
+
+/* ==========================================================================
+ header
+========================================================================== */
+
+header {
+  background: #fff;
+}
+
+.main-header {
+  position: fixed;
+  width: 100%;
+  z-index: 1000;
+  top: 0;
+  height: 80px;
+}
+
+/* 主容器 */
+.creatuser-container {
+  position: relative;
+  padding: 80px 20px;
+  background: #FFFFFF;
+  backdrop-filter: blur(8px);
+  min-height: calc(100vh - 100px);
+  display: flex;
+  align-items: flex-start;
+}
+
+.content-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  gap: 60px;
+  margin-top: 120px;
+}
+
+header .logo {
+  display: flex;
+  align-items: center;
+}
+
+header .logo img {
+  height: 40px;
+  margin-right: 10px;
+}
+
+/* ==========================================================================
+ logo
+========================================================================== */
+
+.logo-text .match {
+  color: #4DA6FF;
+}
+
+.logo-text .pro {
+  color: #FFE066;
+}
+
+/* ==========================================================================
+按鈕
+========================================================================== */
+.right-buttons a {
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+}
+
+/* ==========================================================================
+ 導覽
+========================================================================== */
+.main-nav {
+  background: #f8f9fa;
+  padding: 0;
+  position: fixed;
+  top: 80px;
+  width: 100%;
+  z-index: 999;
+  height: 0;  
+  overflow: hidden;  
+  border-bottom: 1px solid #e9ecef;
+  transition: height 0.3s ease; 
+}
+
+/* 當滑鼠移到 header 時顯示導覽列 */
+.main-header:hover .main-nav {
+  height: 56px; 
+}
+
+.main-nav ul {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 30px;
+  list-style: none;
+  display: flex;
+  gap: 30px;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 導覽列連結樣式 */
+.main-header .main-nav ul li a,
+.main-header .main-nav ul li a.active {  
+  color: #666; 
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 15px;
+  padding: 0 30px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  transition: color 0.3s ease;
+}
+
+.main-header .main-nav ul li a:hover {
+  color: #4DA6FF !important; 
+  cursor: pointer;
+}
+
+/* ==========================================================================
+ hover
+========================================================================== */.login-btn:hover {
+  color: #4DA6FF;
+}
+
+.creatuser-btn:hover {
+  background: #3D96FF;
+  box-shadow: 0 4px 12px rgba(77, 166, 255, 0.3);
+}
+
+/* ==========================================================================
+========================================================================== */
+
+main {
+  flex: 1 0 auto;
+  padding-top: 136px; 
+  background: #1a1a1a; 
+}
+
+/* =========================================================================
+game
+========================================================================== */
+
+.game-intro {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  color: #fff;
+}
+
+/* 遊戲標題 */
+.game-title {
+  font-size: 48px;
+  font-weight: 700;
+  margin-bottom: 30px;
+  text-align: center;
+  color: #fff;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+}
+
+/* 遊戲描述 可以拿掉*/
+.game-description {
+  font-size: 16px;
+  line-height: 1.8;
+  margin-bottom: 30px;
+  text-align: center;
+  color: #ccc;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+
+/* ==========================================================================*/
+/* 向下捲動 */
+.scroll-down {
+  text-align: center;
+  margin-top: 40px;
+  color: #fff;
+  font-size: 14px;
+  opacity: 0.8;
+  animation: bounce 2s infinite;
+}
+
+/* 箭頭動畫 */
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+      transform: translateY(0);
+  }
+  40% {
+      transform: translateY(-10px);
+  }
+  60% {
+      transform: translateY(-5px);
+  }
+}
+/* ==========================================================================*/
+
+
+/* 背景圖片設置 */
+.game-banner {
+  position: relative;
+  width: 100%;
+  height: 600px;
+  background-image: url('path_to_your_image.jpg');  
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.game-banner::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+/* 響應式設計 */
+@media (max-width: 768px) {
+  .header-container {
+      padding: 16px 20px;
+  }
+  
+  .right-buttons {
+      gap: 12px;
+  }
+  
+  .main-nav ul {
+      padding: 0 16px;
+      gap: 15px;
+  }
+  
+  .main-nav a {
+      padding: 0 8px;
+  }
+  
+  .login-btn {
+      padding: 10px 16px;
+  }
+  
+  .creatuser-btn {
+      padding: 10px 20px;
+  }
+  
+  .game-title {
+      font-size: 36px;
+  }
+  
+  .game-description {
+      font-size: 14px;
+      padding: 0 20px;
+  }
+  
+  .game-banner {
+      height: 400px;
+  }
+}
+
+/* Logo 懸停*/
+header .logo:hover img {
+  transform: scale(1.05);
+  transition: transform 0.3s ease;
+}
+
+@media (max-width: 768px) {
+  .content-wrapper {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .character-section,
+  .title-section {
+    width: 100%;
+  }
+}
+
+/* 按鈕樣式 */
+.nav-toggle {
+  display: none; 
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  color: #333;
+}
+
+
+@media (max-width: 768px) {
+  .nav-toggle {
+    display: block;
+  }
+
+  .main-nav {
+    height: auto;  /* 重置高度 */
+    position: fixed;
+    top: 80px;
+    left: -100%;
+    width: 250px;
+    height: calc(100vh - 80px);
+    background: #f8f9fa;
+    transition: left 0.3s ease-in-out;
+    overflow: visible;  /* 重置 overflow */
+  }
+
+  .main-nav.show {
+    left: 0;
+  }
+
+  .main-header:hover .main-nav {
+    height: calc(100vh - 80px);  
+  }
+
+  .main-nav ul {
+    flex-direction: column;
+    padding: 20px 0;
+    height: auto;
+  }
+
+  .main-nav li {
+    width: 100%;
+  }
+
+  .main-nav a {
+    padding: 15px 20px;
+    width: 100%;
+    justify-content: flex-start;
+  }
+}
+
+/* 像素字體1 */
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+/* 通知圖示容器 */
+.notification-icon {
+  position: relative;
+  cursor: pointer;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  margin-right: 8px;
+}
+
+/* 通知圖示顏色 */
+.notification-icon i {
+  font-size: 22px;
+  color: #666;  /* 改為灰色 */
+}
+
+/* 通知數量徽章 */
+.notification-badge {
+  position: absolute;
+  top: 2px;
+  right: 2px;  /* 調整右邊距離 */
+  background-color: #FF6B6B;
+  color: white;
+  font-size: 11px;
+  min-width: 18px;
+  height: 18px;
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 5px;
+  font-weight: 600;
+  box-shadow: 0 2px 4px rgba(255, 107, 107, 0.3);
+}
+
+/* 下拉選單 */
+.notification-dropdown {
+  position: absolute;
+  top: 100%;
+  right: -10px;
+  width: 360px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+  display: none;
+  z-index: 1000;
+  margin-top: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.notification-dropdown.show {
+  display: block;
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+/* 下拉選單標題 */
+.notification-header {
+  padding: 12px 16px;
+  border-bottom: 1px solid #eee;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.notification-header h6 {
+  margin: 0;
+  font-weight: 600;
+  color: #333;
+}
+
+.mark-all-read {
+  background: none;
+  border: none;
+  color: #4DA6FF;
+  font-size: 13px;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.mark-all-read:hover {
+  background: #f0f7ff;
+}
+
+/* 通知列表 */
+.notification-list {
+  max-height: 360px;
+  overflow-y: auto;
+}
+
+/* 通知項目基本樣式 */
+.notification-item {
+  display: flex;
+  padding: 12px 16px;
+  text-decoration: none;
+  color: #333;
+  transition: all 0.2s ease;
+  border-bottom: 1px solid #f5f5f5;
+  position: relative;
+}
+
+/* 未讀通知統一樣式 */
+.notification-item.unread {
+  background-color: #EBF8FF;  /* 統一的淺藍色背景 */
+}
+
+/* 已讀通知樣式 */
+.notification-item:not(.unread) {
+  opacity: 0.8;
+}
+
+/* 懸停效果 */
+.notification-item:hover {
+  background-color: #f8f9fa;
+}
+
+/* 圖示容器 */
+.notification-icon-wrapper {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 12px;
+}
+
+.notification-icon-wrapper i {
+  font-size: 24px;
+}
+
+/* 通知類型圖示顏色 */
+.system-notice .notification-icon-wrapper i {
+  color: #1890ff; 
+}
+
+.case-notice .notification-icon-wrapper i {
+  color: #52c41a;  
+}
+
+.message-notice .notification-icon-wrapper i {
+  color: #faad14;  
+}
+
+.proposal-notice .notification-icon-wrapper i {
+  color: #722ed1;  
+}
+
+.payment-notice .notification-icon-wrapper i {
+  color: #eb2f96;  
+}
+
+/* 未讀標記點 */
+.notification-item.unread::after {
+  content: '';
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #4DA6FF;  /* 統一的藍色未讀標記 */
+}
+
+/* 通知內容 */
+.notification-content {
+  flex: 1;
+}
+
+.notification-text {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.notification-time {
+  font-size: 12px;
+  color: #666;
+}
+
+/* 下拉選單底部 */
+.notification-footer {
+  padding: 12px 16px;
+  text-align: center;
+  border-top: 1px solid #eee;
+}
+
+.view-all {
+  color: #4DA6FF;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.view-all:hover {
+  text-decoration: none;
+  opacity: 0.8;  
+}
+
+@media (max-width: 768px) {
+  .notification-dropdown {
+    width: 300px;
+    right: -80px;
+  }
+  
+  .notification-text {
+    font-size: 13px;
+  }
+  
+  .notification-time {
+    font-size: 11px;
+  }
+}
+
+.toast-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 9999;
+}
+
+.toast-notification {
+  background-color: #4DA6FF;
+  color: white;
+  padding: 12px 24px;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  box-shadow: 0 4px 12px rgba(77, 166, 255, 0.2);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+}
+
+.toast-notification::before {
+  content: '\F26B';
+  font-family: "bootstrap-icons";
+  font-size: 18px;
+}
+
+/* 動畫效果 */
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOut {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+/* 通知圖示的動畫效 可以不用 */
+@keyframes bellShake {
+  0% { transform: rotate(0); }
+  15% { transform: rotate(5deg); }
+  30% { transform: rotate(-5deg); }
+  45% { transform: rotate(4deg); }
+  60% { transform: rotate(-4deg); }
+  75% { transform: rotate(2deg); }
+  85% { transform: rotate(-2deg); }
+  92% { transform: rotate(1deg); }
+  100% { transform: rotate(0); }
+}
+
+/* 通知時間顏色 */
+.notification-time {
+  color: #8c8c8c;
+}
+
+
+@media (max-width: 1200px) {
+  .header-container,
+  .main-nav ul {
+    max-width: 100%;
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .header-container,
+  .main-nav ul {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+  
+  .main-nav ul {
+    justify-content: flex-start; 
+  }
+}

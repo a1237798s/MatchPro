@@ -1,0 +1,70 @@
+﻿@model BackMange.DTO.AnnounceDTO
+
+@{
+    ViewData["Title"] = "公告編輯";
+}
+
+@* breadcrumb *@
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">主頁</a></li>
+        <li class="breadcrumb-item"><a asp-action="List">公告列表</a></li>
+        <li class="breadcrumb-item active" aria-current="page">編輯公告</li>
+    </ol>
+</nav>
+
+<h1>編輯公告</h1>
+
+<hr />
+<div class="row d-flex justify-content-center">
+    <div class="col-md-6">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="FAnnounceId" />
+            <div class="form-group mb-3">
+                <label asp-for="FTitle" class="control-label"></label>
+                <input asp-for="FTitle" class="form-control" />
+                <span asp-validation-for="FTitle" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="FContent" class="control-label"></label>
+                <textarea asp-for="FContent" class="form-control" rows="18" ></textarea>
+                <span asp-validation-for="FContent" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="FCategoryId" class="form-label"></label>
+                <select asp-for="FCategoryId" asp-items="ViewBag.Categories" class="form-control">
+                    <option disabled selected>請選擇類別</option>
+                </select>
+                <span asp-validation-for="FCategoryId" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="FPriority" class="control-label"></label>
+                <select asp-for="FPriority" class="form-control">
+                    <option value="1">一般</option>
+                    <option value="2">緊急</option>
+                    <option value="3">置頂</option>
+                </select>
+                <span asp-validation-for="FPriority" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="Status" class="control-label"></label>
+                <select asp-for="Status" class="form-control">
+                    <option value="發布">發布</option>
+                    <option value="下架">下架</option>
+                </select>
+                <span asp-validation-for="FPriority" class="text-danger"></span>
+            </div>
+            <div class="form-group  d-flex justify-content-end">
+                <input type="submit" value="儲存" class="btn btn-primary mx-3" />
+                <a class="btn btn-secondary" asp-action="List">返回</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

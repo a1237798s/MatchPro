@@ -1,0 +1,203 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Noto Sans TC','Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    background-image: linear-gradient( 111.4deg, rgba(7,7,9,1) 6.5%, rgba(27,24,113,1) 93.2% );
+    animation: gradientBG 20s ease infinite;
+    color: #e2e8f0;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    height: 100vh;
+    position: relative;
+    overflow: hidden;
+}
+
+@keyframes gradientBG {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    25% {
+        background-position: 50% 100%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    75% {
+        background-position: 50% 0%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+/* 背景效果 */
+body::before,
+body::after {
+    content: '';
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    filter: blur(50px);
+    animation: floatLight 15s infinite alternate;
+}
+
+body::before {
+    top: -150px;
+    left: -150px;
+    animation-delay: 0s;
+}
+
+body::after {
+    bottom: -150px;
+    right: -150px;
+    animation-delay: -7.5s;
+}
+
+@keyframes floatLight {
+    0% {
+        transform: translate(0, 0) scale(1);
+    }
+
+    33% {
+        transform: translate(50px, 50px) scale(1.2);
+    }
+
+    66% {
+        transform: translate(-30px, 20px) scale(0.8);
+    }
+
+    100% {
+        transform: translate(0, 0) scale(1);
+    }
+}
+
+/* 主容器 */
+.login-container {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+}
+
+/* 登入框 */
+.login-box {
+    width: 100%;
+    max-width: 360px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.login-content {
+    padding: 40px 32px;
+}
+
+/* 頭像 */
+.avatar-container {
+    width: 80px;
+    height: 80px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    margin: 0 auto 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.avatar-icon {
+    font-size: 40px;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+/* 輸入框樣式 */
+.input-group {
+    position: relative;
+    margin-bottom: 30px;
+}
+
+    /* 圖標樣式 */
+    .input-group i {
+        position: absolute;
+        left: 5px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 18px;
+        color: rgba(255, 255, 255, 0.7);
+    }
+
+    /* 輸入框 */
+    .input-group input {
+        width: 100%;
+        height: 44px;
+        background: transparent;
+        border: none;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+        color: #fff;
+        font-size: 15px;
+        padding: 8px 16px 8px 25px;
+        text-indent: 15px;
+        transition: all 0.3s ease;
+    }
+
+        .input-group input:focus {
+            outline: none;
+            border-bottom-color: #fff;
+        }
+
+    /* 標籤 */
+    .input-group label {
+        position: absolute;
+        left: 40px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 14px;
+        transition: all 0.2s ease;
+        pointer-events: none;
+    }
+
+    /* 輸入框點擊輸入時的效果 */
+    .input-group input:focus + label,
+    .input-group input:not(:placeholder-shown) + label {
+        opacity: 0;
+    }
+
+/* 登入 */
+.btn-login {
+    width: 100%;
+    height: 44px;
+    background: #6271c2;
+    color: #fff;
+    border: none;
+    border-radius: 22px;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 32px;
+    backdrop-filter: blur(5px);
+}
+
+    .btn-login:hover {
+        background: rgba(255, 255, 255, 0.3);
+        transform: translateY(-1px);
+    }
+
+    .btn-login:active {
+        transform: translateY(0);
+    }
+
+

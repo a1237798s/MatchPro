@@ -1,0 +1,106 @@
+﻿<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - MyApplication</title>
+    <link href="~/css/site.css" rel="stylesheet" />   
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" /> 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" integrity="sha512-vKMx8UnXk60zUwyUnUPM3HbQo8QfmNx7+ltw8Pm5zLusl1XIfwcxo8DbWCqMGKaWeNxWA8yrx5v3SaVpMvR3CA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    @* datatables *@
+    <link href="https://cdn.datatables.net/v/dt/jq-3.7.0/dt-2.2.1/af-2.7.0/datatables.min.css" rel="stylesheet">
+    <!-- 自定義 CSS -->
+    <link rel="stylesheet" href="~/css/custom.css" />
+    
+    @await RenderSectionAsync("Styles", required: false)
+</head>
+<body>
+    <div class="d-flex">
+        <!-- 側邊導覽列 -->
+        <nav id="sidebar">
+        <div>
+                <a href="@Url.Action("Index", "Home")" style="text-decoration: none;">
+                    <div class="logo-wrapper">
+                        <div class="t-logo">
+                            <span class="mine">Match</span><span class="craft">Pro</span>
+                        </div>
+                    </div>
+                </a>
+                <div class="accordion accordion-flush" id="sidebarAccordion">
+            <!-- 用戶管理 -->
+              <div class="accordion-item bg-transparent">
+                  <a asp-controller="ttUser" asp-action="List" class="btn btn-outline-light w-100 rounded-0 ">
+                            <p class="my-2"><i class="bi bi-file-person-fill"></i> 用戶管理</p>
+                  </a>
+              </div>
+            <!-- 案件管理 -->
+                <div class="accordion-item bg-transparent">
+                    <a asp-controller="Quest" asp-action="List" class="btn btn-outline-light w-100 rounded-0 ">
+                            <p class="my-2"><i class="bi bi-file-earmark-ruled"></i>  案件管理</p>
+                    </a>
+                </div>
+
+            <!-- 交易紀錄 -->
+                    <div class="accordion-item bg-transparent">
+                        <a asp-controller="BEcpayOrders" asp-action="index" class="btn btn-outline-light w-100 rounded-0 ">
+                            <p class="my-2"><i class="bi bi-file-earmark-bar-graph"></i>  訂單紀錄</p>
+                        </a>
+                    </div>
+
+            <!-- 公告管理 -->
+                    <div class="accordion-item bg-transparent">
+                        <a asp-controller="BAnnounce" asp-action="List" class="btn btn-outline-light w-100 rounded-0 ">
+                            <p class="my-2"><i class="bi bi-megaphone-fill"></i>  公告管理</p>
+                        </a>
+                    </div>
+            <!-- 其他單一選項 -->
+                    <div class="accordion-item bg-transparent">
+                        <a asp-controller="ttAdmins" asp-action="List" class="btn btn-outline-light w-100 rounded-0 ">
+                            <p class="my-2"><i class="bi bi-dash-circle"></i>  管理員</p>
+                        </a>
+                    </div>
+
+            
+          </div>
+        </div>
+      </nav>
+
+        <!-- 主要內容區 -->
+        <div class="flex-grow-1">
+            <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+                <div class="container-fluid">
+                    <!-- 漢堡選單按鈕 -->
+                    <button id="sidebarToggle" class="btn btn-outline-primary">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <form method="post" asp-controller="ttAdmins" asp-action="Logout">
+                        <button type="submit" id="sidebarToggle" class="btn btn-outline-light">
+                            登出
+                        </button>
+                    </form>
+                </div>
+            </nav>
+            <main>
+                <partial name="_Notification" />
+                <div class="container-fluid p-4">                    
+                    @RenderBody()                
+                </div>
+            </main>
+        </div>
+    </div>
+    <!-- jQuery -->
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <!-- Bootstrap JS 和相依套件 -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    @* datatable.JS *@
+    <script src="https://cdn.datatables.net/v/dt/jq-3.7.0/dt-2.2.1/af-2.7.0/datatables.min.js"></script>
+    <!-- 控制側邊欄的 JavaScript -->
+    <script src="~/js/site.js"></script>
+    @* vue.js *@
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,231 @@
+/* 聊天視窗 */
+.chat-widget {
+    position: fixed;
+    bottom: 15px;    
+    right: 80px;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    width: 360px;
+    height: 520px;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12);
+    overflow: hidden;
+    opacity:0;
+}
+
+.chat-widget.active {
+    display: flex;
+    animation: popIn 0.3s ease forwards;
+    opacity:1;
+}
+
+/* 彈出動畫 */
+@keyframes popIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95) translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+/* 機器人頭像 */
+.chat-toggle {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    z-index: 1001;
+    overflow: hidden;
+    opacity: 1;
+    visibility: visible;
+    transition: all 0.3s ease;
+}
+
+.chat-widget.active .chat-toggle {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.chat-toggle img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    transition: transform 0.3s ease;
+}
+
+.chat-toggle:hover img {
+    transform: scale(1.05);
+}
+
+/* 聊天視窗頭部 */
+.chat-widget-header {
+    padding: 18px 20px;
+    background: #fff;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+    .chat-widget-header h4 {
+        margin: 0;
+        font-size: 17px;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: #2c3e50;
+    }
+
+.chat-close {
+    background: none;
+    border: none;
+    color: #94a3b8;
+    cursor: pointer;
+    padding: 8px;
+    font-size: 18px;
+    transition: all 0.2s ease;
+    border-radius: 8px;
+}
+
+    .chat-close:hover {
+        background: #f1f5f9;
+        color: #64748b;
+    }
+
+/* 聊天內容區域 */
+.chat-widget-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    background: #f8fafc;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* 訊息氣泡 */
+.chat-message {
+    max-width: 85%;
+    padding: 12px 16px;
+    border-radius: 12px;
+    font-size: 15px;
+    line-height: 1.5;
+    position: relative;
+}
+
+    .chat-message.received {
+        align-self: flex-start;
+        background: white;
+        color: #334155;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+        border: 1px solid rgba(0, 0, 0, 0.04);
+        border-bottom-left-radius: 4px;
+    }
+
+    .chat-message.sent {
+        align-self: flex-end;
+        background: #3b82f6;
+        color: white;
+        border-bottom-right-radius: 4px;
+    }
+
+/* 輸入區域 */
+.chat-widget-input {
+    padding: 16px;
+    background: white;
+    border-top: 1px solid rgba(0, 0, 0, 0.06);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+    .chat-widget-input input {
+        flex: 1;
+        padding: 12px 16px;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        font-size: 15px;
+        transition: all 0.2s ease;
+        background: #f8fafc;
+    }
+
+        .chat-widget-input input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+    .chat-widget-input button {
+        background: none;
+        border: none;
+        color: #3b82f6;
+        cursor: pointer;
+        padding: 8px;
+        font-size: 20px;
+        transition: all 0.2s ease;
+        border-radius: 8px;
+    }
+
+        .chat-widget-input button:hover {
+            background: #f1f5f9;
+            color: #2563eb;
+        }
+
+/* 氣泡提示 */
+.chat-bubble {
+    position: fixed;
+    bottom: 80px;
+    right: 35px;
+    background: white;
+    padding: 14px 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    font-size: 14px;
+    max-width: 220px;
+    z-index: 1001;
+    opacity:0;
+}
+
+    .chat-bubble.active {
+/*        content: '';*/
+/*        position: absolute;
+        bottom: -6px;
+        right: 35px;
+        width: 12px;
+        height: 12px;
+        background: white;
+        transform: rotate(45deg);
+        box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.04);*/
+        opacity: 1;
+    }
+
+/* 響應式設計 */
+@media (max-width: 768px) {
+    .chat-widget {
+        width: calc(100% - 32px);
+        margin: 0 16px;
+        bottom: 90px;
+    }
+
+    
+}

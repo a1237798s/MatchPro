@@ -1,0 +1,132 @@
+﻿{
+   "CodeGenerationMode": 4,
+   "ContextClassName": "GameCaseContext",
+   "ContextNamespace": null,
+   "FilterSchemas": false,
+   "IncludeConnectionString": false,
+   "ModelNamespace": null,
+   "OutputContextPath": null,
+   "OutputPath": "Models",
+   "PreserveCasingWithRegex": true,
+   "ProjectRootNamespace": "BackMange",
+   "Schemas": null,
+   "SelectedHandlebarsLanguage": 2,
+   "SelectedToBeGenerated": 0,
+   "T4TemplatePath": null,
+   "Tables": [
+      {
+         "Name": "[dbo].[tAdmins]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tAdminStatus]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tAnnounce]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tAnnounceCategories]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tCategory]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tChats]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tConfirmReplys]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tEcpayOrders]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tImages]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tMessagesHistory]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tPortfolios]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tPosters]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tTaskFollows]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tTasks]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[TTransaction]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tUserNotifications]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tUsers]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tUserTypes]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tUserUserTypes]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tVerifications]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tWorkerFollows]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tWorkers]",
+         "ObjectType": 0
+      }
+   ],
+   "UiHint": null,
+   "UncountableWords": null,
+   "UseAsyncStoredProcedureCalls": true,
+   "UseBoolPropertiesWithoutDefaultSql": false,
+   "UseDatabaseNames": false,
+   "UseDatabaseNamesForRoutines": true,
+   "UseDateOnlyTimeOnly": true,
+   "UseDbContextSplitting": false,
+   "UseDecimalDataAnnotationForSprocResult": true,
+   "UseFluentApiOnly": true,
+   "UseHandleBars": false,
+   "UseHierarchyId": false,
+   "UseInflector": true,
+   "UseLegacyPluralizer": false,
+   "UseManyToManyEntity": false,
+   "UseNoDefaultConstructor": false,
+   "UseNoNavigations": false,
+   "UseNoObjectFilter": false,
+   "UseNodaTime": false,
+   "UseNullableReferences": false,
+   "UsePrefixNavigationNaming": false,
+   "UseSchemaFolders": false,
+   "UseSchemaNamespaces": false,
+   "UseSpatial": false,
+   "UseT4": false,
+   "UseT4Split": false
+}

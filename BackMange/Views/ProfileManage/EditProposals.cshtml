@@ -1,0 +1,225 @@
+﻿@model BackMange.DTO.TTaskDTO
+@{
+    Layout = "_FrontendLayout";
+}
+
+
+@section Styles
+{
+    <!-- 引入 Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />    
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
+    <!-- 自定義  -->
+    <link rel="stylesheet" href="~/frontuse/css/task/Task_creation.css" />
+    <link rel="stylesheet" href="~/frontuse/css/task/HFN.css" />
+}
+
+<main class="content-wrap">
+    <div class="container">
+        <div class="main-content">
+            <h2 class="section-title">編輯任務</h2>
+            <!-- 進度指示-->
+            <div class="form-progress">
+                <div class="progress-line">
+                    <div class="progress-fill"></div>
+                </div>
+                <div class="progress-step active">
+                    <div class="step-number">1</div>
+                    <div class="step-label">基本資訊</div>
+                </div>
+                <div class="progress-step">
+                    <div class="step-number">2</div>
+                    <div class="step-label">任務詳情</div>
+                </div>
+                <div class="progress-step">
+                    <div class="step-number">3</div>
+                    <div class="step-label">補充說明</div>
+                </div>
+            </div>
+
+            <form method="post" asp-action="EditProposals" asp-controller="ProfileManage" enctype="multipart/form-data" class="needs-validation" >
+                <!-- 基本資訊 -->
+                <input type="hidden" asp-for="FtaskId" />
+                <div class="form-section">
+                    <h3>基本資訊</h3>
+                    @* <div class="form-group"> *@
+                    @*     <label>店家／公司資料 <span class="required">*</span></label> *@
+                    @*     <div class="form-hint"> </div> *@
+                    @* </div> *@
+                    <div class="form-group">
+                        <label>任務標題 <span class="required">*</span></label>
+                        <input asp-for="Ftitle" type="text"
+                               placeholder="請輸入清楚簡潔的標題"
+                               required />
+                        <div class="form-hint">好的標題能讓接案者更快理解您的需求</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>任務類型 <span class="required">*</span></label>
+                        <select asp-for="FcategoryId" class="form-select" asp-items="ViewBag.Categories">
+                            <option value="" selected disabled>請選擇職位類型</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>預算範圍 <span class="required">*</span></label>
+                        <div class="budget-group">
+                            <input asp-for="Fbudget" class="form-control" type="number" />
+                            <div class="invalid-feedback">此為必填項目</div>
+                        </div>
+
+                    </div>
+                </div>
+                <!-- 發布者 -->
+                <div class="form-section">
+                    <h3>聯絡人</h3>
+                    <div class="form-group">
+                        <label>姓名 <span class="required">*</span></label>
+                        <input asp-for="Fmember" class="form-control" type="text"  />
+                        <div class="invalid-feedback">此為必填項目</div>
+                        <label>電話 <span class="required">*</span></label>
+                        <input asp-for="Fphone" class="form-control" type="text" />
+                        <div class="invalid-feedback">此為必填項目</div>
+                        <label>Email <span class="required">*</span></label>
+                        <input asp-for="Femail" class="form-control" type="text"  />
+                        <div class="invalid-feedback">此為必填項目</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">工作地點</label>
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <select asp-for="Flocation" class="form-select" required>
+                                    <option value="" selected disabled>選擇縣市區域</option>
+                                    <option value="台北市">台北市</option>
+                                    <option value="新北市">新北市</option>
+                                    <option value="桃園市">桃園市</option>
+                                    <option value="台中市">台中市</option>
+                                    <option value="台南市">台南市</option>
+                                    <option value="高雄市">高雄市</option>
+                                    <option value="基隆市">基隆市</option>
+                                    <option value="新竹市">新竹市</option>
+                                    <option value="嘉義市">嘉義市</option>
+                                    <option value="新竹縣">新竹縣</option>
+                                    <option value="苗栗縣">苗栗縣</option>
+                                    <option value="彰化縣">彰化縣</option>
+                                    <option value="南投縣">南投縣</option>
+                                    <option value="雲林縣">雲林縣</option>
+                                    <option value="嘉義縣">嘉義縣</option>
+                                    <option value="屏東縣">屏東縣</option>
+                                    <option value="宜蘭縣">宜蘭縣</option>
+                                    <option value="花蓮縣">花蓮縣</option>
+                                    <option value="台東縣">台東縣</option>
+                                    <option value="澎湖縣">澎湖縣</option>
+                                    <option value="金門縣">金門縣</option>
+                                    <option value="連江縣">連江縣</option>
+
+                                </select>
+                                <div class="invalid-feedback">此為必填項目</div>
+                            </div>
+                            <div class="col-md-8">
+                                <input asp-for="FlocationDetail"
+                                       type="text"
+                                       class="form-control"
+                                       placeholder="請輸入地址或地標"
+                                       required />
+                                <div class="invalid-feedback">請填寫地址或地標</div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 任務詳情 -->
+                    <div class="form-section">
+                        <h3>任務詳情</h3>
+                        <div class="form-group">
+                            <label>任務描述 <span class="required">*</span></label>
+                            <textarea asp-for="Fdescription" rows="5"
+                                      placeholder="請詳細描述您的需求..."
+                                      required></textarea>
+                            <div class="form-hint">
+                                <div class="form-hint-title">
+                                    <i class="fas fa-lightbulb"></i>
+                                    建議說明
+                                </div>
+                                <ul>
+                                    <li>
+                                        <strong>專案背景與目標：</strong>
+                                        描述您的專案背景、目的，以及希望達成的具體目標
+                                    </li>
+                                    <li>
+                                        <strong>具體需求與期望：</strong>
+                                        詳細列出專案的功能需求、設計風格、技術要求等具體期望
+                                    </li>
+                                    <li>
+                                        <strong>參考案例或風格：</strong>
+                                        提供相似的參考案例或您喜歡的設計風格，幫助接案者更好理解
+                                    </li>
+                                    <li>
+                                        <strong>時程規劃：</strong>
+                                        說明專案的重要時程節點、交付方式、驗收標準等
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- <div class="form-group">
+                            <label>所需技能</label>
+                            <div class="skills-input">
+                                <input type="text" placeholder="輸入技能名稱後按 Enter" />
+                                <div class="skills-tags">
+                                </div>
+                            </div>
+                            <div class="form-hint">
+                                添加相關技能可以幫助篩選合適的接案者
+                            </div>
+                        </div>-->
+
+                        <div class="date-group">
+
+                            <div class="form-group">
+                                <label>預計完成 <span class="required">*</span></label>
+                                <input asp-for="Fdeadline" type="datetime-local" required />
+                            </div>
+                            <div class="form-hint">我們將在您填表後的3至5個工作日後審核完成</div>
+                        </div>
+                    </div>
+
+                    <!-- 補充資訊 -->
+                    <div class="form-section">
+                        <h3>補充資訊</h3>
+                        <div class="form-group">
+                            <label>參考圖片</label>
+                            <div class="file-upload">
+                                <div class="upload-content">
+                                    <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                                    <div class="upload-text">點擊或拖曳圖片至此處</div>
+                                    <div class="upload-hint">
+                                        支援 JPG、PNG 格式，單檔最大 5MB
+                                    </div>
+                                </div>
+                                <input asp-for="FtimageFiles" type="file" class="form-control" accept="image/*" multiple />
+                                <span  class="text-danger"></span>
+                            </div>
+                            <div class="image-preview"></div>
+                        </div>
+                    </div>
+                    <!-- 按鈕 -->
+                    <div class="button-group">
+                        <button type="submit" class="submit-btn">
+                            <i class="fas fa-paper-plane"></i>
+                            更新任務
+                        </button>
+                        <a href="/FProfileManage/PersonalPage/#/Poster" class="btn btn-outline-secondary cancel-btn">
+                            <i class="fas fa-arrow-left me-2"></i> 取消
+                        </a>
+                    </div>
+            </form>
+        </div>
+    </div>
+</main>
+@section Scripts
+{
+    <script src="~/frontuse/js/task/index.js"></script>
+    <script src="~/frontuse/js/task/task-creation.js"></script>
+}

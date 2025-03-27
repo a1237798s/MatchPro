@@ -1,0 +1,52 @@
+﻿@{
+    Layout=null;
+}
+@model BackMange.ViewModels.LoginViewModel
+<!DOCTYPE html>
+<html>
+<head>
+   
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />  
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" integrity="sha512-vKMx8UnXk60zUwyUnUPM3HbQo8QfmNx7+ltw8Pm5zLusl1XIfwcxo8DbWCqMGKaWeNxWA8yrx5v3SaVpMvR3CA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="~/css/Backend/Login.css" rel="stylesheet" />
+    <title>後臺管理登入畫面</title>
+</head>
+<body>       
+    <div class="login-container">
+        <div class="login-box">
+            <partial name="_Notification" />
+            <div class="login-content">
+                <div class="avatar-container">
+                    <i class="fa-solid fa-user avatar-icon"></i>
+                </div>
+                <form action="/ttAdmins/Login"
+                      method="post"
+                      class="login-form"
+                      id="loginForm">
+                    <div class="input-group email">
+                        <i class="fa-solid fa-user"></i>
+                        <input asp-for="Email"
+                               type="text"
+                               id="Email"
+                               required
+                               placeholder=" " />
+                        <label asp-for="Email">帳號</label>                      
+                    </div>
+                    <div class="input-group password">
+                        <i class="fa-solid fa-lock"></i>
+                        <input asp-for="Password"
+                               type="password"
+                               id="Password"
+                               required
+                               placeholder=" " />
+                        <label asp-for="Password">密碼</label>                        
+                    </div>
+                    <button type="submit" class="btn-login" id="btn-login">登入</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>     
+</body>
+</html>

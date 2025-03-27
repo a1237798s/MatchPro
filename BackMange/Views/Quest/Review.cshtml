@@ -1,0 +1,51 @@
+﻿@model BackMange.DTO.TTaskDTO
+
+
+@{
+    ViewData["Title"] = "Review";
+}
+
+
+<h1>審核任務</h1>
+
+<table class="table mb-3">
+    <tr>
+        <th>標題：</th>
+        <td>@Model.Ftitle</td>
+    </tr>
+    <tr>
+        <th>發佈者：</th>
+        <td>@Model.FposterId</td>
+    </tr>
+    <tr>
+        <th>描述：</th>
+        <td>@Model.Fdescription</td>
+    </tr>
+    <tr>
+        <th>預算：</th>
+        <td>@Model.Fbudget</td>
+    </tr>
+    <tr>
+        <th>狀態：</th>
+        <td>@Model.Fstatus</td>
+    </tr>
+    <tr>
+        <th>截止日期：</th>
+        <td>@Model.Fdeadline</td>
+    </tr>
+</table>
+<div class="d-flex gap-3">
+    <form asp-action="Approve" asp-route-id="@Model.FtaskId" method="post">
+        <button type="submit" class="btn btn-success">審核通過</button>
+    </form>
+    <form asp-action="Reject" asp-route-id="@Model.FtaskId" method="post" onsubmit="return confirm('確定要退回此案件嗎？此操作無法復原。');">
+        <button type="submit" class="btn btn-danger">退回</button>
+    </form>
+    
+        <a asp-action="List" class="btn btn-secondary">返回列表</a>
+       
+</div>
+
+
+
+    

@@ -1,0 +1,1747 @@
+﻿@{
+    Layout = "_FrontendLayout";
+}
+@section Styles 
+{
+    @* 側邊攔樣式 *@
+    <link href="~/frontuse/css/ProfileManage/Sidebar.css" rel="stylesheet" />
+    @* 主頁樣式 *@
+    <link href="~/frontuse/css/ProfileManage/Main.css" rel="stylesheet" />
+    @* 個人資料 *@
+    <link href="~/frontuse/css/ProfileManage/Profile.css" rel="stylesheet" />   
+    @* 接案管理 *@
+    <link href="~/frontuse/css/ProfileManage/Freelancer.css" rel="stylesheet" />
+    @* 工作坊 *@
+    <link href="~/frontuse/css/ProfileManage/FreelancerProfile.css" rel="stylesheet" />
+    @* 接案管理 *@
+    <link href="~/frontuse/css/ProfileManage/Poster.css" rel="stylesheet" />
+    @* 訊息管理 唯此 2 個*@
+    <link href="~/frontuse/css/ProfileManage/case-management.css" rel="stylesheet" />
+    <link href="~/frontuse/css/ProfileManage/message-interface.css" rel="stylesheet" />
+    @* 修改密碼 *@
+    <link href="~/frontuse/css/ProfileManage/ChangePassword.css" rel="stylesheet" />    
+
+}
+<section id="app">
+    <div class="container-lg">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-2">
+                <section class="talent-sidebar-container">
+                    <div class="card">
+                        <div class="card-header">會員編號：{{User.FuserId}}</div>
+                        <div class="member-avatar">
+                            @* 頭貼為空值顯示預設Icon *@
+                            <div class="avatar-icon" v-if="!User.FprofileImageUrl">
+                                <i class="bi bi-person"></i>
+                                <div class="overlay">更換頭貼</div>
+                                <input type="file" class="file-input" @@change="UpdateImage" accept="image/png, image/jpeg, image/jpg, image/gif">
+                            </div>
+                            @* 顯示自己本身Icon *@
+                            <div class="avatar-icon" v-else>
+                                <img :src="User.FprofileImageUrl" />
+                                <div class="overlay">更換頭貼</div>
+                                <input type="file" class="file-input" @@change="UpdateImage" accept="image/png, image/jpeg, image/jpg, image/gif">
+                            </div>
+                            <div class="member-name">{{User.FfullName}}</div>
+                        </div>
+                        <ul class="sidebar-nav list-group list-group-flush">
+                            <router-link to="/">
+                                <li class="list-group-item">主頁</li>
+                            </router-link>
+                            <router-link to="/Profile">
+                                <li class="list-group-item">個人資料</li>
+                            </router-link>
+                            <router-link to="/FreelancerProfile">
+                                <li class="list-group-item">工作坊</li>
+                            </router-link>
+                            <router-link to="/Freelancer">
+                                <li class="list-group-item">接案管理</li>
+                            </router-link>
+                            <router-link to="/Poster">
+                                <li class="list-group-item">提案管理</li>
+                            </router-link>
+                            <router-link to="/Message">
+                                <li class="list-group-item">訊息管理</li>
+                            </router-link>
+                            <router-link to="/ChangePassword" v-if="User.FloginType=='Local'">
+                                <li class="list-group-item">修改信箱/密碼</li>
+                            </router-link>
+                        </ul>
+                    </div>
+                </section>
+            </div>
+
+            <!-- 內容區塊 -->
+            <div class="col-10">
+                <section id="talent-info-container">
+                    <router-view></router-view>
+                </section>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts 
+{    
+    <script src="https://cdn.jsdelivr.net/npm/vue-router@4.1.6/dist/vue-router.global.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.8/axios.min.js" integrity="sha512-v8+bPcpk4Sj7CKB11+gK/FnsbgQ15jTwZamnBf/xDmiQDcgOIYufBo6Acu1y30vrk8gg5su4x0CG3zfPaq5Fcg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    
+    <script src="~/frontuse/js/message-management.js"></script>
+    @* <script src="~/frontuse/js/message2.js"></script> *@
+   
+
+    <script>
+        // const { createApp, ref, onMounted , provide, inject, computed  } = Vue;
+        const { createRouter, createWebHashHistory } = VueRouter;
+        
+
+        // 建立 Vue 應用，並掛載 Vue Router
+        const app = createApp({
+            setup() {
+                const User =ref({
+                    FuserId:null,
+                    FidNumber:null,
+                    FfullName:null,
+                    FcompanyNumber:null,
+                    Femail:null,
+                    FphoneNumber:null,
+                    Faddress:null,
+                    Fbirthday:null,
+                    Fgender:null,
+                    FprofileImageUrl:null,
+                    FisEmailVerified:null ,
+                    FcreatedAt:null,
+                    FloginType:null
+                });
+
+                // 獲取 Session 會員 ID
+                const fetchUserID = async () => {
+                    try {
+                        const response = await fetch("/ProfileManage/GetUser", {
+                            method: "GET",
+                            credentials: "include",  // 確保帶上 Session
+                        });
+
+                        if (!response.ok) throw new Error("獲取失敗");
+
+                        const data = await response.json();                        
+
+                        // 確保 data.user 存在，避免 undefined 錯誤
+                        if (data.User) {
+                            // 正確更新 ref 內的物件屬性
+                            User.value = {
+                                FuserId: data.User.FuserId || null,
+                                FidNumber:data.User.FidNumber || null,
+                                FfullName: data.User.FfullName || null,
+                                FcompanyNumber: data.User.FcompanyNumber || null,
+                                Femail: data.User.Femail || null,
+                                FphoneNumber: data.User.FphoneNumber || null,
+                                Faddress: data.User.Faddress ||null,
+                                Fbirthday: data.User.Fbirthday || null,
+                                Fgender: data.User.Fgender || null,
+                                FprofileImageUrl: getProfileImageUrl(data.User),
+                                FisEmailVerified: data.User.FisEmailVerified || null,
+                                FcreatedAt:data.User.FcreatedAt || null,
+                                FloginType:data.User.FloginType ||null,
+                            };
+                        };
+                    }
+                    catch (error) {
+                        console.error("獲取會員 ID 失敗:", error);
+                    }
+                };
+                onMounted(fetchUserID);
+
+                //轉換日期格式用
+                const formattedDate = computed(() => {
+                    return User.value.FcreatedAt ? dayjs(User.value.FcreatedAt).format("YYYY-MM-DD") : "未提供";
+                });
+
+                //大頭照路徑
+                function getProfileImageUrl(user) {
+                    if (!user || !user.FprofileImageUrl || User.value.FprofileImageUrl=="") {
+                        return null; // 預設圖片
+                    }
+                    return `/uploads/Profile/${user.FprofileImageUrl}`;
+                }
+
+                //更新大頭照
+                async function UpdateImage(event){
+                    const file = event.target.files[0];
+                    if (!file) return;
+
+                    // 允許的檔案類型
+                    const allowedTypes = ["image/png", "image/jpeg", "image/jpg", "image/gif"];
+                    const allowedExtensions = [".png", ".jpeg", ".jpg", ".gif"];                                       
+
+                     // 檢查 MIME 類型
+                    if (!allowedTypes.includes(file.type)) {
+                        alert("請選擇正確的圖片格式（PNG, JPG, JPEG, GIF）");
+                        return;
+                    }
+
+                    // 檢查副檔名
+                    const fileExtension = file.name.slice(file.name.lastIndexOf(".")).toLowerCase();
+                    if (!allowedExtensions.includes(fileExtension)) {
+                        alert("檔案格式錯誤！請上傳 PNG, JPG, JPEG, GIF");
+                        return;
+                    }                    
+
+                    const formData = new FormData();
+                    formData.append("file", file);
+
+                    // 傳遞舊的圖片路徑給後端
+                    if (User.value.FprofileImageUrl) {
+                        formData.append("oldImageUrl", User.value.FprofileImageUrl);
+                    }
+
+                    try {
+                        const response = await fetch("/ProfileManage/UploadImage", {
+                            method: "POST",
+                            body: formData
+                        });
+
+                        if (!response.ok) throw new Error("上傳失敗");
+
+                        const result = await response.json();
+
+                        User.value.FprofileImageUrl = getProfileImageUrl({ 
+                            FuserId: User.value.FuserId,
+                            FprofileImageUrl: result.imageUrl
+                        });
+
+                    } catch (error) {
+                        console.error("頭像上傳失敗", error);
+                    }
+
+                };
+
+                // **提供給所有組件**
+                 provide("User", User);
+                 provide("formattedDate", formattedDate);
+                return { User, formattedDate ,UpdateImage };
+            }
+        });
+
+        // 定義 Vue 組件（使用 Composition API）
+        const Home = {
+            setup() {
+                const User = inject("User");
+                const AllProposals = ref(0);
+                const PendingProposals= ref(0);
+                const NumNotify = ref(0);
+                const NumNotConfirm = ref(0);
+                //取得所有提案筆數
+                async function GetAllProposals (){
+                    const response = await axios.get("/ProfileManage/GetProposals?status=all");                   
+                     AllProposals.value = response.data.Proposals.length;                        
+                };
+                //取得進行中案件筆數
+                async function GetPending (){
+                    const response = await axios.get("/ProfileManage/GetProposals?status=進行中");
+                    PendingProposals.value = response.data.Proposals.length;                       
+                };
+                //取得通知筆數
+                async function GetNotify(){
+                    const response = await axios.get(`/ProfileManage/GetNotify`);
+                    NumNotify.value = response.data.unreadCount;
+                };
+
+                //取得未確認案子
+                async function GetNotConfirm(){
+                    const response = await axios.get(`/ProfileManage/GetNotConfirm`);
+                    console.log(response.data);
+                    NumNotConfirm.value = response.data.NotConfirmCount;
+                };
+
+                onMounted(() => {
+                    GetAllProposals();
+                    GetPending();
+                    GetNotify();
+                    GetNotConfirm();
+                });
+
+                 return { User,AllProposals ,PendingProposals , NumNotify , NumNotConfirm};
+            },
+            template: `<!-- 首頁 -->                   
+                      <div class="page-header">
+                        <h2>總覽</h2>
+                        <div class="header-actions">
+                          <div class="user-level">
+                            <span class="level-tag">Lv.1</span>
+                            <span class="exp-text">經驗值：150/1000</span>
+                          </div>
+                          <div class="credit-score">
+                            <i class="bi bi-award"></i>
+                            <span>信用等級：3.0</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="dashboard-container">
+                        <div class="welcome-banner">
+                          <div class="welcome-text">
+                            <h3>歡迎回來，<span>{{User.FfullName}}</span></h3>
+                            <p class="greeting-text"></p>
+                          </div>
+                          <div class="quick-actions">
+                               <button class="action-btn" >
+                              <i class="bi bi-search"></i>
+                              瀏覽案件
+                            </button>
+                          </div>
+                        </div>
+
+                        <div class="stats-cards">
+                          <a
+                            href="javascript:void(0)"
+                            class="stat-card"
+                            onclick="switchToTab('nav-case')"
+                          >
+                            <div class="stat-icon">
+                              <i class="bi bi-file-text"></i>
+                            </div>
+                            <div class="stat-info">
+                              <h3>案件</h3>
+                              <div class="stat-numbers">
+                                <div class="stat-item">
+                                  <span class="number">0</span>
+                                  <span class="label">成交數</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="number">{{AllProposals}}</span>
+                                  <span class="label">提案數</span>
+                                </div>
+                                <div class="stat-item">
+                                   <span class="number">{{PendingProposals}}</span>
+                                  <span class="label">未結案</span>
+                                </div>
+                              </div>
+                            </div>
+                          </a>
+
+                          <a
+                            href="javascript:void(0)"
+                            class="stat-card"                            
+                          >
+                            <div class="stat-icon">
+                              <i class="bi bi-star"></i>
+                            </div>
+                            <div class="stat-info">
+                              <h3>評價</h3>
+                              <div class="stat-numbers">
+                                <div class="stat-item">
+                                  <span class="number">0</span>
+                                  <span class="label">總評價</span>
+                                </div>
+                                <div class="stat-item">
+                                  <span class="number">0</span>
+                                  <span class="label">服務評價</span>
+                                </div>
+                              </div>
+                            </div>
+                          </a>
+
+                          <a
+                            href="javascript:void(0)"
+                            class="stat-card"
+                            onclick="switchToTab('nav-proposal')"
+                          >
+                            <div class="stat-icon">
+                              <i class="bi bi-bell"></i>
+                            </div>
+                            <div class="stat-info">
+                              <h3>提醒通知</h3>
+                              <div class="stat-numbers">
+                                <div class="stat-item">
+                                  <span class="number">{{NumNotConfirm}}</span>
+                                  <span class="label">待確認</span>
+                                </div>
+                                <div class="stat-item">
+                                  <span class="number">{{ NumNotify }}</span>
+                                  <span class="label">服務提醒</span>
+                                </div>
+                              </div>
+                            </div>
+                          </a>
+                        </div>
+
+                        <!-- 每日任務 -->
+                        <div class="daily-tasks">
+                          <h3>每日任務</h3>
+                          <div class="task-progress">
+                            <div class="task-header">
+                              <span>進行類別為"一般案件"的提案</span>
+                              <span class="progress-text">10/55</span>
+                            </div>
+                            <div class="progress">
+                              <div class="progress-bar" style="width: 18%"></div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                   
+            `
+        };
+
+        const Profile = {
+            setup() {
+                const User = inject("User");
+                const formattedDate = inject("formattedDate");
+                const errors = ref({});
+
+                const genderText=computed(()=>{
+                    // 依據 User.Fgender 來回傳對應的顯示文字
+                    const genderMap = {
+                        M: "男生",
+                        F: "女生",
+                        O: "其他"
+                    };
+                    return genderMap[User.value.Fgender] || "未選擇";
+                });
+
+                 // 驗證表單
+                const validateForm = () => {
+                    errors.value = {}; // 先清空錯誤
+                    let isValid = true;
+
+                    if (!tempUser.value.FfullName || tempUser.value.FfullName.trim() === "") {
+                        errors.value.FfullName = "姓名不能為空";
+                        isValid = false;
+                    }
+
+                    if (!tempUser.value.FphoneNumber || !/^\d{10}$/.test(tempUser.value.FphoneNumber)) {
+                        errors.value.FphoneNumber = "電話號碼格式錯誤，需為 10 位數字";
+                        isValid = false;
+                    }
+
+                    if (!tempUser.value.Fbirthday) {
+                       tempUser.value.Fbirthday=null;
+                    }
+
+                    if (!tempUser.value.FcompanyNumber) {
+                       tempUser.value.FcompanyNumber=null;
+                    }
+
+                    if (tempUser.value.FcompanyNumber && !/^\d{8}$/.test(tempUser.value.FcompanyNumber)) {
+                        errors.value.FcompanyNumber = "統一編號格式錯誤，需為 8 位數字";
+                        isValid = false;
+                    }
+
+                    if (!tempUser.value.FidNumber || !/^[A-Z]{1}\d{9}$/.test(tempUser.value.FidNumber)) {
+                        errors.value.FidNumber = "身分證格式有誤";
+                        isValid = false;
+                    }
+                   
+
+                    return isValid;
+                };
+
+                // 暫存編輯中的資料
+                const tempUser = ref({ ...User.value });
+
+                // 控制編輯模式
+                const isEditing = ref(false);
+
+                // 進入編輯模式
+                const edit = () => {
+                    tempUser.value = { ...User.value }; // 深拷貝，避免直接影響原始資料
+                    errors.value = {};
+                    isEditing.value = true;
+                };
+
+                // 儲存修改
+                const save = async () => {
+                   
+                    if (!validateForm()) {
+                        return; // 有錯誤就不送出
+                    }
+                    try {
+                        User.value = { ...tempUser.value }; // 更新原始資料
+                        const response = await axios.put("/ProfileManage/UpdateUser", tempUser.value, {
+                            headers: { "Content-Type": "application/json" }
+                        });
+
+                        if (response.data.success) {
+                            User.value = { ...tempUser.value }; // 更新 User 資料
+                            isEditing.value = false; // 關閉編輯模式
+                            alert("更新成功！");                            
+                        } else {
+                            alert("更新失敗：" + response.data.message);
+                        }
+                    } catch (error) {
+                        console.error("更新失敗", error);
+                        alert("伺服器錯誤，請稍後再試");
+                    }           
+                     isEditing.value = false;
+                      location.reload();
+                };
+
+                // 取消編輯
+                const cancel = () => {
+                    tempUser.value = { ...User.value }; // 恢復為原本的資料
+                    isEditing.value = false;
+                    errors.value = {};
+                };
+
+                return { User, formattedDate, isEditing, edit, save, cancel, tempUser, genderText, errors };
+            },
+            
+            template:`             
+                    <div class="profile-container">
+                        <div class="profile-card">
+                          <!-- 頂部個人資訊 -->
+                          <div class="profile-header">
+                            <div class="avatar-wrapper" v-if="!User.FprofileImageUrl">
+                                <i class="bi bi-person"></i>
+                            </div>
+                            <div class="avatar-wrapper" v-else>                                
+                                 <img
+                                :src="User.FprofileImageUrl"
+                                alt="用戶頭像"
+                                class="avatar"
+                              />
+                            </div>
+                            <div class="profile-user-info">
+                               <div class="profile-name-section">
+                                <h2>{{User.FfullName}}</h2>
+                                <span class="member-id">#{{User.FuserId}}</span>                                
+                              </div>                              
+                            </div>
+                            <div v-if="!isEditing"><button class="edit-profile-btn" v-on:click="edit()">編輯</button></div>
+                            <div class="d-flex" v-if="isEditing">
+                                <button class="edit-profile-btn mx-2" v-on:click="save()">儲存</button>
+                                <button class="edit-profile-btn" v-on:click="cancel()">取消</button>
+                            </div>
+                          </div>
+
+                          <!-- 詳細資訊 -->
+                          <div class="info-grid">
+                            <div class="info-item">
+                              <i class="bi bi-person"></i>
+                              <div class="item-content">
+                                <label>姓名</label>
+                                <span v-if="!isEditing">{{User.FfullName}}</span>
+                                <input type="text" class="form-control" v-if="isEditing" v-model="tempUser.FfullName" />
+                                <span class="error-text" v-if="errors.FfullName">{{ errors.FfullName }}</span>
+                              </div>
+                            </div>
+                             <div class="info-item">
+                              <i class="bi bi-gender-ambiguous"></i>
+                              <div class="item-content">
+                                <label>性別</label>
+                                <span v-if="!isEditing">{{genderText}}</span>
+                                <div class="d-flex" v-if="isEditing">
+                                    <div style="width:70px">
+                                        <input type="radio" name="gender" value="M" v-model="tempUser.Fgender"/>
+                                        <label for="gender">男生</label>
+                                    </div>
+                                    <div style="width:70px">
+                                        <input type="radio" name="gender" value="F" v-model="tempUser.Fgender"/>
+                                        <label for="gender">女生</label>
+                                    </div>
+                                    <div style="width:70px">
+                                        <input type="radio" name="gender" value="O" v-model="tempUser.Fgender"/>
+                                        <label for="gender">其他</label>
+                                    </div>                                     
+                                </div>                                
+                              </div>
+                            </div>
+                            <div class="info-item">
+                              <i class="bi bi-card-text"></i>
+                              <div class="item-content">
+                                <label>身分證字號</label>
+                                <span v-if="!isEditing">{{User.FidNumber}}</span>
+                                <input v-if="isEditing" class="form-control" v-model="tempUser.FidNumber" />
+                                <span class="error-text" v-if="errors.FidNumber">{{ errors.FidNumber }}</span>
+                              </div>
+                            </div>
+                            <div class="info-item">
+                              <i class="bi bi-envelope"></i>
+                              <div class="item-content">
+                                <label>電子郵件</label>
+                                <span >{{User.Femail}}</span>
+                              </div>
+                            </div>
+                            <div class="info-item">
+                              <i class="bi bi-telephone"></i>
+                              <div class="item-content">
+                                <label>聯絡電話</label>
+                                <span v-if="!isEditing">{{User.FphoneNumber}}</span>
+                                <input v-if="isEditing" class="form-control" v-model="tempUser.FphoneNumber" />
+                                <span class="error-text" v-if="errors.FphoneNumber">{{ errors.FphoneNumber }}</span>
+                              </div>
+                            </div>
+                            <div class="info-item">
+                              <i class="bi bi-cake"></i>
+                              <div class="item-content">
+                                <label>生日</label>
+                                <span v-if="!isEditing">{{User.Fbirthday }}</span>
+                                <input type="date" class="form-control" v-if="isEditing" v-model="tempUser.Fbirthday"/>
+                              </div>
+                            </div>
+
+                            <div class="info-item">
+                              <i class="bi bi-geo-alt"></i>
+                              <div class="item-content">
+                                <label>所在地區</label>
+                                <span v-if="!isEditing">{{User.Faddress}}</span>
+                                <input v-if="isEditing" class="form-control" v-model="tempUser.Faddress" />
+                              </div>
+                            </div>                           
+                            <div class="info-item">
+                              <i class="bi bi-building"></i>
+                              <div class="item-content">
+                                <label>公司統編</label>
+                                <span v-if="!isEditing">{{User.FcompanyNumber}}</span>
+                                <input v-if="isEditing" class="form-control" v-model="tempUser.FcompanyNumber" />
+                                <span class="error-text" v-if="errors.FcompanyNumber">{{ errors.FcompanyNumber }}</span>
+                              </div>
+                            </div>
+                            <div class="info-item">
+                              <i class="bi bi-calendar3"></i>
+                              <div class="item-content">
+                                <label>加入時間</label>
+                                <span>{{ formattedDate }}</span>
+                              </div>
+                            </div>                            
+                          </div>
+                        </div>
+                      </div>`
+        };
+
+        const Freelancer = {
+            setup() {
+                const User = inject("User");
+                const Cases = ref([]);
+                const reply = ref([]);
+                const filters = [
+                    {label:"全部",status:"all"},
+                    {label:"進行中",status:"進行中"},
+                    {label:"已完成",status:"已完成"},
+                    {label:"已取消",status:"已取消"}
+                ];
+                const isReply = ref(false);
+                const selectedFilter = ref("all");               
+
+                const profit = ref(0);
+                const Notreceived = ref(0);
+                const isCalculated = ref(false); // 計算旗標
+                
+                // 轉換日期格式（MM月DD日）
+                const formatDate = (dateString) => {
+                    if (!dateString) return "日期錯誤";
+                    const date = new Date(dateString);
+                    return `${date.getMonth() + 1}月${date.getDate()}日`;
+                };
+
+                async function GetCase(status){
+
+                    isReply.value = false;
+                    if(isReply.value){
+                        return ;
+                    }
+
+                    selectedFilter.value = status;
+                    try{
+                        const response = await axios.get(`/ProfileManage/GetCase?status=${status}`);
+                        Cases.value = response.data.Case;
+
+                        // 只執行一次計算
+                        if (!isCalculated.value) {
+                            profit.value = Cases.value
+                                .filter(caseItem => caseItem.Status === "已完成")
+                                .reduce((sum, item) => sum + (item.Amount || 0), 0);
+
+                            Notreceived.value = Cases.value
+                                .filter(caseItem => caseItem.Status === "進行中")
+                                .reduce((sum, item) => sum + (item.Amount || 0), 0);
+
+                            isCalculated.value = true; // 標記已計算
+                        }
+                    }
+                    catch(error){
+                        console.log(error);
+                    }
+                };
+
+                //切換回覆確認篩選
+                async function fetchReply(){
+                    selectedFilter.value="";
+                    isReply.value = true;
+
+                    try{
+                         const response = await axios.get("/ProfileManage/GetReply?identity=worker");
+                         reply.value =  response.data.replies;
+                         console.log(response.data);
+                    }
+                    catch(error){
+                        console.log(error);
+                    }
+                };
+
+                onMounted(()=>{GetCase("all")});
+
+
+                return { User, filters, selectedFilter, GetCase, Cases, formatDate, profit, isCalculated, Notreceived, isReply, fetchReply,reply};
+            },
+            template: `
+            <div class="freelancer-management">
+                <div class="page-header">
+                    <h2>接案管理</h2>
+                </div>
+                @* 收益金額Start *@
+                <div class="stats-container">
+                    <div class="stats-row">
+                        <div class="stat-card">
+                            <div class="stat-label">總收益</div>
+                            <div class="stat-value">NT$ {{profit}}</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">未到帳金額</div>
+                            <div class="stat-value">NT$ {{Notreceived}}</div>
+                        </div>
+                    </div>
+                </div>
+                 @* 收益金額End *@
+                 @* 篩選按鈕 *@
+                <div class="case-list-section">
+                    <div class="list-header">
+                        <div class="case-filter-tabs">
+                            <div>
+                                <button
+                                v-for="filter in filters"
+                                :key="filter.status"
+                                :class="{ 'filter-tab': true, 'active': selectedFilter === filter.status }"
+                                @@click="GetCase(filter.status)"
+                                >
+                                {{ filter.label }}
+                                </button>
+                            </div>                            
+                            <div>
+                                <button class="filter-tab" :class="{'active': isReply }" @@click="fetchReply">
+                                    等待回覆
+                                    <span class="badge"></span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    @* 案件列表Container *@
+                    <div class="case-list">
+                        @* 抓取案件資料Start *@
+                        <div v-if="!isReply" class="case-item" v-for="item in Cases" :key="item.TransactionId">
+                            <div class="case-date">{{formatDate(item.StartTime)}}</div>
+                            <div class="case-content">
+                                <div class="case-title">{{item.Ftitle}}</div>
+                                <div>
+                                    <div class="case-status status-conducting" v-if="item.Status=='進行中'">進行中</div>
+                                    <div class="case-status status-complete" v-if="item.Status=='已完成'" >已完成</div>
+                                    <div class="case-status status-cancel" v-if="item.Status=='已取消'">已取消</div>
+                                </div>                                
+                            </div>
+                            <div class="case-amount">NT{{new Intl.NumberFormat("zh-TW", { style: "currency", currency: "TWD",minimumFractionDigits: 0, }).format(item.Amount)}}</div>
+                            <a :href="'/Frontend/missionDetail/' + item.TaskId" class="btn-action" v-if="item.Status=='進行中'">查看進度</a>
+                            <a :href="'/Frontend/missionDetail/' + item.TaskId" class="btn-action" v-if="item.Status=='已完成'">查看評價</a>
+                            <a :href="'/Frontend/missionDetail/' + item.TaskId" class="btn-action" v-if="item.Status=='已取消'">查看原因</a>
+                        </div>                        
+                        @* 抓取案件資料End *@
+                        @* 抓取回復內容Start *@
+                        <div v-if="isReply" class="case-item" v-for="item in reply" :key="item.TransactionId">                            
+                            <div class="case-content">
+                                <div class="case-title">
+                                    <span class="case-status status-complete me-3" v-if="item.FconfirmationType=='接案確認'">接案請求</span>
+                                    <span class="case-status status-cancel me-3" v-if="item.FconfirmationType=='取消確認'">取消請求</span>
+                                    <a :href="'/Frontend/missionDetail/' + item.FtaskId" >{{item.TaskTitle}}</a>                                    
+                                </div>                                
+                            </div>                           
+                            <button v-if="item.FconfirmationStatus=='待確認'" class="btn-action">等待案主回覆</button>
+                            <button v-if="item.FconfirmationStatus=='已確認'" class="btn-action btn-accept">已接案</button>
+                            <button v-if="item.FconfirmationStatus=='已拒絕'" class="btn-action btn-delete">拒絕請求</button>
+                            <button v-if="item.FconfirmationStatus=='已取消'" class="btn-action btn-delete">案件已取消</button>
+                            <button v-if="item.FconfirmationStatus=='拒絕取消'" class="btn-action btn-delete">駁回取消請求</button>
+                        </div>
+                        @* 抓取回復內容End *@
+                    </div>
+                </div>
+            </div>`
+        };
+
+        const FreelancerProfile = {
+            setup() {
+
+            const worker = ref({});
+            const newSkill = ref('');
+            const skills = ref([]);
+            const portfolioImages = ref([]);
+            const isLoading = ref(false);
+            const errors = ref({});
+            const isEdit = ref(false);
+            const isModalOpen = ref(false);
+            const selectedFile = ref(null);
+            const imageUrl = ref("");
+
+            // 讀取接案者資料
+            async function GetWorker() {
+                try {
+                    const response = await axios.get("/ProfileManage/GetWorker");
+                    worker.value = response.data.Worker || {};
+                    skills.value = response.data.Worker.Fskills
+                        ? response.data.Worker.Fskills.split(",").map(s => s.trim())
+                        : [];
+                } catch (error) {
+                    console.error("讀取接案者資料失敗", error);
+                }
+            }
+
+            // 讀取作品集
+            async function GetPortfolio() {
+                try {
+                    const response = await axios.get("/ProfileManage/GetPortfolio");
+                    portfolioImages.value = response.data.Portfolio || [];
+                } catch (error) {
+                    console.error("讀取作品集失敗", error);
+                }
+            }
+
+            onMounted(() => {
+                GetWorker();
+                GetPortfolio();
+            });
+
+            // 新增技能
+            const addSkill = () => {
+                const trimmedSkill = newSkill.value.trim();
+                if (trimmedSkill && !skills.value.includes(trimmedSkill)) {
+                    skills.value.push(trimmedSkill);
+                    newSkill.value = "";
+                }
+            };
+
+            // 刪除技能
+            const removeSkill = index => {
+                skills.value.splice(index, 1);
+            };
+
+            // 驗證表單
+            function validateInput() {
+                errors.value = {};
+                if (!worker.value.FcodeName?.trim()) {
+                    errors.value.FcodeName = "請輸入使用者名稱";
+                }
+                if (!worker.value.FprofileDescription?.trim()) {
+                    errors.value.FprofileDescription = "請輸入簡介";
+                }
+                
+                return Object.keys(errors.value).length === 0;
+            }
+
+            // 儲存編輯
+            async function Save() {
+                if (!validateInput() || isLoading.value) return;
+                isLoading.value = true;
+
+                const updatedWorker = {
+                    ...worker.value,
+                    FisVerified: true,
+                    Fskills: skills.value.join(","),
+                };
+
+                try {
+                    await axios.put("/ProfileManage/AddWorker", updatedWorker);
+                    newSkill.value="";
+                    alert("儲存成功！");
+                    isEdit.value = false;
+                } catch (error) {
+                    console.error("儲存失敗", error);
+                    alert("儲存失敗，請稍後再試！");
+                } finally {
+                    isLoading.value = false;
+                }
+            }
+
+            // 切換編輯模式
+            function Editbtn() {               
+                isEdit.value = !isEdit.value;
+            }
+
+            // 圖片預覽
+            const previewImage = event => {
+                const file = event.target.files[0];
+                if (file) {
+                    selectedFile.value = file;
+                    const reader = new FileReader();
+                    reader.onload = e => (imageUrl.value = e.target.result);
+                    reader.readAsDataURL(file);
+                }
+            };
+
+            // 上傳作品集
+            async function savePortfolio() {
+                if (!selectedFile.value) {
+                    errors.value.portfolio = "請選擇圖片";
+                    return;
+                }
+                const formData = new FormData();
+                formData.append("file", selectedFile.value);
+
+                try {
+                    const response = await axios.post("/ProfileManage/AddPortfolio", formData, {
+                        headers: { "Content-Type": "multipart/form-data" },
+                    });
+                    alert("圖片上傳成功！");                     
+                    //**確保上傳的圖片正確推入 `portfoilioImages`**
+                    portfolioImages.value.push(response.data.Portfolio);
+                    closeModal();
+                } catch (error) {
+                    console.error("圖片上傳失敗", error);
+                    errors.value.portfolio = "圖片上傳失敗：" + (error.response?.data?.Message || error.message);
+                }
+            }
+
+            // 刪除作品
+             async function portfoliodelete(FimageId) {
+                if (!confirm("確定要刪除這個作品嗎？")) return;
+                try {
+                    const response = await axios.delete(`/ProfileManage/DeletePortfolio?FimageId=${FimageId}`);                    
+                    portfolioImages.value = portfolioImages.value.filter(img => img.FimageId !== FimageId);
+                    alert("作品刪除成功！");
+                } catch (error) {
+                    console.error("刪除作品失敗", error);
+                    alert("刪除作品失敗，請稍後再試！");
+                }
+            }
+
+            //修改作品路徑
+            const normalizePath = (path) => {
+                if (!path) return ""; // 避免 undefined 錯誤
+                return "/" + path.replace(/\\/g, "/"); // 確保 `\` 轉換成 `/`
+            };
+
+
+            // 移除圖片預覽
+            const removeImage = () => {
+                imageUrl.value = "";
+                selectedFile.value = null;
+                errors.value.portfolio = "";
+            };
+
+            // 彈窗控制
+            function openModal() {
+                isModalOpen.value = true;
+            }
+            function closeModal() {
+                isModalOpen.value = false;
+                removeImage();
+            }
+
+            return {
+                worker,
+                newSkill,
+                skills,
+                addSkill,
+                removeSkill,
+                isEdit,
+                Editbtn,
+                Save,
+                isModalOpen,
+                openModal,
+                closeModal,
+                savePortfolio,
+                validateInput,
+                errors,
+                previewImage,
+                imageUrl,
+                removeImage,
+                portfolioImages,
+                selectedFile,
+                portfoliodelete,
+                normalizePath
+            };
+        },
+             template:`
+            <div class="portfolio-content">
+               @* 自我介紹區塊Start *@
+                <div class="tab-pane me-tab" id="me-section">
+                    <div class="me-page-header">
+                        <div class="me-header-content">
+                            <div class="me-title-section">
+                               <h1>接案者資料編輯</h1>
+                               <p>完善您的個人資料，讓案主更了解您的專業能力</p>
+                            </div>
+                            <div class="me-header-actions">
+                                <button class="me-edit-btn" @@click="Editbtn" v-if="!isEdit">
+                                    <i class="bi bi-pencil"></i>編輯
+                                </button>
+                                <button class="me-save-btn" @@click="Save()" v-if="isEdit" >
+                                    <i class="bi bi-check2"></i>儲存
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    @* 接案資料Start *@
+                    <div class="me-form">
+                        @* 接案暱稱Start *@
+                        <div class="me-form-group">
+                            <label>接案暱稱</label>
+                            <input type="text" class="me-form-control" v-model="worker.FcodeName" :disabled="!isEdit" :class="{'is-invalid': errors.FcodeName}"/>
+                             <small class="me-form-text" v-if="!errors.FcodeName">這個暱稱會顯示在您的接案資料中</small>
+                            <div class="invalid-feedback">{{ errors.FcodeName }}</div>
+                        </div>
+                        @* 接案暱稱End *@
+                        @* 自我介紹Start *@
+                        <div class="me-form-group">
+                            <label>專業簡介</label>
+                            <div class="me-field-wrapper">
+                                 <textarea class="me-form-control" rows="5" v-model="worker.FprofileDescription" :disabled="!isEdit" :class="{'is-invalid': errors.FprofileDescription}">自我介紹</textarea>
+                                 <small class="me-form-text" v-if="!errors.FprofileDescription">建議 100-300 字，讓案主快速了解您的專業能力</small>
+                                <div class="invalid-feedback">{{ errors.FprofileDescription }}</div>
+                             </div>                            
+                        </div>
+                        @* 自我介紹End *@
+                        @* 技能Start *@ 
+                        <div class="me-form-group">
+                             <label>專業技能</label>
+
+                            @* 輸入與新增技能 *@ 
+                            <div class="skill-container">
+                                <input v-model="newSkill" @@keyup.enter="addSkill" placeholder="輸入技能" class="me-form-control skill-input" :disabled="!isEdit">
+                                <button @@click="addSkill" class="work-add-btn me-2" :disabled="!isEdit">新增技能</button>
+                            </div>
+
+                            @* 顯示技能標籤 *@ 
+                            <div class="me-certificate-list">
+                                <div v-for="(skill, index) in skills" :key="index" class="me-certificate-item">
+                                    <i class="bi bi-award"></i><span>{{ skill }}</span>
+                                    <button @@click="removeSkill(index)">x</button>
+                                </div>
+                            </div>                            
+                            <small class="me-form-text">相關技能可增加案主的信任度</small>
+                        </div>
+                        @* 技能End *@ 
+                        @* 作品集Start *@                    
+                        <div class="work-page">
+                            <div class="work-header-content">
+                                <div class="work-title-section">
+                                   <h1>作品集</h1>
+                                   <p>展示您的專案作品和實際成果</p>
+                                </div>
+                                <button class="work-add-btn" @@click="openModal">
+                                    <i class="bi bi-plus"></i>新增作品
+                                </button>
+                            </div>
+                            <div class="work-container">
+                                 <div class="work-item" v-for="item in portfolioImages" :key="item.FimageId">
+                                    <div class="work-preview">
+                                        <img :src="normalizePath(item.FimagePath)" />
+                                         <button class="portfolio-delete" @@click="portfoliodelete(item.FimageId)">
+                                            <i class="bi bi-x"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>                
+            </div>
+        
+        @* Modal *@
+        <div v-if="isModalOpen" class="modal-overlay">
+            <div class="modal-Portfolio">                 
+                   <div class="work-form-header">
+                     <h3>新增作品</h3>
+                      <button class="work-form-close" @@click="closeModal">
+                       <i class="bi bi-x"></i>
+                     </button>
+                   </div>
+                   <div class="work-form-body">                     
+                     <div class="work-form-group">
+                       <label>作品圖片</label>
+                    
+                       <input
+                         type="file"
+                         class="work-form-control"
+                         accept="image/*"
+                         @@change="previewImage"
+                       />
+                     </div>
+                    @* 預覽圖片 *@                 
+                    <div v-if="imageUrl" class="work-preview">
+                        <img :src="imageUrl" alt="圖片預覽" style="object-fit: contain;"/>
+                        <button class="portfolio-delete" @@click="removeImage">
+                            <i class="bi bi-x"></i>
+                        </button>                       
+                    </div>
+                   </div>
+                    <div class="text-danger" >{{ errors.portfolio }}</div>
+                   <div class="work-form-footer">
+                     <button @@click="savePortfolio" class="work-form-submit">儲存</button>
+                     <button @@click="closeModal" class="work-form-cancel">取消</button>
+                   </div>
+                </div>            
+        </div>
+        `
+        };
+
+        const Poster = {
+            setup() {
+                const User = inject("User");
+                const proposals = ref([]);
+                const reply = ref([]);
+                const pendingReply = ref(0);
+
+                // 定義篩選條件
+                const filters = ref([
+                    { label: "全部", status: "all" },
+                    { label: "待審核", status: "待審核" },
+                    { label: "發佈中", status: "發佈中" },
+                    { label: "進行中", status: "進行中" },
+                    { label: "已取消", status: "已取消" },
+                    { label: "已完成", status: "已完成" }
+                ]);
+                const selectedFilter = ref("all"); // 預設選擇「全部」
+
+                const isReply = ref(false); //預設等待回應false
+
+                //抓取個人提案數
+                const fetchProposals = async (status) => {
+                     isReply.value = false;
+                     
+                     if(isReply.value){
+                         return ;
+                     }
+                    selectedFilter.value = status;  //更新選中的篩選條件
+                    
+                    try {
+                    const response = await axios.get(`/ProfileManage/GetProposals?status=${status}`);
+                    proposals.value = response.data.Proposals; 
+                    
+                    } catch (error) {
+                    console.error("獲取提案數據失敗:", error);
+                    }
+                };
+
+                // 截斷字串的函式
+                const truncateText = (text, maxLength) => {
+                  return text.length > maxLength ? text.slice(0, maxLength) + "..." : text;
+                };
+
+                // 當組件掛載時執行請求
+                onMounted(()=>{
+                    fetchProposals("all");
+                    fetchNotRead();            
+                });
+
+                // 轉換日期格式（YYYY-MM-DD）
+                const formatDate = (dateString) => {
+                  if (!dateString) return "日期錯誤";
+                  const date = new Date(dateString);
+                  return date.toLocaleDateString("zh-TW", {
+                    year: "numeric",
+                    month: "2-digit",
+                    day: "2-digit"
+                  });
+                };
+
+                //進入編輯畫面
+                async function editProposal(FtaskId){                    
+                    try{  
+                        // 成功後跳轉到新頁面
+                        window.location.href = `/ProfileManage/EditProposals?FtaskId=${encodeURIComponent(FtaskId)}`;
+                    }
+                    catch(error){
+                        console.error("獲取提案數據失敗:", error);
+                    }
+                };
+
+                //刪除提案
+                function deleteProposal(FtaskId){
+                      //alert(`deleteProposal${FtaskId}`);
+                    if(!confirm("刪除後無法復原，確定要刪除?")){
+                        return;
+                    };                        
+                        
+                    axios.delete(`/ProfileManage/deleteProposal?FtaskId=${FtaskId}`)
+                    .then(response => {
+                        alert(response.data.Message); // 成功提示
+                        location.reload(); // 重新整理頁面或執行其他 UI 更新
+                    })
+                    .catch(error => {
+                        if (error.response && error.response.data) {
+                            console.log(error);
+                            alert("刪除失敗：" + error.response.data.message);
+                        } else {
+                            console.log(error);
+                            alert("請求失敗，請稍後再試。");
+                        }
+                        console.error("Error:", error);
+                    });
+                      
+                };
+
+                //獲取尚未回覆確認數量
+                async function fetchNotRead(){                    
+                    try{
+                         const response = await axios.get("/ProfileManage/GetReply?identity=poster");                         
+                         pendingReply.value = response.data.replies.filter(reply => reply.FconfirmationStatus == "待確認").length;
+                         console.log(response.data);
+                    }
+                    catch(error){
+                        console.log(error);
+                    }
+                };
+
+                //切換回覆確認篩選
+                async function fetchReply(){                     
+                    selectedFilter.value="";                    
+                    isReply.value = true;                    
+                    try{
+                         const response = await axios.get("/ProfileManage/GetReply?identity=poster");
+                         reply.value = response.data.replies.sort((a, b) => b.FconfirmReplyId - a.FconfirmReplyId);
+                         console.log(reply);
+                    }
+                    catch(error){
+                        console.log(error);
+                    }
+                };
+
+                //確認回覆
+                 async function Confirm(status,confirmReplyId){                       
+                    const targetReply = await reply.value.find(reply => reply.FconfirmReplyId === confirmReplyId);                     
+                    const taskid = await targetReply.FtaskId;
+                    //取得taskID所有任務回覆，除了目前點擊的WorkerID的所有任務
+                    const ReplytaskID = await reply.value.filter(reply => reply.FtaskId == taskid && reply.FworkerId != targetReply.FworkerId);
+                     
+                    if(status=="已確認")
+                    {
+                        if(!confirm("確定接受？")){
+                             return;
+                        }else{
+                            try{                                
+                                const response = await axios.post(`/ProfileManage/Confirm`,{ Status:status,FconfirmReplyId:confirmReplyId});
+                                pendingReply.value--;
+                                if (targetReply) {
+                                    targetReply.FconfirmationStatus = "已確認";  // 修改成你想要的狀態
+
+                                     //以下為呼叫通知API
+                                     //#region === 寄送通知 ====
+                                      const notificationData = {
+                                           UserId: parseInt(targetReply.FworkerId),
+                                            Content: `您應徵的案件「${targetReply.TaskTitle}」已由案主核准，可開始進行。`,
+                                           Type: "Case",
+                                           RelatedId: parseInt(targetReply.FtaskId),
+                                           SenderId: parseInt(User.value.FuserId),
+                                        };
+                                        
+                                        // console.log("notificationData!!:",notificationData);
+
+                                        fetch('/api/Notify/TaskNotification', {
+                                            method: 'POST',
+                                            headers: {
+                                                'Content-Type': 'application/json',
+                                                // 加入 CSRF token 如果需要的話
+                                                // 'X-CSRF-TOKEN': document.querySelector('input[name="__RequestVerificationToken"]').value
+                                            },
+                                            body: JSON.stringify(notificationData)
+                                        })
+                                        .then(async response => {
+                                            // 如果回應不是 2xx，拋出詳細錯誤
+                                            if (!response.ok) {
+                                                const errorText = await response.text();
+                                                throw new Error(`HTTP error! status: ${response.status}, body: ${errorText}`);
+                                            }
+                                            return response.json();
+                                        })
+                                        .then(data => {
+                                            console.log('成功回應:', data);
+                                            if (data.success) {
+                                                console.log("通知發送成功");
+                                            } else {
+                                                console.error("通知發送失敗：", data.message);
+                                            }
+                                        })
+                                        .catch(async error => {
+                                            // 更詳細的錯誤記錄
+                                            console.error("完整錯誤資訊：", {
+                                                error: error,
+                                                message: error.message,
+                                                notificationData: notificationData,  // 記錄發送的資料
+                                                url: '/api/Notify/TaskNotification'  // 記錄目標 URL
+                                            });
+                                        });
+                                      //#endregion === 寄送通知 END ====
+                                }
+                                if(ReplytaskID){
+                                    ReplytaskID.forEach(reply => {
+                                      reply.FconfirmationStatus = "已拒絕"; // 替換成你要更新的內容
+                                    });
+                                }
+                            }
+                            catch(error){
+                                console.log(error);
+                            }
+
+                            
+                        }
+                    }
+                    else if(status=="已拒絕")
+                    {
+                        if(!confirm("確定拒絕？")){
+                             return;
+                        }else{
+                            try{
+                                 const response = await axios.post(`/ProfileManage/Confirm`,{Status:status, FconfirmReplyId:confirmReplyId });
+                                 pendingReply.value--;
+                                 if (targetReply) {
+                                      targetReply.FconfirmationStatus = "已拒絕";  // 修改成你想要的狀態
+                                 }
+                            }
+                            catch(error){
+                                console.log(error);
+                            }
+                        }                           
+                        
+                    }
+                    else if(status=="已取消")
+                    {
+                        if(!confirm("確定取消案件？")){
+                             return;
+                        }else{
+                            try{
+                                 const response = await axios.post(`/ProfileManage/Confirm`,{Status:status, FconfirmReplyId:confirmReplyId });
+                                 pendingReply.value--;
+                                 if (targetReply) {
+                                      targetReply.FconfirmationStatus = "已取消";  // 修改成你想要的狀態
+                                 }
+                            }
+                            catch(error){
+                                console.log(error);
+                            }
+                        }
+
+                    }
+                    else if(status=="拒絕取消")
+                    {
+                        if(!confirm("駁回取消請求？")){
+                             return;
+                        }else{
+                            try{
+                                 const response = await axios.post(`/ProfileManage/Confirm`,{Status:status, FconfirmReplyId:confirmReplyId });
+                                 pendingReply.value--;
+                                 if (targetReply) {
+                                      targetReply.FconfirmationStatus = "拒絕取消";  // 修改成你想要的狀態
+                                 }
+                            }
+                            catch(error){
+                                console.log(error);
+                            }
+                        }
+
+                    }
+                };
+
+                return { User , proposals ,formatDate,filters,selectedFilter,fetchProposals ,editProposal ,truncateText ,
+                    deleteProposal,fetchReply,isReply,reply,Confirm,pendingReply };
+            },
+                  template: `
+          <div class="proposal-management">
+            <!-- 頁面頂部 -->
+            <div class="page-header">
+              <h2>提案管理</h2>
+              <a
+                class="btn-new-proposal"
+                href="/frontend/missionCreate"
+              >
+                <i class="bi bi-plus-lg"></i>
+                新增提案
+              </a>
+            </div>
+
+            <!-- 提案列表 -->
+              <div class="proposal-list d-flex justify-content-between">
+                <div>
+                    <!-- 篩選標籤 -->
+                    <button                        
+                        v-for="filter in filters"
+                        :key="filter.status"
+                        :class="{ 'filter-tab': true, 'active': selectedFilter === filter.status }"
+                        @@click="fetchProposals(filter.status)"
+                    >
+                    {{ filter.label }}
+                    </button>
+                </div>
+                <div>
+                    <button class="filter-tab" :class="{'active': isReply }" @@click="fetchReply">
+                        回覆確認<span class="badge">{{pendingReply}}</span>
+                    </button>
+                </div>
+            </div>
+            <!-- 提案卡片列表 -->
+            <div class="proposal-cards">
+                 @* 抓提案資料庫start *@
+                  <div v-if="!isReply" class="proposal-card" v-for="item in proposals" :key="item.FtaskId">
+                    <div class="proposal-card-content">
+                        <div class="proposal-header">
+                            <h3 class="proposal-title">{{item.Ftitle}}</h3>
+                            <span class="proposal-date">{{formatDate(item.FcreatedAt)}}</span>
+                        </div>
+                        <div class="proposal-content">{{truncateText(item.Fdescription,25)}}</div>
+                    </div>
+                    <div class="proposal-footer">
+                        <div class="proposal-info">
+                            <span v-if="item.Fstatus=='待審核'" class="proposal-status status-reviewing">待審核</span>
+                            <span v-if="item.Fstatus=='發佈中'" class="proposal-status status-publishing">發佈中</span>
+                            <span v-if="item.Fstatus=='進行中'" class="proposal-status status-pending">進行中</span>
+                            <span v-if="item.Fstatus=='已完成'" class="proposal-status status-accepted">已完成</span>
+                            <span v-if="item.Fstatus=='已取消'" class="proposal-status status-rejected">已取消</span>
+                            <span class="proposal-amount">NT {{new Intl.NumberFormat("zh-TW", { style: "currency", currency: "TWD",minimumFractionDigits: 0, }).format(item.Fbudget)}}</span>
+                        </div>
+                        <div class="proposal-actions" v-if="['待審核', '發佈中'].includes(item.Fstatus)">
+                            <button class="btn-action" @@click="editProposal(item.FtaskId)">編輯</button>
+                            <button class="btn-action btn-delete" v-on:click="deleteProposal(item.FtaskId)">刪除</button>
+                        </div>
+                        <div class="proposal-actions" v-if="item.Fstatus=='進行中'">
+                                 <a :href="'/Frontend/missionDetail/' + item.FtaskId" class="btn-action" style="text-decoration:none">查看進度</a>
+                        </div>
+                        <div class="proposal-actions" v-if="item.Fstatus=='取消'">
+                            <button class="btn-action">查看原因</button>
+                        </div>
+                        <div class="proposal-actions" v-if="item.Fstatus=='已完成'">
+                            <a :href="'/Frontend/missionDetail/' + item.FtaskId" class="btn-action" style="text-decoration:none">查看評價</a>
+                        </div>
+                    </div>
+                </div>
+                @* 抓提案資料庫End *@
+
+                @* 抓取回覆確認Start *@
+                <div
+                  v-if="isReply"
+                  class="proposal-card"
+                  v-for="item in reply"
+                  :key="item.FconfirmReplyId"
+                >
+                  <div class="proposal-card-content">
+                    <div class="proposal-header">
+                          <a class="proposal-title workername" :href="'/FWorker/Details/' + item.FworkerId">接案者：{{item.WorkerFullName}}</a>
+                    </div>
+                    <div class="proposal-content">{{item.TaskTitle}}</div>
+                  </div>
+                  <div class="proposal-footer">
+                    <div class="proposal-info">
+                        <span class="proposal-status status-publishing" v-if="item.FconfirmationType=='接案確認'">
+                            接案確認
+                        </span>
+                        <span class="proposal-status status-rejected" v-if="item.FconfirmationType=='取消確認'">
+                            取消案件確認
+                        </span>
+                    </div>
+                    @* 接案確認 *@
+                    <div class="proposal-actions" v-if="item.FconfirmationStatus=='待確認'&&item.FconfirmationType=='接案確認'">
+                       <button class="btn-action btn-accept" @@click="Confirm('已確認', item.FconfirmReplyId)">接受</button>
+                       <button class="btn-action btn-delete" @@click="Confirm('已拒絕', item.FconfirmReplyId)">拒絕</button>
+                    </div>
+                    @* 取消確認 *@
+                    <div class="proposal-actions" v-if="item.FconfirmationStatus=='待確認'&&item.FconfirmationType=='取消確認'">
+                       <button class="btn-action btn-accept" @@click="Confirm('已取消', item.FconfirmReplyId)">取消案件</button>
+                       <button class="btn-action btn-delete" @@click="Confirm('拒絕取消', item.FconfirmReplyId)">拒絕取消</button>
+                    </div>
+                    <div class="proposal-actions" v-if="item.FconfirmationStatus=='已確認'">
+                       <button class="btn-action btn-accept">已接受</button>                       
+                    </div>
+                    <div class="proposal-actions" v-if="item.FconfirmationStatus=='已拒絕'">                       
+                       <button class="btn-action btn-delete">已拒絕</button>
+                    </div>
+                    <div class="proposal-actions" v-if="item.FconfirmationStatus=='已取消'">                       
+                       <button class="btn-action btn-delete">案件已取消</button>
+                    </div>
+                    <div class="proposal-actions" v-if="item.FconfirmationStatus=='拒絕取消'">
+                         <button class="btn-action btn-accept">駁回取消</button>
+                     </div>
+                  </div>
+                </div>
+                @* 抓取回覆確認END *@
+            </div>
+          </div>
+        `
+        };
+
+        const ChangePassword = {
+            setup() {
+                const User = inject("User");
+                const errors = ref({});
+                const oldpassword = ref("");
+                const newpassword = ref("");
+                const confirmpassword = ref("");
+                const newEmail = ref("");
+                const confirmCode = ref("");
+
+                const isDisabled = ref(false);
+                const countdown = ref(30); //倒數秒數
+                let timer = null;          // 計時器變數
+
+                //更改密碼
+                const changePassword = async () => {
+                    try {
+                        const response = await axios.post("/ProfileManage/Updatepassword", {
+                            oldPassword: oldpassword.value,  
+                            newPassword: newpassword.value,
+                            confirmPassword: confirmpassword.value
+                        }, {
+                            headers: { "Content-Type": "application/json" }
+                        });
+
+                        
+                        if (response.data.success) {
+                            alert("密碼更新成功！");
+                            oldpassword.value = "";
+                            newpassword.value = "";
+                            confirmpassword.value = "";
+                            errors.value.password ="";
+                        } else {
+                            errors.value.password = error.response.data.message;
+                        }
+                    } catch (error) {
+                        console.error("密碼變更失敗", error);
+                        errors.value.password = error.response.data.message;
+                    }
+                };
+
+                // 驗證 Email 格式
+                function validateEmail(email) {
+                    const re = /^[^\s@@]+@@[^\s@@]+\.[^\s@@]+$/;
+                    return re.test(email);
+                };
+
+                // 計算按鈕顯示的文字
+                const buttonText = computed(() => {
+                  return isDisabled.value ? `請稍候 ${countdown.value}s` : "寄送驗證信";
+                });
+
+                //寄驗證信
+                const sendVerificationCode = async () => {
+                    if (!newEmail.value || newEmail.value.trim() === "") {
+                        errors.value.email = "請輸入有效的新信箱";
+                        return;
+                    }
+
+                    // 驗證 Email 格式
+                    if (!validateEmail(newEmail.value)) {
+                        errors.value.email = "請輸入正確的 Email 格式";
+                        return;
+                    }
+
+                    errors.value.email = ""; // 清除錯誤訊息
+
+                     //計時器
+                    isDisabled.value = true;
+                    countdown.value = 30;
+                    timer = setInterval(() => {
+                        countdown.value--;
+                        if (countdown.value <= 0) {
+                            clearInterval(timer);
+                            isDisabled.value = false;
+                        }
+                    }, 1000);
+
+
+                    try {
+                        const response = await axios.post("/ProfileManage/SendVerification", { email: newEmail.value });
+                        
+                        alert(response.data.Message); // 顯示成功訊息
+
+                    } catch (error) {
+                        clearInterval(timer); // **如果 API 失敗，立刻停止倒數**
+                        isDisabled.value = false;
+                        countdown.value = 0;
+                        if (error.response?.status === 400) {
+                            errors.value.email = error.response.data.Message; // 顯示錯誤訊息
+                        } else {
+                            errors.value.email = "驗證碼發送失敗，請稍後再試";
+                        }
+                    }
+                };
+
+                //驗證驗證碼
+                async function VerifyCode (){
+                    if (!newEmail.value || !confirmCode.value) {
+                        errors.value.email = "請輸入新信箱和驗證碼";
+                        return;
+                    }
+
+                    try {
+                        const response = await axios.post("/ProfileManage/VerifyCode", {
+                            email: newEmail.value,
+                            code: confirmCode.value
+                        });
+
+                        alert(response.data.Message); // 顯示成功訊息
+
+                        // 驗證成功後，更新目前信箱 User.Femail
+                        User.value.Femail = newEmail.value;
+
+                        // 清空驗證碼與新信箱輸入框
+                        newEmail.value = "";
+                        confirmCode.value = "";
+                        errors.value.email = ""; // 清除錯誤訊息                        
+
+                    } catch (error) {
+                        errors.value.email = error.response?.data?.Message || "驗證失敗，請稍後再試";
+                    }
+                };
+
+                return { User ,changePassword,errors,oldpassword,newpassword,confirmpassword,sendVerificationCode,newEmail,confirmCode,validateEmail,VerifyCode
+                    ,isDisabled, buttonText};
+            },
+            /* 修改密碼信箱 */
+            template:`
+                <div class="changePasswordEmail-container">
+                    <div class="changePasswordEmail-card">
+                        <div class="changePasswordEmail-header">
+                            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link active"
+                                        id="changepassword-tab"
+                                        data-bs-toggle="tab"
+                                        data-bs-target="#changepassword"
+                                        type="button"
+                                        role="tab"
+                                        aria-controls="changepassword"
+                                        aria-selected="true">
+                                        更新密碼
+                                    </button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link"
+                                        id="changeEmail-tab"
+                                        data-bs-toggle="tab"
+                                        data-bs-target="#changeEmail"
+                                        type="button"
+                                        role="tab"
+                                        aria-controls="changeEmail"
+                                        aria-selected="false">
+                                        更換Email
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- 這裡是兩個 tab 的內容區域 -->
+                        <div class="tab-content" id="myTabContent">
+                            <!-- 更換密碼 Tab -->
+                            <div class="tab-pane fade show active"
+                                id="changepassword"
+                                role="tabpanel"
+                                aria-labelledby="changepassword-tab">
+
+                                <form class="changepassword-container">
+                                    <div class="page-title mb-3">
+                                        <h2><b>更改密碼</b></h2>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="oldpassword" class="form-label">舊密碼</label>
+                                        <input v-model="oldpassword"
+                                            type="password"
+                                            class="form-control"
+                                            placeholder="請輸入舊密碼" />
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="newpassword" class="form-label">新密碼</label>
+                                        <input v-model="newpassword"
+                                            type="password"
+                                            class="form-control"
+                                            placeholder="請輸入新密碼" />
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="confirmpassword" class="form-label">新密碼確認</label>
+                                        <input v-model="confirmpassword"
+                                            type="password"
+                                            class="form-control"
+                                            placeholder="請確認新密碼" />
+                                    </div>
+                                    <p class="error-text" v-if="errors.password">{{ errors.password }}</p>
+                                    <div class="mb-3 d-flex justify-content-center">
+                                        <button v-on:click.prevent="changePassword"
+                                            class="form-control customer-btn">
+                                            送出
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <!-- 更換 Email Tab -->
+                            <div class="tab-pane fade"
+                                id="changeEmail"
+                                role="tabpanel"
+                                aria-labelledby="changeEmail-tab">
+
+                                <div class="changeEmail-container">
+                                    <div class="page-title mb-3">
+                                        <h2><b>更換Email</b></h2>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="oldEmail" class="form-label">目前信箱</label>
+                                        <input type="text"
+                                            class="form-control"
+                                            :value="User.Femail"
+                                            disabled />
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="newEmail" class="form-label">新信箱</label>
+                                        <div class="d-flex">
+                                            <input v-model="newEmail"
+                                                type="email"
+                                                class="form-control me-3"
+                                                placeholder="請輸入新信箱" />
+                                            <button :disabled="isDisabled" @@click="sendVerificationCode"
+                                                class="form-control sendEmail-btn">
+                                                {{buttonText}}
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="confirmCode" class="form-label">驗證碼</label>
+                                        <input v-model="confirmCode"
+                                            type="text"
+                                            class="form-control"
+                                            placeholder="請輸入驗證碼" />
+                                    </div>
+                                    <p class="error-text" v-if="errors.email">{{ errors.email }}</p>
+                                    <div class="mb-3 d-flex justify-content-center">
+                                        <button v-on:click.prevent="VerifyCode"
+                                            class="form-control customer-btn">
+                                            送出
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> <!-- tab-content 結束 -->
+                    </div> <!-- changePasswordEmail-card 結束 -->
+                </div> <!-- changePasswordEmail-container 結束 -->
+            `
+        };
+
+        const MessageSec = window.MessageComponent;
+        
+        // 定義 Vue Router
+        const routes = [
+            { path: '/', component: Home },
+            { path: '/profile', component: Profile },
+            { path: '/freelancer', component: Freelancer },
+            { path: '/freelancerprofile', component: FreelancerProfile },
+            { path: '/poster', component: Poster },
+            { path: '/ChangePassword', component: ChangePassword },
+            { path: '/Message', component: MessageSec },
+        ];
+
+        const router = createRouter({
+            history: createWebHashHistory(), // 避免 ASP.NET 404
+            routes
+        });
+
+        app.use(router);
+        app.mount("#app");
+    </script>
+    
+}
+

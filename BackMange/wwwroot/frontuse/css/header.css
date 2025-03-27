@@ -1,0 +1,322 @@
+
+
+body {
+    min-height: 100vh;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ==========================================================================
+   header
+========================================================================== */
+
+header {
+    background: #fff;
+}
+
+.main-header {
+    position: fixed;
+    width: 100%;
+    z-index: 1000;
+    top: 0;
+    height: 80px;
+}
+
+.header-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 15px 0px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+}
+
+header .logo {
+    display: flex;
+    align-items: center;
+}
+
+    header .logo img {
+        height: 40px;
+        margin-right: 10px;
+    }
+
+/* ==========================================================================
+   logo
+========================================================================== */
+
+.logo-text {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 22px;
+    display: flex;
+    gap: 3px;
+}
+
+.logo-text .match {
+    color: #4DA6FF;
+}
+
+.logo-text .pro {
+    color: #FFE066;
+}
+
+.match {
+    color: #4A90E2;
+    text-shadow: 3px 3px 0 #1B3B5E, -3px -3px 0 #1B3B5E, 3px -3px 0 #1B3B5E, -3px 3px 0 #1B3B5E, 0 0 15px rgba(74, 144, 226, 0.6);
+    display: inline-block;
+    transform: translateZ(10px);
+}
+
+.pro {
+    color: #FFD700;
+    text-shadow: 3px 3px 0 #8B7355, -3px -3px 0 #8B7355, 3px -3px 0 #8B7355, -3px 3px 0 #8B7355, 0 0 15px rgba(255, 215, 0, 0.6);
+    display: inline-block;
+    transform: translateZ(10px);
+}
+/* ==========================================================================
+按鈕
+========================================================================== */
+.right-buttons {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+/* 登入按鈕 */
+.login-btn {
+    background: none;
+    color: #333;
+    padding: 12px 24px;
+    font-weight: 500;
+    font-size: 15px;
+    border: none;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    height: 44px;
+    text-decoration: none;
+}
+
+/* 註冊按鈕 */
+.creatuser-btn {
+    background: #4DA6FF;
+    color: white;
+    padding: 12px 28px;
+    font-weight: 500;
+    font-size: 15px;
+    border: none;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(77, 166, 255, 0.2);
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.right-buttons a {
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+}
+
+/* ==========================================================================
+   導覽
+========================================================================== */ 
+.main-nav {
+    background: #f8f9fa;
+    padding: 0;
+    position: fixed;
+    top: 80px;
+    width: 100%;
+    z-index: 999;
+    height: 56px;
+    border-bottom: 1px solid #eee;
+}
+
+.main-nav ul {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    list-style: none;
+    display: flex;
+    gap: 30px;
+    height: 100%;
+    align-items: center;
+}
+
+.main-nav a {
+    color: #666;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 15px;
+    padding: 0 20px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+/* ==========================================================================
+   hover
+========================================================================== */ .login-btn:hover {
+    color: #4DA6FF;
+}
+
+.creatuser-btn:hover {
+    background: #3D96FF;
+    box-shadow: 0 4px 12px rgba(77, 166, 255, 0.3);
+}
+
+
+/* ==========================================================================
+========================================================================== */
+
+
+.main-nav a:hover,
+.main-nav a.active {
+    color: #4DA6FF;
+}
+
+.main-nav a.active {
+    box-shadow: inset 0 -2px 0 #4DA6FF;
+}
+
+main {
+    flex: 1 0 auto;    
+    background: #1a1a1a; /* 深色背景 */
+}
+
+/* =========================================================================
+  game
+========================================================================== */
+
+.game-intro {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    color: #fff;
+}
+
+/* 遊戲標題 */
+.game-title {
+    font-size: 48px;
+    font-weight: 700;
+    margin-bottom: 30px;
+    text-align: center;
+    color: #fff;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+}
+
+/* 遊戲描述 */
+.game-description {
+    font-size: 16px;
+    line-height: 1.8;
+    margin-bottom: 30px;
+    text-align: center;
+    color: #ccc;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+
+/* ==========================================================================*/
+/* 向下捲動提示 */
+.scroll-down {
+    text-align: center;
+    margin-top: 40px;
+    color: #fff;
+    font-size: 14px;
+    opacity: 0.8;
+    animation: bounce 2s infinite;
+}
+
+/* 箭頭動畫 */
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+    }
+
+    40% {
+        transform: translateY(-10px);
+    }
+
+    60% {
+        transform: translateY(-5px);
+    }
+}
+/* ==========================================================================*/
+
+
+/* 背景圖片設置 */
+.game-banner {
+    position: relative;
+    width: 100%;
+    height: 600px;
+    background-image: url('path_to_your_image.jpg'); /* 請替換為實際圖片路徑 */
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+    .game-banner::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+    }
+
+/* 響應式設計 */
+@media (max-width: 768px) {
+    .header-container {
+        padding: 16px 20px;
+    }
+
+    .right-buttons {
+        gap: 12px;
+    }
+
+    .main-nav ul {
+        padding: 0 16px;
+        gap: 15px;
+    }
+
+    .main-nav a {
+        padding: 0 8px;
+    }
+
+    .login-btn {
+        padding: 10px 16px;
+    }
+
+    .creatuser-btn {
+        padding: 10px 20px;
+    }
+
+    .game-title {
+        font-size: 36px;
+    }
+
+    .game-description {
+        font-size: 14px;
+        padding: 0 20px;
+    }
+
+    .game-banner {
+        height: 400px;
+    }
+}
+
+/* Logo 懸停效果 */
+header .logo:hover img {
+    transform: scale(1.05);
+    transition: transform 0.3s ease;
+}

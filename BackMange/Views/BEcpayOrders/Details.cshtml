@@ -1,0 +1,109 @@
+﻿@model BackMange.Models.TEcpayOrder
+
+@{
+    ViewData["Title"] = "訂單詳細資料";
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">主頁</a></li>
+        <li class="breadcrumb-item"><a asp-action="Index">訂單列表</a></li>
+        <li class="breadcrumb-item active" aria-current="page">訂單詳細資料</li>
+    </ol>
+</nav>
+
+<h1>訂單詳細資料</h1>
+<hr />
+
+<div class="card">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <h5 class="card-title mb-4">訂單基本資訊</h5>
+                <dl class="row">
+                    <dt class="col-sm-4">訂單編號</dt>
+                    <dd class="col-sm-8">@Model.MerchantTradeNo</dd>
+
+                    <dt class="col-sm-4">綠界交易編號</dt>
+                    <dd class="col-sm-8">@Model.TradeNo</dd>
+
+                    <dt class="col-sm-4">交易金額</dt>
+                    <dd class="col-sm-8">@Model.TradeAmt?.ToString("C0")</dd>
+
+                    <dt class="col-sm-4">付款狀態</dt>
+                    <dd class="col-sm-8">
+                        @{
+                            string statusText = Model.RtnCode switch
+                            {
+                                1 => "<span class='badge bg-success'><i class='bi bi-check-circle'></i> 付款成功</span>",
+                                0 => "<span class='badge bg-warning text-dark'><i class='bi bi-hourglass'></i> 待付款</span>",
+                                _ => "<span class='badge bg-danger'><i class='bi bi-x-circle'></i> 付款失敗</span>"
+                            };
+                        }
+                        @Html.Raw(statusText)
+                        @if (!string.IsNullOrEmpty(Model.RtnMsg))
+                        {
+                            <small class="d-block text-muted mt-1">@Model.RtnMsg</small>
+                        }
+                    </dd>
+
+                    <dt class="col-sm-4">付款時間</dt>
+                    <dd class="col-sm-8">@(Model.PaymentDate?.ToString("yyyy-MM-dd HH:mm:ss") ?? "尚未付款")</dd>
+
+                    <dt class="col-sm-4">訂單建立時間</dt>
+                    <dd class="col-sm-8">
+                        @(DateTime.TryParse(Model.TradeDate, out var tradeDate)
+                            ? tradeDate.ToString("yyyy-MM-dd HH:mm:ss")
+                            : "尚未建立")
+                    </dd>
+
+                    
+                </dl>
+            </div>
+
+            <div class="col-md-6">
+                <h5 class="card-title mb-4">任務與用戶資訊</h5>
+                <dl class="row">
+                    <dt class="col-sm-4">任務名稱</dt>
+                    <dd class="col-sm-8">
+                        @if (Model.Ftask != null)
+                        {
+                            <a asp-controller="Quest" asp-action="Detail"
+                               asp-route-id="@Model.Ftask.FtaskId">@Model.Ftask.Ftitle</a>
+                        }
+                    </dd>
+
+                    <dt class="col-sm-4">任務描述</dt>
+                    <dd class="col-sm-8">@Model.Ftask?.Fdescription</dd>
+
+                    <dt class="col-sm-4">發案者</dt>
+                    <dd class="col-sm-8">
+                        @if (Model.Fposter != null)
+                        {
+                            <div>@Model.Fposter.FfullName</div>
+                            <small class="text-muted">@Model.Fposter.Femail</small>
+                        }
+                    </dd>
+
+                    <dt class="col-sm-4">接案者</dt>
+                    <dd class="col-sm-8">
+                        @if (Model.Fworker != null)
+                        {
+                            <div>@Model.Fworker.FfullName</div>
+                            <small class="text-muted">@Model.Fworker.Femail</small>
+                        }
+                    </dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="mt-3">
+    <a asp-action="Index" class="btn btn-secondary">返回列表</a>
+    @if (Model.RtnCode != 1)
+    {
+        <a asp-action="Edit" asp-route-id="@Model.MerchantTradeNo"
+           class="btn btn-warning">編輯訂單</a>
+    }
+</div>

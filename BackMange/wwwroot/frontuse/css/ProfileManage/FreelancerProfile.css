@@ -1,0 +1,639 @@
+/* 自我介紹頁 */
+.me-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* 頁面標題樣式 */
+.me-page-header {
+    margin-bottom: 30px;
+}
+
+.me-header-content {
+    background: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.me-title-section {
+    flex: 1;
+}
+
+    .me-title-section h1 {
+        color: #333;
+        font-size: 24px;
+        margin: 0;
+    }
+
+    .me-title-section p {
+        color: #666;
+        margin: 5px 0 0;
+    }
+
+/* 個人資料完整度 */
+.me-completion {
+    background: #fff;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+    margin: 0 auto 30px;
+    max-width: 100%;
+}
+
+.me-completion-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+    .me-completion-header h5 {
+        color: #333;
+        margin: 0;
+        font-weight: 600;
+    }
+
+    .me-completion-header span {
+        color: #2196F3;
+        font-weight: bold;
+    }
+
+.me-progress-bar {
+    background-color: #2196F3;
+    border-radius: 10px;
+    height: 8px;
+}
+
+/* 表單容器樣式 */
+.me-form {
+    background: #fff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+    max-width: 100%;
+    margin: 0 auto;
+}
+
+/* 表單群組樣式 */
+.me-form-group {
+    margin-bottom: 30px;
+    max-width: 100%;
+}
+
+.me-form-group .skill-container {
+    display: flex;
+    align-items: center; /* 讓 input 和 button 垂直置中對齊 */
+    gap: 10px; /* 設定間距 */
+}
+
+.me-field-wrapper {
+    position: relative;
+    margin-bottom: 5px;
+}
+
+/* 文字計數器 */
+.me-word-count {
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    color: #6c757d;
+    font-size: 0.8rem;
+}
+
+.me-form-control {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 12px;
+    width: 100%;
+    transition: all 0.3s ease;
+}
+
+    .me-form-control:disabled {
+        background-color: #f8f9fa;
+        cursor: not-allowed;
+    }
+
+.me-form-text {
+    color: #6c757d;
+    font-size: 0.875rem;
+    margin-top: 5px;
+}
+
+/* 工作經驗區塊 */
+.me-experience-list {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 25px;
+    margin-top: 15px;
+}
+
+.me-experience-item {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+    .me-experience-item:last-child {
+        margin-bottom: 0;
+    }
+
+.me-experience-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+    .me-experience-header h6 {
+        color: #333;
+        font-weight: 600;
+        margin: 0;
+    }
+
+    .me-experience-header span {
+        color: #6c757d;
+        font-size: 0.875rem;
+    }
+
+.me-experience-item ul {
+    margin: 0;
+    padding-left: 20px;
+}
+
+.me-experience-item li {
+    color: #555;
+    margin-bottom: 5px;
+}
+
+/* 技能列表 */
+.me-certificate-list {
+    position:relative;
+    display: flex;
+    flex-wrap:wrap;
+    grid-template-columns: repeat(auto-fill,1fr);
+    gap: 10px 20px;
+    margin-top: 15px;
+}
+
+.me-certificate-item {
+    display: flex;
+    align-items: center;
+    margin: 0;
+    justify-content: space-between;
+    background: #fff;
+    padding: 10px 15px;
+    border-radius: 15px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s ease;
+}
+
+    .me-certificate-item:hover {
+        transform: translateY(-2px);
+    }
+
+    .me-certificate-item i {
+        color: #FF9224;
+        font-size: 1.2rem;
+    }
+
+    .me-certificate-item span {
+        color: #333;
+        font-size: 0.9rem;
+    }
+
+    .me-certificate-item button {        
+        border: none;
+        background: none;
+        font-size:1.1rem;
+        font-weight:500;
+    }
+    /* 編輯按鈕樣式 */
+    .me-header-actions {
+        margin-left: 20px;
+    }
+
+.me-edit-btn,
+.me-save-btn {
+    padding: 8px 20px;
+    border-radius: 6px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.me-edit-btn {
+    background-color: #2196F3;
+    color: white;
+    border: none;
+}
+
+    .me-edit-btn:hover {
+        background-color: #1976D2;
+        transform: translateY(-2px);
+    }
+
+.me-save-btn {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+}
+
+    .me-save-btn:hover {
+        background-color: #388E3C;
+        transform: translateY(-2px);
+    }
+
+/* 響應式調整 */
+@media (max-width: 768px) {
+    .me-content {
+        padding: 15px;
+    }
+
+    .me-form {
+        padding: 20px;
+    }
+
+    .me-certificate-list {
+        grid-template-columns: 1fr;
+    }
+
+    .me-header-content {
+        flex-direction: column;
+        text-align: center;
+        gap: 15px;
+    }
+
+    .me-header-actions {
+        margin-left: 0;
+    }
+
+    .me-edit-btn,
+    .me-save-btn {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+
+/*作品集CSS*/
+
+/* 作品集頁面基本樣式 */
+.work-tab {
+    background: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+/* 頁面標題區塊 */
+.work-page-header {
+    margin-bottom: 30px;
+}
+
+.work-header-content {
+    background: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+}
+
+    .work-header-content h1 {
+        font-size: 1.8rem;
+        color: #2d3748;
+        margin: 0;
+    }
+
+/* 作品列表容器 */
+.work-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 24px;
+    padding: 20px;
+}
+
+/* 作品項目卡片 */
+.work-item {
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease;
+}
+
+    .work-item:hover {
+        transform: translateY(-5px);
+    }
+
+/* 作品預覽圖 */
+.work-preview {
+    display: inline-block; /* 讓 div 大小與圖片對齊 */
+    position: relative;
+    width: 100%;
+    padding-top: 56.25%;
+    overflow: hidden;
+    border-radius: 8px;
+}
+
+    .work-preview img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+    }
+
+.work-item:hover .work-preview img {
+    transform: scale(1.05);
+}
+
+/* 作品資訊區 */
+.work-info {
+    padding: 20px;
+}
+
+    .work-info h3 {
+        color: #2d3748;
+        font-size: 1.2rem;
+        margin: 0 0 12px 0;
+    }
+
+.work-description {
+    color: #718096;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    margin-bottom: 16px;
+}
+
+/* 作品元資訊 */
+.work-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.work-date {
+    color: #a0aec0;
+    font-size: 0.85rem;
+}
+
+.work-tags {
+    display: flex;
+    gap: 8px;
+}
+
+    .work-tags span {
+        background: #edf2f7;
+        color: #4a5568;
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 0.75rem;
+    }
+
+/* 響應式調整 */
+@media (max-width: 768px) {
+    .work-container {
+        grid-template-columns: 1fr;
+        padding: 10px;
+    }
+
+    .work-info {
+        padding: 15px;
+    }
+
+    .work-meta {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+}
+
+/* 作品表單樣式 */
+.work-form {
+    background: white;
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 24px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.work-form-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+    .work-form-header h3 {
+        margin: 0;
+        color: #2d3748;
+    }
+
+.work-form-close {
+    background: none;
+    border: none;
+    color: #718096;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 5px;
+    transition: all 0.2s ease;
+}
+
+    .work-form-close:hover {
+        color: #e53e3e;
+    }
+
+.work-form-group {
+    margin-bottom: 15px;
+}
+
+    .work-form-group label {
+        display: block;
+        margin-bottom: 8px;
+        color: #4a5568;
+        font-weight: 500;
+    }
+
+.work-form-control {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+}
+
+    .work-form-control:focus {
+        border-color: #3498db;
+        box-shadow: 0 0 0 3px rgba(52,152,219,0.1);
+        outline: none;
+    }
+
+.work-form-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 1px solid #e2e8f0;
+}
+
+.work-form-cancel,
+.work-form-submit {
+    padding: 8px 20px;
+    border-radius: 6px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.work-form-cancel {
+    background: white;
+    border: 1px solid #e2e8f0;
+    color: #4a5568;
+}
+
+.work-form-submit {
+    background: #3498db;
+    border: none;
+    color: white;
+}
+
+.work-form-cancel:hover {
+    background: #f8fafc;
+}
+
+.work-form-submit:hover {
+    background: #2980b9;
+}
+
+/* 新增作品表單 */
+.work-form .work-preview-container {
+    position: relative;
+    width: 100%;
+    max-height: 300px;
+    overflow: hidden;
+    border-radius: 8px;
+    margin-top: 10px;
+    display: none;
+}
+
+    .work-form .work-preview-container img {
+        width: 100%;
+        height: auto;
+        object-fit: contain;
+    }
+
+/* 新增作品按鈕 */
+.work-add-btn {
+    background: linear-gradient(135deg, #4CAF50, #45a049);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+    transition: all 0.3s ease;
+}
+
+    .work-add-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+    }
+
+/* 作品集頁面標題區塊 */
+.work-page-header {
+    margin-bottom: 30px;
+}
+
+.work-header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background: #fff;
+    border-radius: 12px;
+}
+
+.work-title-section h1 {
+    font-size: 1.8rem;
+    color: #2d3748;
+    margin: 0;
+}
+
+.work-title-section p {
+    color: #718096;
+    margin: 5px 0 0;
+}
+
+/* 響應式調整 */
+@media (max-width: 768px) {
+    .work-header-content {
+        flex-direction: column;
+        gap: 16px;
+        text-align: center;
+    }
+
+    .work-add-btn {
+        width: 100%;
+        justify-content: center;
+    }
+} 
+
+/* 彈窗Modal */
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-Portfolio {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    min-width:600px;
+}
+
+.modal-buttons {
+    margin-top: 10px;
+}
+
+    .modal-buttons button {
+        margin: 0 5px;
+    }
+
+.portfolio-delete {
+    position: absolute;
+    top: 10px; /* 距離頂部 10px */
+    right: 10px; /* 距離右側 10px */
+    background-color: rgba(0, 0, 0, 0.6); /* 半透明背景 */
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}

@@ -1,0 +1,410 @@
+﻿@model IEnumerable<BackMange.DTO.TTaskDTO>
+@{
+    Layout = "_FrontendLayout";
+}
+
+@section Styles
+{    
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined"
+          rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
+          rel="stylesheet" />
+    <link rel="stylesheet" href="~/frontuse/css/task/CaseBrowse.css" />
+}
+<main class="case-browse">
+    <div class="container">
+        <!-- 修改搜尋和篩選區域 -->
+        <div class="filter-section">
+            <div class="filter-row">
+                <div class="search-box">
+                    <input type="text" name="searchQuery" placeholder="搜尋案件..." value="@ViewBag.SearchQuery" />
+                    <i class="fas fa-search"></i>
+
+                </div>
+                 <div >
+                    <button onclick="showMyTaskFollowings()" class="btn btn-outline-secondary">
+                        <i class="fas fa-heart"></i> 我的追蹤任務
+                    </button>
+                </div> 
+                <form method="get" action="@Url.Action("missionList2")">
+                <div class="filter-options">
+                    <select class="filter-select" id="sortOrder">
+                        <option value="">價格</option>
+                        <option value="price_asc">低至高</option>
+                        <option value="price_desc">高至低</option>
+
+                    </select>
+                    <select name="categoryId" id="categoryFilter" class="filter-select">
+                        <option value="">任務類別</option>
+                        @foreach (var category in (SelectList)ViewBag.Categories)
+                        {
+                            <option value="@category.Value" selected="@(ViewBag.SelectedCategoryId != null && ViewBag.SelectedCategoryId.ToString() == category.Value ? "selected" : null)">
+                                @category.Text
+                            </option>
+                        }
+                    </select>
+                        <select class="filter-select" name="selectedCity" id="cityFilter">
+                            <option value="">全部地點</option> <!-- 預設選項 -->
+                            @foreach (var city in ViewBag.Cities)
+                            {
+                                if (ViewBag.SelectedCity != null && ViewBag.SelectedCity.ToString() == city.Value)
+                                {
+                                    <option value="@city.Value" selected>@city.Text</option>
+                                }
+                                else
+                                {
+                                    <option value="@city.Value">@city.Text</option>
+                                }
+                            }
+                        </select>
+
+                        <button type="submit" class="btn btn-primary">篩選</button> <!-- ✅ 確保有 `submit` 按鈕 -->
+                </div>
+                </form>
+
+            </div>
+            <div class="filter-tags">
+                <button class="filter-tag active" data-value="">全部案件</button>
+                @foreach (var category in ViewBag.Categories)
+                {
+                    <button class="filter-tag" data value="@category.Value">
+                        @category.Text
+                    </button>
+
+                }
+                <!-- 展開/收起按鈕 -->
+                <button id="toggleMoreTags" class="filter-tag more-button">顯示更多</button>
+            </div>
+        </div>
+
+        <!-- 案件列表 -->
+        <div class="case-list">
+
+            <!-- 案件卡片 -->
+            @foreach (var task in Model)
+            {
+                <div  class="card-link cardM">
+                    <div class="case-card">
+                        <div class="case-image" style="display: flex; transition: transform 0.5s ease;">
+                            @if (!string.IsNullOrEmpty(task.FtimagePath))
+                            {
+                                var images = task.FtimagePath.Split(';'); // 假設以分號分隔
+                                foreach (var imgSrc in images)
+                                {
+                                    <img src="@imgSrc" alt="@task.Ftitle" style="width: 100%; flex-shrink: 0; object-fit: cover;" />
+                                }
+                            }
+                            else
+                            {
+                                <p>無圖片</p>
+                            }
+                            <span class="case-tag">@task.JobName</span>
+                            <button class="slider-btn prev" type="button" aria-label="上一張">
+                                <i class="bi bi-chevron-left"></i>
+                            </button>
+                            <button class="slider-btn next" type="button" aria-label="下一張">
+                                <i class="bi bi-chevron-right"></i>
+                            </button>
+                            <div class="slider-dots"></div>
+                        </div>
+                        <div class="case-content">
+                            <div class="case-header">
+                                <h3 class="case-title">@task.Ftitle</h3>
+                                <div class="case-budget">NT$@task.Fbudget.ToString("N0")</div>
+                            </div>
+                            <p class="case-description">
+                                @task.Fdescription
+                            </p>
+                            <div class="case-details">
+                                <span><i class="fas fa-clock"></i> 預計時程：@task.RemainingDays 天</span>
+                                @if (!string.IsNullOrEmpty(task.Flocation))
+                                {
+                                    <span><i class="fas fa-map-marker-alt"></i> 地點：@task.Flocation</span>
+                                }
+                               
+                            </div>
+                        </div>
+                        <div class="case-footer">
+                            <div class="case-info">
+                                <span class="post-time">
+                                    <i class="far fa-calendar"></i> @task.Fdeadline.ToString("yyyy-MM-dd")
+                                </span>
+                                <span class="view-count">
+                                    <i class="far fa-eye"></i> 追蹤：@task.FollowCount 
+                                </span>
+                            </div>
+                            <div class="card-actions">
+                                <button class="btn-favorite" onclick="toggleTaskFollow(this)" data-task-id="@task.FtaskId">
+                                    <i class="far fa-heart"></i>  <!-- 空心愛心 -->
+                                    <i class="fas fa-heart d-none text-danger"></i>  <!-- 實心愛心，預設隱藏 -->
+                                    @* <span class="follow-count"></span> *@
+                                </button>
+                                <a asp-controller ="Frontend" asp-action="missionDetail" asp-route-id="@task.FtaskId" class="btn-proposal">接案</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+           
+
+        </div>
+      
+
+
+
+    </div>
+    
+    <!-- 分頁按鈕 -->
+    <div class="d-flex justify-content-center mt-4">
+        <ul class="pagination">
+            <!-- 上一頁 -->
+            <li class="page-item @(ViewBag.PageNumber == 1 ? "disabled" : "")">
+                <a class="page-link"
+                   asp-action="missionList2"
+                   asp-route-pageNumber="@(ViewBag.PageNumber - 1)"
+                   asp-route-sortOrder="@ViewBag.SortOrder"
+                   asp-route-searchQuery="@ViewBag.searchQuery">
+                    上一頁
+                </a>
+            </li>
+
+            <!-- 頁數顯示 -->
+            @for (var i = 1; i <= ViewBag.TotalPages; i++)
+            {
+                <li class="page-item @(ViewBag.PageNumber == i ? "active" : "")">
+                    <a class="page-link"
+                       asp-action="missionList2"
+                       asp-route-pageNumber="@i"
+                       asp-route-sortOrder="@ViewBag.SortOrder">
+                        @i
+                    </a>
+                </li>
+            }
+
+            <!-- 下一頁 -->
+            <li class="page-item @(ViewBag.PageNumber == ViewBag.TotalPages ? "disabled" : "")">
+                <a class="page-link"
+                   asp-action="missionList2"
+                   asp-route-pageNumber="@(ViewBag.PageNumber + 1)"
+                   asp-route-sortOrder="@ViewBag.SortOrder"
+                   asp-route-searchQuery="@ViewBag.searchQuery">
+                    下一頁
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div class="modal fade" id="taskFollowingModal" tabindex="-1" style="background: rgba(0, 0, 0, 0.4);">
+        <div class="modal-dialog modal-dialog-centered" style="max-width: 400px;">
+            <div class="modal-content" style="border-radius: 8px; border: none;">
+                <div class="modal-header" style="background-color: #f0f2f5; border-bottom: none;">
+                    <h5 class="modal-title" style="font-size: 16px;">我的追蹤任務列表</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" style="background-color: #f0f2f5; padding: 16px;">
+                    <div id="taskFollowingListContainer" style="background-color: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+@section Scripts
+{
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+            
+
+    <script src="~/frontuse/js/Pcard.js"></script>  <!-- 確保這個路徑正確 -->
+    <script src="~/js/Follow/TaskFollow.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const searchInput = document.querySelector('input[name="searchQuery"]');
+            const sortDropdown = document.getElementById("sortOrder");
+            const categoryDropdown = document.getElementById("categoryFilter");
+            const cityDropdown = document.querySelector('select[name="selectedCity"]');
+
+            function updateFilters() {
+                const currentUrl = new URL(window.location.href);
+
+                // 設置 `searchQuery`
+                if (searchInput && searchInput.value.trim()) {
+                    currentUrl.searchParams.set("searchQuery", searchInput.value.trim());
+                } else {
+                    currentUrl.searchParams.delete("searchQuery");
+                }
+
+                //  設置 `sortOrder`
+                if (sortDropdown && sortDropdown.value) {
+                    currentUrl.searchParams.set("sortOrder", sortDropdown.value);
+                } else {
+                    currentUrl.searchParams.delete("sortOrder");
+                }
+
+                //  設置 `categoryId`
+                if (categoryDropdown && categoryDropdown.value) {
+                    currentUrl.searchParams.set("categoryId", categoryDropdown.value);
+                } else {
+                    currentUrl.searchParams.delete("categoryId");
+                }
+
+                //  設置 `selectedCity`
+                if (cityDropdown && cityDropdown.value) {
+                    currentUrl.searchParams.set("selectedCity", cityDropdown.value);
+                } else {
+                    currentUrl.searchParams.delete("selectedCity");
+                }
+
+                //  重新導向到新的 URL
+                window.location.href = currentUrl.toString();
+            }
+
+            // 綁定事件監聽器，當篩選選項變更時觸發篩選
+            if (searchInput) {
+                searchInput.addEventListener("keypress", function (event) {
+                    if (event.key === "Enter") {
+                        updateFilters();
+                    }
+                });
+            }
+            if (sortDropdown) {
+                sortDropdown.addEventListener("change", updateFilters);
+            }
+            if (categoryDropdown) {
+                categoryDropdown.addEventListener("change", updateFilters);
+            }
+            if (cityDropdown) {
+                cityDropdown.addEventListener("change", updateFilters);
+            }
+        });
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const sortDropdown = document.getElementById("sortOrder");
+            if (sortDropdown) {
+                sortDropdown.addEventListener("change", function () {
+                    const currentUrl = new URL(window.location.href);
+                    const searchInput = document.querySelector('input[name="searchQuery"]');
+
+                    // 設置 `sortOrder` 參數到 URL
+                    currentUrl.searchParams.set("sortOrder", sortDropdown.value);
+
+                    // 保留 `searchQuery` 參數
+                    if (searchInput && searchInput.value) {
+                        currentUrl.searchParams.set("searchQuery", searchInput.value);
+                    }
+
+                    // 重新導向新的 URL
+                    window.location.href = currentUrl.toString();
+                });
+            }
+        });
+        function checkTaskFollowStatus(taskId, btn) {
+            fetch(`/FTaskFollow/CheckFollowStatus?followingId=${taskId}`)
+                .then(response => response.json())
+                .then(data => {
+                    const emptyHeart = btn.querySelector('.far.fa-heart');
+                    const filledHeart = btn.querySelector('.fas.fa-heart');
+                    // 找到顯示追蹤數的元素（在卡片中）
+                    const viewCount = btn.closest('.case-card').querySelector('.view-count');
+
+                    if (data.isFollowing) {
+                        emptyHeart.classList.add('d-none');
+                        filledHeart.classList.remove('d-none');
+                    } else {
+                        emptyHeart.classList.remove('d-none');
+                        filledHeart.classList.add('d-none');
+                    }
+
+                    // 更新追蹤數
+                    if (viewCount) {
+                        viewCount.innerHTML = `<i class="far fa-eye"></i> 追蹤：${data.followCount}`;
+                    }
+                })
+                .catch(error => console.error('檢查追蹤狀態失敗:', error));
+        }
+
+        function toggleTaskFollow(btn) {
+            const taskId = btn.getAttribute('data-task-id');
+            const isFollowing = !btn.querySelector('.fas.fa-heart').classList.contains('d-none');
+            const url = isFollowing ? '/FTaskFollow/Unfollow' : '/FTaskFollow/Follow';
+
+            const formData = new FormData();
+            formData.append('followingId', taskId);
+
+            fetch(url, {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        checkTaskFollowStatus(taskId, btn);
+
+                        // 找到並更新追蹤數
+                        const viewCount = btn.closest('.case-card').querySelector('.view-count');
+                        if (viewCount && data.followCount !== undefined) {
+                            viewCount.innerHTML = `<i class="far fa-eye"></i> 追蹤：${data.followCount}`;
+                        }
+                    } else {
+                        alert(data.message || '操作失敗');
+                    }
+                })
+                .catch(error => {
+                    console.error('錯誤:', error);
+                    alert('發生錯誤，請稍後再試');
+                });
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            // 取得所有篩選標籤按鈕
+            const filterTags = document.querySelectorAll(".filter-tag:not(.more-button)");
+            const toggleButton = document.getElementById("toggleMoreTags");
+            const maxVisibleTags = 5; // 只顯示前五個
+            let isExpanded = false;
+
+            // 如果按鈕數量大於 maxVisibleTags，則隱藏多餘的按鈕
+            if (filterTags.length > maxVisibleTags) {
+                filterTags.forEach((btn, index) => {
+                    if (index >= maxVisibleTags) {
+                        btn.style.display = "none"; // 隱藏超過的按鈕
+                    }
+                });
+            } else {
+                toggleButton.style.display = "none"; // 如果按鈕數不足，則隱藏「顯示更多」
+            }
+
+            // 切換顯示更多/收起
+            toggleButton.addEventListener("click", function () {
+                isExpanded = !isExpanded;
+
+                filterTags.forEach((btn, index) => {
+                    if (index >= maxVisibleTags) {
+                        btn.style.display = isExpanded ? "inline-block" : "none";
+                    }
+                });
+
+                toggleButton.textContent = isExpanded ? "收起" : "顯示更多";
+            });
+
+            // 篩選功能，根據按鈕的 `data-value` 來更新 URL 並篩選案件
+            filterTags.forEach(tag => {
+                tag.addEventListener("click", function () {
+                    // 移除其他按鈕的 active 樣式
+                    filterTags.forEach(btn => btn.classList.remove("active"));
+                    this.classList.add("active");
+
+                    const categoryId = this.getAttribute("data-value");
+                    const currentUrl = new URL(window.location.href);
+
+                    if (categoryId) {
+                        currentUrl.searchParams.set("categoryId", categoryId);
+                    } else {
+                        currentUrl.searchParams.delete("categoryId");
+                    }
+
+                    window.location.href = currentUrl.toString();
+                });
+            });
+        });
+    </script>
+        
+}

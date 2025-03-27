@@ -1,0 +1,208 @@
+﻿@model IEnumerable<BackMange.DTO.CUserDTO>
+
+@{
+    ViewData["Title"] = "List";
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">主頁</a></li>
+        <li class="breadcrumb-item active" aria-current="page">會員列表</li>
+    </ol>
+</nav>
+
+<h1>會員資料表</h1>
+
+@using (Html.BeginForm())
+{
+    @:會員查詢 @Html.TextBox("txtKeyword")
+    <input type="submit" value="查詢" class="btn btn-primary" />
+    
+}
+
+<h3>
+    <a asp-action="Create" class="btn btn-success mt-3 mb-3">新增會員</a>
+</h3>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>序號</th>
+            <th>@Html.DisplayNameFor(model => model.FfullName)</th>
+            <th>@Html.DisplayNameFor(model => model.Femail)</th>
+            <th>@Html.DisplayNameFor(model => model.FphoneNumber)</th>
+            <th>@Html.DisplayNameFor(model => model.Faddress)</th>
+            <th>@Html.DisplayNameFor(model => model.Fbirthday)</th>
+            <th>@Html.DisplayNameFor(model => model.Fgender)</th>
+            <th>@Html.DisplayNameFor(model => model.FidNumber)</th>
+            <th>@Html.DisplayNameFor(model => model.FcompanyNumber)</th>
+            @* <th>照片</th> *@
+            <th>@Html.DisplayNameFor(model => model.Fstatus)</th>
+            @* <th>@Html.DisplayNameFor(model => model.FisEmailVerified)</th> *@
+            <th>@Html.DisplayNameFor(model => model.FloginType)</th>
+            <th>@Html.DisplayNameFor(model => model.FcreatedAt)</th>
+            <th>@Html.DisplayNameFor(model => model.FupdatedAt)</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.FuserId)</td>
+                <td>@Html.DisplayFor(modelItem => item.FfullName)</td>
+                <td>@Html.DisplayFor(modelItem => item.Femail)</td>
+                <td>@Html.DisplayFor(modelItem => item.FphoneNumber)</td>
+                <td>@Html.DisplayFor(modelItem => item.Faddress)</td>
+                <td>@(item.Fbirthday?.ToString("yyyy-MM-dd"))</td>
+                <td>
+                    @switch (item.Fgender)
+                    {
+                        case "M":
+                            @:男
+                            break;
+                        case "F":
+                            @:女
+                            break;
+                        case "O":
+                            @:其他
+                            break;
+                    }
+                </td>
+                <td>@Html.DisplayFor(modelItem => item.FidNumber)</td>
+                <td>@Html.DisplayFor(modelItem => item.FcompanyNumber)</td>
+                @* <td> *@
+                @*     @if (!string.IsNullOrEmpty(item.FprofileImageUrl)) *@
+                @*     { *@
+                @*         <img src="~/imgs/@item.FprofileImageUrl" alt="個人照片" *@
+                @*              style="width: 80px; height: 70px; object-fit: cover;" /> *@
+                @*     } *@
+                @* </td> *@
+                <td>
+                    @switch (item.Fstatus)
+                    {
+                        case 0:
+                            <span class="badge bg-warning">
+                                <i class="bi bi-hourglass"></i> 待驗證未啟用
+                            </span>
+                            break;
+                        case 1:
+                            @if (item.FisEmailVerified.GetValueOrDefault())
+                            {
+                                <span class="badge bg-success">
+                                    <i class="bi bi-check-circle"></i> 已驗證啟用
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-warning">
+                                    <i class="bi bi-exclamation-triangle"></i> 狀態不一致
+                                </span>
+                            }
+                            break;
+                        case 2:
+                            <span class="badge bg-danger">
+                                <i class="bi bi-slash-circle"></i> 停用
+                                @if (item.FsuspensionEndTime.HasValue && item.FsuspensionEndTime.Value > DateTime.Now)
+                                {
+                                    <small>(@((item.FsuspensionEndTime.Value - DateTime.Now).Days)天)</small>
+                                }
+                            </span>
+                            @if (!string.IsNullOrEmpty(item.FsuspensionReason))
+                            {
+                                <div class="small mt-1">
+                                    <strong>原因：</strong>@item.FsuspensionReason
+                                </div>
+                            }
+                            @if (item.FsuspensionEndTime.HasValue)
+                            {
+                                <div class="small" title="@item.FsuspensionEndTime.Value.ToString("yyyy-MM-dd HH:mm")">
+                                    <strong>結束時間：</strong>
+                                    @item.FsuspensionEndTime.Value.ToString("yyyy-MM-dd")
+                                </div>
+                            }
+                            break;
+                        case 3:
+                            <span class="badge bg-secondary">
+                                <i class="bi bi-trash"></i> 已刪除
+                            </span>
+                            break;
+                    }
+                </td>
+                @* <td> *@
+                @*     @if (item.FisEmailVerified == true) *@
+                @*     { *@
+                @*         <span class="badge bg-success">已驗證</span> *@
+                @*     } *@
+                @*     else *@
+                @*     { *@
+                @*         <span class="badge bg-warning">未驗證</span> *@
+                @*     } *@
+                @* </td> *@
+                <td>
+                    @if (item.FloginType == "Google")
+                    {
+                        <span class="badge bg-primary">
+                            <i class="bi bi-google"></i> Google
+                        </span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-secondary">一般</span>
+                    }
+                </td>
+                <td title="@item.FcreatedAt?.ToString("yyyy-MM-dd HH:mm")">
+                    @item.FcreatedAt?.ToString("yyyy-MM-dd")
+                </td>
+                <td title="@item.FupdatedAt?.ToString("yyyy-MM-dd HH:mm")">
+                    @item.FupdatedAt?.ToString("yyyy-MM-dd")
+                </td>
+                <td>
+                    <div class="btn-group">
+                        <a asp-action="Edit" asp-route-id="@item.FuserId"
+                           class="btn btn-warning btn-sm">修改</a>
+                        <a asp-action="Delete" asp-route-id="@item.FuserId"
+                           class="btn btn-danger btn-sm"
+                           onclick="return confirm('確定要刪除嗎？')">刪除</a>
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<div class="d-flex justify-content-center mt-4">
+    <ul class="pagination">
+        <!-- 上一頁 -->
+        <li class="page-item @(ViewBag.PageNumber == 1 ? "disabled" : "")">
+            <a class="page-link"
+               asp-action="List"
+               asp-route-pageNumber="@(ViewBag.PageNumber - 1)"
+               asp-route-txtKeyword="@ViewBag.Keyword">
+                上一頁
+            </a>
+        </li>
+
+        <!-- 頁數顯示 -->
+        @for (var i = 1; i <= ViewBag.TotalPages; i++)
+        {
+            <li class="page-item @(ViewBag.PageNumber == i ? "active" : "")">
+                <a class="page-link"
+                   asp-action="List"
+                   asp-route-pageNumber="@i"
+                   asp-route-txtKeyword="@ViewBag.Keyword">
+                    @i
+                </a>
+            </li>
+        }
+
+        <!-- 下一頁 -->
+        <li class="page-item @(ViewBag.PageNumber == ViewBag.TotalPages ? "disabled" : "")">
+            <a class="page-link"
+               asp-action="List"
+               asp-route-pageNumber="@(ViewBag.PageNumber + 1)"
+               asp-route-txtKeyword="@ViewBag.Keyword">
+                下一頁
+            </a>
+        </li>
+    </ul>
+</div>

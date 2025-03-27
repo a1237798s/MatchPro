@@ -1,0 +1,133 @@
+﻿@model BackMange.DTO.TTaskDTO
+
+@{
+    ViewData["Title"] = "任務修改頁";
+}
+
+<h1>任務修改頁</h1>
+
+<hr />
+<div class="row ">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group mb-3">
+                <label asp-for="FtaskId" class="control-label"></label>
+                <input asp-for="FtaskId" class="form-control" />
+                <span asp-validation-for="FtaskId" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="FposterId" class="control-label"></label>
+                <input asp-for="FposterId" class="form-control" />
+                <span asp-validation-for="FposterId" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="FcategoryId" class="control-label"></label>
+                <input asp-for="FcategoryId" class="form-control" />
+                <span asp-validation-for="FcategoryId" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="Ftitle" class="control-label"></label>
+                <input asp-for="Ftitle" class="form-control" />
+                <span asp-validation-for="Ftitle" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="Fdescription" class="control-label"></label>
+                <input asp-for="Fdescription" class="form-control" />
+                <span asp-validation-for="Fdescription" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="Fbudget" class="control-label"></label>
+                <input asp-for="Fbudget" class="form-control" />
+                <span asp-validation-for="Fbudget" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="Flocation" class="control-label"></label>
+                <input asp-for="Flocation" class="form-control" />
+                <span asp-validation-for="Flocation" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="FlocationDetail" class="control-label"></label>
+                <input asp-for="FlocationDetail" class="form-control" />
+                <span asp-validation-for="FlocationDetail" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="Fmember" class="control-label"></label>
+                <input asp-for="Fmember" class="form-control" />
+                <span asp-validation-for="Fmember" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="Fphone" class="control-label"></label>
+                <input asp-for="Fphone" class="form-control" />
+                <span asp-validation-for="Fphone" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="Femail" class="control-label"></label>
+                <input asp-for="Femail" class="form-control" />
+                <span asp-validation-for="Femail" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="Fstatus" class="control-label"></label>
+                <select asp-for="Fstatus" class="form-control">
+                    <option value="待審核">待審核</option>
+                    <option value="發布中">發布中</option>
+                    <option value="進行中">進行中</option>
+                    <option value="已完成">已完成</option>
+                    <option value="已刪除">已刪除</option>
+                </select>
+                <span asp-validation-for="Fstatus" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="Fdeadline" class="control-label"></label>
+                <input asp-for="Fdeadline" class="form-control" />
+                <span asp-validation-for="Fdeadline" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="FcreatedAt" class="control-label"></label>
+                <input asp-for="FcreatedAt" class="form-control" />
+                <span asp-validation-for="FcreatedAt" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="FupdatedAt" class="control-label"></label>
+                <input asp-for="FupdatedAt" class="form-control" />
+                <span asp-validation-for="FupdatedAt" class="text-danger"></span>
+            </div>
+            <!-- 左側標題 -->
+            <label class="me-3"><strong>現有任務照片:</strong></label>
+
+            <!-- 右側內容 -->
+            <div>
+                @if (!string.IsNullOrEmpty(Model.FtimagePath))
+                {
+                    var imagePaths = Model.FtimagePath.Split(';'); // 分號分隔的多張圖片
+                    <div class="d-flex flex-wrap">
+                        @foreach (var imagePath in imagePaths)
+                        {
+                            <div class="mb-2 me-2">
+                                <img src="@imagePath" alt="任務圖片" style="max-width: 200px; height: auto;" />
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <!-- 尚未上傳圖片 (右側顯示) -->
+                    <p class="mt-1">尚未上傳圖片</p>
+                }
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="儲存修改" class="btn btn-primary" />
+                <a asp-action="List" class="btn btn-secondary">回到案件列表</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

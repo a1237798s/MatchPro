@@ -1,0 +1,207 @@
+﻿@model BackMange.DTO.CUserDTO
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>編輯會員資料</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="FuserId" />
+            <input type="hidden" asp-for="FcreatedAt" />
+            <input type="hidden" asp-for="FupdatedAt" />
+            <input type="hidden" asp-for="FloginType" />
+
+            <div class="form-group">
+                <label asp-for="FfullName" class="control-label"></label>
+                <input asp-for="FfullName" class="form-control" />
+                <span asp-validation-for="FfullName" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Femail" class="control-label"></label>
+                <input asp-for="Femail" class="form-control" type="email" />
+                <span asp-validation-for="Femail" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="FidNumber" class="control-label">身分證字號</label>
+                <input asp-for="FidNumber" class="form-control" maxlength="10" />
+                <span asp-validation-for="FidNumber" class="text-danger"></span>
+            </div>
+           
+            <div class="form-group">
+                <label asp-for="FcompanyNumber" class="control-label">統一編號</label>
+                <input asp-for="FcompanyNumber" class="form-control" maxlength="8" />
+                <span asp-validation-for="FcompanyNumber" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="FphoneNumber" class="control-label"></label>
+                <input asp-for="FphoneNumber" class="form-control" type="tel" />
+                <span asp-validation-for="FphoneNumber" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Faddress" class="control-label"></label>
+                <input asp-for="Faddress" class="form-control" />
+                <span asp-validation-for="Faddress" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Fbirthday" class="control-label"></label>
+                <input asp-for="Fbirthday" class="form-control" type="date" />
+                <span asp-validation-for="Fbirthday" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Fgender" class="control-label"></label>
+                <select asp-for="Fgender" class="form-control">
+                    <option value="">請選擇性別</option>
+                    <option value="M">男</option>
+                    <option value="F">女</option>
+                    <option value="O">其他</option>
+                </select>
+                <span asp-validation-for="Fgender" class="text-danger"></span>
+            </div>
+
+            @* <div class="form-group"> *@
+            @*     <label asp-for="FprofileImageUrl" class="control-label"></label> *@
+            @*     @if (!string.IsNullOrEmpty(Model.FprofileImageUrl)) *@
+            @*     { *@
+            @*         <img src="~/imgs/@Model.FprofileImageUrl" alt="個人照片" style="width: 100px; height: 100px; object-fit: cover;" class="mb-2" /> *@
+            @*     } *@
+            @*     <input type="file" name="photoPath" class="form-control" /> *@
+            @*     <span asp-validation-for="FprofileImageUrl" class="text-danger"></span> *@
+            @* </div> *@
+
+
+            <div class="form-group">
+                <label asp-for="Fstatus" class="control-label">帳號狀態</label>
+                <select asp-for="Fstatus" class="form-control" id="accountStatus">
+                    <option value="0">未啟用</option>
+                    <option value="1">啟用</option>
+                    <option value="2">停用</option>
+                    <option value="3">刪除</option>
+                </select>
+                <span asp-validation-for="Fstatus" class="text-danger"></span>
+            </div>
+
+            <div id="suspensionInfo" style="display: none;">
+                <div class="form-group">
+                    <label asp-for="FsuspensionReason" class="control-label">停用原因</label>
+                    <select asp-for="FsuspensionReason" class="form-control" id="suspensionReason">
+                        <option value="">請選擇停用原因</option>
+                        @foreach (var reason in ViewBag.SuspensionReasons)
+                        {
+                            <option value="@reason.Text" data-days="@reason.Days">@reason.Text</option>
+                        }
+                    </select>
+                    <span asp-validation-for="FsuspensionReason" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="FsuspensionEndTime" class="control-label">停用結束時間</label>
+                    <input asp-for="FsuspensionEndTime" class="form-control" type="datetime-local"
+                           id="suspensionEndTime" readonly />
+                    <small class="text-muted">停用天數會根據選擇的原因自動計算</small>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="FisEmailVerified" class="control-label">Email 驗證狀態</label>
+                <select asp-for="FisEmailVerified" class="form-control">
+                    <option value="@true">已驗證</option>
+                    <option value="@false">未驗證</option>
+                </select>
+            </div>
+
+            <div class="form-group mb-3">
+                <label class="control-label">最後登入時間</label>
+                <div class="form-control-plaintext">
+                    @(Model.FlastLoginTime?.ToString("yyyy/MM/dd HH:mm:ss") ?? "從未登入")
+                </div>
+            </div>
+
+            <div class="form-group mb-3">
+                <label class="control-label">帳號建立時間</label>
+                <div class="form-control-plaintext">
+                    @(Model.FcreatedAt?.ToString("yyyy/MM/dd HH:mm:ss") ?? "-")
+                </div>
+            </div>
+
+            <div class="form-group mt-3">
+                <input type="submit" value="儲存" class="btn btn-primary" />
+                <a asp-action="List" class="btn btn-secondary">返回列表</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        $(document).ready(function() {
+            // 原有的停用功能程式碼
+            function toggleSuspensionInfo() {
+                if ($('#accountStatus').val() === '2') {
+                    $('#suspensionInfo').slideDown();
+                } else {
+                    $('#suspensionInfo').slideUp();
+                    if ($('#accountStatus').val() !== '2') {
+                        $('#suspensionReason').val('');
+                        $('#suspensionEndTime').val('');
+                    }
+                }
+            }
+
+            $('#accountStatus').change(toggleSuspensionInfo);
+            toggleSuspensionInfo();
+
+            // 當選擇停用原因時，自動計算結束時間
+            $('#suspensionReason').change(function() {
+                const days = $(this).find(':selected').data('days');
+                if (days) {
+                    const endDate = new Date();
+                    endDate.setDate(endDate.getDate() + days);
+
+                    const year = endDate.getFullYear();
+                    const month = String(endDate.getMonth() + 1).padStart(2, '0');
+                    const day = String(endDate.getDate()).padStart(2, '0');
+                    const hours = String(endDate.getHours()).padStart(2, '0');
+                    const minutes = String(endDate.getMinutes()).padStart(2, '0');
+
+                    $('#suspensionEndTime').val(`${year}-${month}-${day}T${hours}:${minutes}`);
+                }
+            });
+
+            // 表單提交時檢查
+            $('form').on('submit', function(e) {
+                // 檢查統一編號
+                const companyNumber = $('#FcompanyNumber').val();
+                if (companyNumber && companyNumber.length !== 8) {
+                    e.preventDefault();
+                    alert('統一編號必須是8位數字');
+                    return false;
+                }
+
+                // 檢查身分證字號
+                const idNumber = $('#FidNumber').val();
+                if (idNumber) {
+                    // 身分證字號格式：一個大寫字母加上9個數字
+                    const idPattern = /^[A-Z][12]\d{8}$/;
+                    if (!idPattern.test(idNumber)) {
+                        e.preventDefault();
+                        alert('身分證字號格式不正確（須為一個大寫字母開頭，第二碼為1或2，後面接8個數字）');
+                        return false;
+                    }
+                }
+            });
+        });
+    </script>
+}

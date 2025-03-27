@@ -1,0 +1,106 @@
+.profile-card {
+    max-width: 300px;
+    margin: auto;
+}
+
+.profile-image {
+    height: 200px;
+    object-fit: cover;
+}
+
+.tab-content {
+    padding: 20px;
+    margin-top: 20px;
+}
+
+.nav-tabs {
+    margin-bottom: 10px;
+}
+
+.subheading {
+    font-weight: bold;
+    border-bottom: 2px solid #ccc;
+    padding-bottom: 5px;
+    margin-bottom: 15px;
+}
+
+.share-links {
+    display: flex;
+    align-items: center;
+    margin-top: 15px;
+}
+
+    .share-links span {
+        margin-right: 10px;
+    }
+
+    .share-links a {
+        margin-right: 10px;
+    }
+
+        .share-links a:last-child {
+            margin-right: 0;
+        }
+
+/*  修正按鈕間距 */
+.btn-group {
+    display: flex;
+    margin-top: 10px;
+    justify-content: center;
+}
+
+    /*  只有非最後一個按鈕才加 margin-right */
+    .btn-group .btn:not(:last-child) {
+        margin-right: 10px;
+    }
+
+/*  修正按鈕大小 */
+.btn-circle {
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border-radius: 50%;
+    text-align: center;
+    font-size: 18px;
+    line-height: 40px; /* 讓圖示置中 */
+}
+
+    .btn-circle:hover {
+        background-color: #e2e6ea;
+    }
+
+.service-schedule {
+    padding: 15px;
+    background: #ffffff;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    max-width: 320px;
+    margin-top: 10px;
+}
+
+    .service-schedule p {
+        display: flex;
+        justify-content: space-between;
+        padding: 8px 12px;
+        margin: 0;
+        font-family: 'Arial', sans-serif;
+        font-weight: 500;
+        border-bottom: 1px solid #e0e0e0;
+    }
+
+        .service-schedule p:nth-child(odd) {
+            background: #f8f9fa; /* 奇數行背景色 */
+        }
+
+        .service-schedule p:nth-child(even) {
+            background: #e9ecef; /* 偶數行背景色 */
+        }
+
+.service-time {
+    font-weight: normal;
+    color: #007bff; /* 設置時間部分的字體顏色 */
+}
+
+.service-schedule p:last-child {
+    border-bottom: none;
+}

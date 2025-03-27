@@ -1,0 +1,110 @@
+﻿@model BackMange.DTO.TTaskDTO
+
+@{
+    ViewData["Title"] = "創建任務頁面";
+}
+
+<h1>創建任務</h1>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create" enctype="multipart/form-data" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+           
+            <div class="form-group">
+                <label asp-for="FposterId" class="control-label"></label>
+                <input asp-for="FposterId" class="form-control" />
+                <span asp-validation-for="FposterId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FcategoryId" class="control-label"></label>
+                <input asp-for="FcategoryId" class="form-control" />
+                <span asp-validation-for="FcategoryId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Ftitle" class="control-label"></label>
+                <input asp-for="Ftitle" class="form-control" />
+                <span asp-validation-for="Ftitle" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Fdescription" class="control-label"></label>
+                <input asp-for="Fdescription" class="form-control" />
+                <span asp-validation-for="Fdescription" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Fbudget" class="control-label"></label>
+                <input asp-for="Fbudget" class="form-control" />
+                <span asp-validation-for="Fbudget" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Flocation" class="control-label"></label>
+                <input asp-for="Flocation" class="form-control" />
+                <span asp-validation-for="Flocation" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FlocationDetail" class="control-label"></label>
+                <input asp-for="FlocationDetail" class="form-control" />
+                <span asp-validation-for="FlocationDetail" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Fmember" class="control-label"></label>
+                <input asp-for="Fmember" class="form-control" />
+                <span asp-validation-for="Fmember" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Fphone" class="control-label"></label>
+                <input asp-for="Fphone" class="form-control" />
+                <span asp-validation-for="Fphone" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Femail" class="control-label"></label>
+                <input asp-for="Femail" class="form-control" />
+                <span asp-validation-for="Femail" class="text-danger"></span>
+            </div>
+        
+            <div class="form-group">
+                <label asp-for="Fdeadline" class="control-label"></label>
+                <input asp-for="Fdeadline" class="form-control" />
+                <span asp-validation-for="Fdeadline" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Fdeadline" class="control-label"></label>
+                <select asp-for="Fdeadline" class="form-control">
+                    <option value="1">true</option>
+                    <option value="0">false</option>
+                </select>
+                <span asp-validation-for="Fdeadline" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FcreatedAt" class="control-label"></label>
+                <input asp-for="FcreatedAt" class="form-control" />
+                <span asp-validation-for="FcreatedAt" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FupdatedAt" class="control-label"></label>
+                <input asp-for="FupdatedAt" class="form-control" />
+                <span asp-validation-for="FupdatedAt" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="FtimageFiles">上傳任務照片 (可多張)</label>
+                <input asp-for="FtimageFiles" type="file" class="form-control" accept="image/*" multiple />
+              
+            </div>
+
+  
+            <div class="form-group">
+                <input type="submit" value="新增" class="btn btn-primary" />
+            </div>
+           
+        </form> 
+    </div>
+</div>
+
+<div>
+    <a asp-action="List">返回</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

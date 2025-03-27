@@ -1,0 +1,43 @@
+body {
+    background: #f2f2f2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+}
+
+ul {
+    position: relative;
+    transform: rotate(-35deg) skew(20deg, 5deg);
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.list-item {
+    background: #000;
+    color: #575757;
+    text-align: center;
+    height: 2.5em;
+    width: 4em;
+    vertical-align: middle;
+    line-height: 2.5em;
+    border-bottom: 1px solid #333;
+    display: block;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.list-item:hover {
+    background: #2c2c2c;
+    color: #fff;
+    transform: translate(0.5em, -0.5em);
+    transition: all 0.3s ease;
+}
+
+
+.list-item i {
+    font-size: 1.2em;
+}

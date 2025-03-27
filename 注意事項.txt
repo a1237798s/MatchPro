@@ -1,0 +1,10 @@
+* 請先使用"創建用資料表"創建資料庫
+
+* 使用套件管理主控台，工具>NuGet套件管理員>套件管理器主控台，輸入Scaffold-DbContext "Data Source=.;Initial Catalog=GameCase;Integrated Security=True;Encrypt=False" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models -f -NoOnConfiguring
+
+* 再輸入 add-migration addIdentityTables -c ApplicationDbContext
+
+* 再輸入 update-database -Context ApplicationDbContext
+
+
+

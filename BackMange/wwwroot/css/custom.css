@@ -1,0 +1,82 @@
+/* your styles go here */
+
+* {
+    padding:0;
+    margin:0;
+}
+
+#sidebar {
+    min-width: 250px;
+    max-width: 250px;
+    min-height: 100vh;
+    transition: margin-left 0.3s;
+    background-color: #343a40;
+}
+
+    #sidebar.collapsed {
+        margin-left: -250px;
+    }
+
+#sidebarAccordion {
+    display: flex;
+    flex-direction: column;
+    height:70vh;    
+    justify-content:center;
+}
+
+    #sidebarAccordion .accordion-item {
+        
+        
+    }
+
+        #sidebarAccordion .accordion-item a {
+            display: flex;
+            height: 75px;
+            text-align: center;
+            justify-content: center;
+            align-items: center;
+        }
+
+    @media (max-width: 768px) {
+        #sidebar {
+        margin-left: -250px;
+    }
+
+        #sidebar.active {
+            margin-left: 0;
+        }
+}
+
+.container-fluid {
+    min-height:50px;
+}
+.accordion-item {
+    border-width: 0;
+}
+
+.logo-wrapper {
+    margin: 30px 0 20px 0;
+    padding: 0 0 0 35px;
+}
+
+.t-logo {
+    font-family: 'Arial Black', sans-serif;
+    font-size: 26px;
+    font-weight: 900;
+    text-transform: uppercase;
+}
+
+.mine {
+    color: #4D80E6;
+    text-shadow: 3px 3px #225, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+}
+
+.craft {
+    color: #FFD700;
+    text-shadow: 3px 3px #666, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+    margin-left: 2px;
+}
+
+.btn-outline-light {
+    --bs-btn-border-color: none !important;
+}

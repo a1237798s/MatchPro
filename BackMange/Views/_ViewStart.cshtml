@@ -1,0 +1,15 @@
+﻿@{
+    var controller = ViewContext.RouteData.Values["controller"]?.ToString();
+    var action = ViewContext.RouteData.Values["action"]?.ToString();
+
+    if (controller == "FrontendController") // 前台控制器名稱
+    {
+       
+            Layout = "_FrontendLayout"; // 其他頁面使用默認前台 Layout
+        
+    }
+    else
+    {
+        Layout = "_Layout"; // 默認後台 Layout
+    }
+}
